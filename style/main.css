@@ -1,0 +1,79 @@
+body {
+    margin:0;
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+#myCanvas {
+    box-shadow:1px 1px 3px rgba(0, 0, 0, .5);
+    display: block;
+    margin:50px auto 20px;
+}
+#myCanvas p {
+    padding:20px;
+}
+
+#console {
+    box-shadow:1px 1px 3px rgba(0, 0, 0, .5);
+    width:500px;
+    margin:20px auto;
+    cursor:default;
+}
+#console p {
+    padding:5px;
+    margin:0;
+}
+#console p.in {
+    background:#EEE;
+    border-radius:3px;
+    margin:2px 5px;
+}
+#console-input {
+    width:420px;
+    padding:0;
+    margin:0;
+    border:none;
+    outline:none;
+    background:none;
+}
+#console-output {
+    width:500px;
+    min-height:100px;
+    max-height:300px;
+    overflow-y:scroll;
+    display:none;
+    margin:0;
+}
+.viz #console-output {
+    display:block;
+}
+#console-output, #console input {
+    font-family:"Consolas","Courier New",monospace;
+    font-size:12px;
+}
+#console-title {
+    height:32px;
+    line-height:32px;
+    background:#CCF;
+    color:#000;
+    font-weight:bold;
+    font-size:16px;
+    text-shadow:1px 1px 10px #FFF;
+    padding:0 4px;
+}
+#console-title button {
+    float:right;
+    margin:4px 2px 0;
+    height:22px;
+    padding:0 5px;
+}
+.viz #bttn-show {
+    display:none;
+}
+#bttn-show {
+    display:block;
+}
+#bttn-hide, #bttn-clear {
+    display:none;
+}
+.viz #bttn-hide, .viz #bttn-clear {
+    display:block;
+}
