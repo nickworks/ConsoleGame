@@ -21,7 +21,7 @@ var consoleObj = {
         try{
             result = window.eval(this.input.value);
             if(typeof(result) == "string") result = '"'+result+'"';
-            if(typeof(result) == "object") result = JSON.stringify(result, null, 4);
+            if(typeof(result) == "object") result = this.stringify(result);
         } catch(e){
             result = e.message;
         }
@@ -31,7 +31,7 @@ var consoleObj = {
         this.scrollToBottom();
     },
     outputToConsole:function(msg, isIn = false){
-        var p = document.createElement("p");
+        const p = document.createElement("p");
         if(isIn) p.classList.add("in");
         p.appendChild(document.createTextNode(msg));
         this.output.insertBefore(p,this.inputP);
@@ -50,6 +50,22 @@ var consoleObj = {
     },
     hide:function(){
         this.consoleDiv.classList.remove("viz");
+    },
+    stringify:function(obj){
+        const temp = []; // put objects here
+        var result = JSON.stringify(obj, (key, val)=>{
+            if(typeof(val) == "object" && val !== null){
+                if(temp.indexOf(val) !== -1) return "[circular reference]";
+                temp.push(val);
+            }
+            if(typeof(val) == "function"){
+                return "####";
+            }
+            return val;
+        }, 4);
+        
+        result = result.replace(/\"\#{4}\"/g, "function(){}");
+        return result;
     }
 };
 consoleObj.setup();
