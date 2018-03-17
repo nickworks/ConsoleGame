@@ -21,6 +21,7 @@ var consoleObj = {
         try{
             result = window.eval(this.input.value);
             if(typeof(result) == "string") result = '"'+result+'"';
+            if(typeof(result) == "function") result = '[function]'; // comment this out to see function bodies
             if(typeof(result) == "object") result = this.stringify(result);
         } catch(e){
             result = e.message;
@@ -52,19 +53,26 @@ var consoleObj = {
         this.consoleDiv.classList.remove("viz");
     },
     stringify:function(obj){
-        const temp = []; // put objects here
-        var result = JSON.stringify(obj, (key, val)=>{
-            if(typeof(val) == "object" && val !== null){
-                if(temp.indexOf(val) !== -1) return "[circular reference]";
-                temp.push(val);
+        var result='{\n';
+        for(var prop in obj){
+            result+='    '+prop+': ';
+            switch(typeof(obj[prop])){
+                case "object":
+                    result+="[Object]";
+                    break;
+                case "function":
+                    result+="[function]";
+                    break;
+                case "string":
+                    result+='"'+obj[prop]+'"';
+                    break;
+                default:
+                    result +=obj[prop];
+                    break;
             }
-            if(typeof(val) == "function"){
-                return "####";
-            }
-            return val;
-        }, 4);
-        
-        result = result.replace(/\"\#{4}\"/g, "function(){}");
+            result+=',\n';
+        }
+        result+='}';    
         return result;
     }
 };
