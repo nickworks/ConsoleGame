@@ -44,7 +44,7 @@ var consoleObj = {
         try{
             result = window.eval(cmd);
             if(typeof(result) == "string") result = '"'+result+'"';
-            if(typeof(result) == "function") result = '[function]'; // comment this out to see function bodies
+            if(typeof(result) == "function" && (this.settings.showFunctionBodies || false) == false) result = '[function]'; // comment this out to see function bodies
             if(typeof(result) == "object") result = this.stringify(result);
         } catch(e){
             result = e.message;
