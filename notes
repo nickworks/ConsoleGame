@@ -1,0 +1,14 @@
+
+Lookup a puzzle solution (lock combination?)
+Change an enemy to friendly
+Spawn a key item
+Look into a function body
+Change the scene manually to a different scene
+change a function body
+
+
+CAN WE SANDBOX?
+I'd like the ability to limit which objects the player can manipulate
+Put the game in a closure?
+Start the game, but don't make a global variable for it...
+Can we make a global variable for the current scene?
