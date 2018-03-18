@@ -1,3 +1,4 @@
+let level = null;
 const game = {
     timePrev: 0,
     dt: 0,
@@ -17,8 +18,6 @@ const game = {
         keyboard.setup();
         mouse.setup(canvas)
         
-        this.scene = new SceneTitle();
-        
         this.update(0); // begin game loop
     },
     calcDeltaTime:function(time){
@@ -28,14 +27,18 @@ const game = {
     },
     update:function(time){
         this.calcDeltaTime(time);
+        let nextScene;
         
         if(this.scene){
-            const nextScene = this.scene.update(this.dt);
-            
+            nextScene = this.scene.update(this.dt);
             this.scene.draw(this.gfx);
-            if(nextScene){
-                this.scene = nextScene;
-            }
+        } else {
+            nextScene = new SceneTitle();
+        }
+        
+        if(nextScene){
+            this.scene = nextScene;
+            level = nextScene;
         }
         
         ///////////////////////////// LATE UPDATE:

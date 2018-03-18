@@ -3,38 +3,43 @@ var consoleObj = {
     output:undefined, // the <div> that contains several <p>
     inputP:undefined, // the <p> that contains <input>
     input:undefined, // the <input>
-    history:[],
-    historyIndex:0,
+    settings:{showFunctions:false},
+    history:{s:[],i:0,add:function(c){this.s.push(c);this.i=this.s.length;}},
     setup:function(){
         this.consoleDiv = document.getElementById("console");
         this.input = document.getElementById("console-input");
         this.output = document.getElementById("console-output");
         this.inputP = document.getElementById("input-p");
         this.input.addEventListener("keydown", (e) => {
-            if(e.keyCode == 13) this.handleInput();
-            if(e.keyCode == 38) this.handleHistory(-1);
-            if(e.keyCode == 40) this.handleHistory(1);
+            switch(e.keyCode){
+                case 13: this.handleInput(); break;
+                case 38: this.handleHistory(-1); break;
+                case 40: this.handleHistory(+1); break;
+                default: return;
+            }
+            e.preventDefault();
         });
-        
         document.getElementById("bttn-hide").addEventListener("click", () => this.hide());
         document.getElementById("bttn-show").addEventListener("click", () => this.show());
         document.getElementById("bttn-clear").addEventListener("click", () => this.clear());
     },
     handleHistory:function(offset){
-        this.historyIndex+=offset;
-        if(this.historyIndex < 0) this.historyIndex = 0;
-        if(this.historyIndex < this.history.length) {
-            this.input.value = this.history[this.historyIndex];
+        const h = this.history;
+        h.i+=offset;
+        if(h.i < 0) h.i = 0;
+        if(h.i < h.s.length) {
+            this.input.value = h.s[h.i];
         } else {
-            this.historyIndex = this.history.length;
+            h.i = h.s.length;
             this.input.value = '';
         }
+        const p = this.input.value.length;
+        this.input.setSelectionRange(p, p);
     },
     handleInput:function(){
         var cmd = this.input.value.trim();
         if(cmd.length == 0) return;
-        this.history.push(cmd);
-        this.historyIndex = this.history.length;
+        this.history.add(cmd);
         var result = "";
         try{
             result = window.eval(cmd);
@@ -74,6 +79,7 @@ var consoleObj = {
         const isArr = (Array.isArray(obj));
         var result=isArr?'[\n':'{\n';
         for(var prop in obj){
+            if(typeof obj[prop] == "function" && !this.settings.showFunctions) continue;
             result+='    ';
             if(!isArr)result+=prop+': ';
             switch(typeof(obj[prop])){
