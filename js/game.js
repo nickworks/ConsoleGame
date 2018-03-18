@@ -16,7 +16,7 @@ const game = {
         this.height = canvas.height;
         
         keyboard.setup();
-        mouse.setup(canvas)
+        mouse.setup(canvas);
         
         this.update(0); // begin game loop
     },

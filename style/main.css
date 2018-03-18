@@ -1,17 +1,23 @@
 body {
     margin:0;
     font-family: "Helvetica", "Arial", sans-serif;
+    background:#333;
 }
 #myCanvas {
+    background:#FFF;
     box-shadow:1px 1px 3px rgba(0, 0, 0, .5);
     display: block;
     margin:50px auto 20px;
 }
+#myCanvas:enabled {
+    border:5px solid #FF0;
+}
 #myCanvas p {
     padding:20px;
 }
-
 #console {
+    background:#666;
+    color:#FFF;
     box-shadow:1px 1px 3px rgba(0, 0, 0, .5);
     width:500px;
     margin:20px auto;
@@ -22,9 +28,10 @@ body {
     margin:0;
 }
 #console p.in {
-    background:#EEE;
+    background:#999;
     border-radius:3px;
-    margin:2px 5px;
+    margin:4px 5px;
+    color:#333;
 }
 #console-input {
     width:420px;
@@ -33,6 +40,9 @@ body {
     border:none;
     outline:none;
     background:none;
+}
+#console #input-p {
+    background:#AAA;
 }
 #console-output {
     width:500px;

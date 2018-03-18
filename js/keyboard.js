@@ -26,7 +26,9 @@ const keyboard = {
     },
     updateKey: function(keyCode, value){
         //console.log(keyCode + (value ? " down" : " up"));
-        this.keys[keyCode] = value;
+        
+        if(document.activeElement == document.body)
+            this.keys[keyCode] = value;
     },
     setup: function(){
         document.addEventListener("keydown", (e)=>this.updateKey(e.keyCode, true));

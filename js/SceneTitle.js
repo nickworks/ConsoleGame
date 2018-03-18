@@ -5,7 +5,7 @@ function SceneTitle(){
     
     this.update = function(dt){
         if(keyboard.onDown(keycode.enter)){
-            //return new ScenePlay();
+            return new ScenePlay();
         }
     };
     this.draw = function(gfx){
