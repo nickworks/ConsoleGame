@@ -16,7 +16,7 @@ const game = {
         this.height = canvas.height;
         
         keyboard.setup();
-        mouse.setup(canvas);
+        mouse.setup(canvas, this);
         
         this.update(0); // begin game loop
     },
@@ -43,11 +43,12 @@ const game = {
         
         ///////////////////////////// LATE UPDATE:
         keyboard.update();
+        mouse.update();
         requestAnimationFrame((time) => this.update(time));
     },
     clear:function(){
         this.gfx.clearRect(0, 0, this.width, this.height); // clear screen
-    }
+    },
 };
 
 game.begin("myCanvas");

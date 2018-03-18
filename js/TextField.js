@@ -12,7 +12,7 @@ function TextField(text = "placeholder", x = 0, y = 0, size = 20){
         gfx.fillStyle = this.color;
         gfx.font = this.size + "px " + this.font;
         gfx.textAlign = this.align;
-        gfx.baseline = this.baseline;
+        gfx.textBaseline = this.baseline;
         gfx.fillText(this.text, this.x, this.y, this.maxWidth);
     };
 }
