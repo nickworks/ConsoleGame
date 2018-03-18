@@ -80,11 +80,13 @@ var consoleObj = {
         var result=isArr?'[\n':'{\n';
         for(var prop in obj){
             if(typeof obj[prop] == "function" && !this.settings.showFunctions) continue;
-            result+='    ';
-            if(!isArr)result+=prop+': ';
+            result+='    '+prop+': ';
             switch(typeof(obj[prop])){
                 case "object":
-                    result+="[Object]";
+                    if(Array.isArray(obj[prop]))
+                        result+="[Array]";
+                    else
+                        result+="[Object]";
                     break;
                 case "function":
                     result+="[function]";
