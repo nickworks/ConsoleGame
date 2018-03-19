@@ -5,6 +5,7 @@ function NPC(){
         
     };
     this.draw=function(gfx){
-        
+        const r=this.rect;
+        gfx.fillRect(r.x,r.y,r.w,r.h);
     };
 }
