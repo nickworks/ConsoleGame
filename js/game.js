@@ -15,6 +15,9 @@ const game = {
         this.width = canvas.width;
         this.height = canvas.height;
         
+        window.addEventListener("blur",()=>{/*pause*/this.cleanupPause=true;});
+        window.addEventListener("focus",()=>{/*unpause*/this.cleanupPause=true;});
+        
         keyboard.setup();
         mouse.setup(canvas, this);
         
@@ -22,6 +25,10 @@ const game = {
     },
     calcDeltaTime:function(time){
         if(time === undefined) time = 0;
+        if(this.cleanupPause){
+            this.timePrev=time;
+            this.cleanupPause=false;
+        }
         this.dt = (time - this.timePrev) / 1000;
         this.timePrev = time;
     },
