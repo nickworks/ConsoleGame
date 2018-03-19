@@ -4,12 +4,24 @@ function Player(){
     this.vy = 0;
     this.a = 800;
     this.maxv = 400;
+    this.isGrounded=false;
+    this.isJumping=false;
     this.update=function(dt){
-        this.vy+=800*dt;
+        let grav=1;
         if(keyboard.onDown(keycode.space)){
-            this.vy=-400;
+            if(this.isGrounded){
+                this.vy=-300;
+                this.isJumping=true;
+            }
         }
+        if(this.isJumping&&keyboard.isDown(keycode.space)&&this.vy<0){
+            grav=.4;
+        }else{
+            this.isJumping=false;
+        }
+        this.vy+=800*grav*dt;
         this.move(dt);
+        this.isGrounded=false;
     };
     this.draw=function(gfx){
         const r=this.rect;
@@ -51,6 +63,10 @@ function Player(){
         }
         if(fix.y!=0){
             this.vy=0;
+            if(fix.y<0)this.isGrounded=true;
         }
+    };
+    this.jump=function(){
+        
     };
 }
