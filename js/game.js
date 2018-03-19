@@ -57,5 +57,3 @@ const game = {
         this.gfx.clearRect(0, 0, this.width, this.height); // clear screen
     },
 };
-
-game.begin("myCanvas");

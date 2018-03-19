@@ -1,6 +1,8 @@
-((a)=>{
+((a,c)=>{
+    let loaded=0;
     a.forEach((u)=>{
         const s=document.createElement('script');
+        s.addEventListener("load", ()=>{if(++loaded==a.length)c();});
         s.src=u; document.head.appendChild(s);
     });
 })([
@@ -19,4 +21,6 @@
     'js/mouse.js',
     'js/console.js',
     'js/game.js'
-]);
+],()=>{
+    game.begin("myCanvas");
+});

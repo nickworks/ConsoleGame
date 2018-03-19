@@ -7,12 +7,18 @@ function ScenePlay(){
         new Platform(new Rect(-205,200,200,60)),
         new Platform(new Rect(230,100,200,30)),
     ];
-    
+    this.npcs=[
+        new NPC()
+    ];
     this.update = function(dt){
         this.player.update(dt);
         this.platforms.forEach(p=>{
             p.update(dt);
             this.player.fixOverlap(p.rect);
+        });
+        this.npcs.forEach(n=>{
+            const overlaps=n.rect.overlaps(this.player.rect);
+            n.update(dt, overlaps);
         });
         this.cam.update(dt, this.player);
     };
@@ -20,6 +26,7 @@ function ScenePlay(){
         game.clear();
         this.cam.drawStart(gfx);
         this.player.draw(gfx);
+        this.npcs.forEach(n=>n.draw(gfx));
         this.platforms.forEach(p=>p.draw(gfx));
         this.cam.drawEnd(gfx);
     };
