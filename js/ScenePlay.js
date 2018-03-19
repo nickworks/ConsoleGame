@@ -12,15 +12,20 @@ function ScenePlay(){
     ];
     this.modal=null;
     this.update = function(dt){
-        this.player.update(dt);
-        this.platforms.forEach(p=>{
-            p.update(dt);
-            this.player.fixOverlap(p.rect);
-        });
-        this.npcs.forEach(n=>{
-            const overlaps=n.rect.overlaps(this.player.rect);
-            n.update(dt, overlaps);
-        });
+        if(this.modal){
+            this.modal.update(dt);
+            if(this.modal.remove)this.modal=null;
+        } else {
+            this.player.update(dt);
+            this.platforms.forEach(p=>{
+                p.update(dt);
+                this.player.fixOverlap(p.rect);
+            });
+            this.npcs.forEach(n=>{
+                const overlaps=n.rect.overlaps(this.player.rect);
+                n.update(dt, overlaps);
+            });
+        }
         this.cam.update(dt, this.player);
     };
     this.draw = function(gfx){
@@ -30,5 +35,6 @@ function ScenePlay(){
         this.npcs.forEach(n=>n.draw(gfx));
         this.platforms.forEach(p=>p.draw(gfx));
         this.cam.drawEnd(gfx);
+        if(this.modal)this.modal.draw(gfx);
     };
 }

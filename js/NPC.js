@@ -5,7 +5,7 @@ function NPC(){
         this.canTalk=overlaps;
         if(overlaps && keyboard.onDown([keycode.e,keycode.enter])){
             // do dialog
-            console.log("dialog");
+            level.modal=new Dialog("Hello world, this is a dialog system!");
         }
     };
     this.draw=function(gfx){
