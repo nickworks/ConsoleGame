@@ -16,9 +16,23 @@ const keyboard = {
     keys:[],
     prev:[],
     isDown:function(keyCode){
+        if(Array.isArray(keyCode)){
+            let val = false;
+            keyCode.forEach((c)=>{
+                if(this.keys[c]) val = true;
+            })
+            return val;
+        }
         return this.keys[keyCode] || false; // if the value is undefined, it will return false instead...
     },
     onDown:function(keyCode){
+        if(Array.isArray(keyCode)){
+            let val = false;
+            keyCode.forEach((c)=>{
+                if(this.onDown(c)) val = true;
+            });
+            return val;
+        }
         return (this.isDown(keyCode) && (this.prev[keyCode] || false) == false);
     },
     update:function(){
