@@ -10,6 +10,9 @@ function ScenePlay(){
     this.npcs=[
         new NPC()
     ];
+    this.doors=[
+        new Door(300,100)  
+    ];
     this.modal=null;
     this.update = function(dt){
         if(this.modal){
@@ -25,6 +28,10 @@ function ScenePlay(){
                 const overlaps=n.rect.overlaps(this.player.rect);
                 n.update(dt, overlaps);
             });
+            this.doors.forEach(d=>{
+                d.update(dt);
+                this.player.fixOverlap(d.rect);
+            });
         }
         this.cam.update(dt, this.player);
     };
@@ -34,6 +41,7 @@ function ScenePlay(){
         this.player.draw(gfx);
         this.npcs.forEach(n=>n.draw(gfx));
         this.platforms.forEach(p=>p.draw(gfx));
+        this.doors.forEach(d=>d.draw(gfx));
         this.cam.drawEnd(gfx);
         if(this.modal)this.modal.draw(gfx);
     };

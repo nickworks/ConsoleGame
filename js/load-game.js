@@ -18,6 +18,7 @@
     'js/Sprite.js',
     'js/TextField.js',
     'js/Dialog.js',
+    'js/Door.js',
     'js/keyboard.js',
     'js/mouse.js',
     'js/console.js',

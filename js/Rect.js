@@ -28,3 +28,10 @@ function Rect(x,y,w,h){
         return res;
     };
 }
+Rect.lerp=function(a,b,t){
+    let x=a.x+(b.x-a.x)*t;
+    let y=a.y+(b.y-a.y)*t;
+    let w=a.w+(b.w-a.w)*t;
+    let h=a.h+(b.h-a.h)*t;
+    return new Rect(x,y,w,h);
+};
