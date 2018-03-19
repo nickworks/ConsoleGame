@@ -10,6 +10,7 @@ function ScenePlay(){
     this.npcs=[
         new NPC()
     ];
+    this.modal=null;
     this.update = function(dt){
         this.player.update(dt);
         this.platforms.forEach(p=>{

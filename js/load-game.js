@@ -17,6 +17,7 @@
     'js/SceneTitle.js',
     'js/Sprite.js',
     'js/TextField.js',
+    'js/Dialog.js',
     'js/keyboard.js',
     'js/mouse.js',
     'js/console.js',
