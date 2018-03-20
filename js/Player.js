@@ -6,15 +6,16 @@ function Player(){
     this.maxv = 400;
     this.isGrounded=false;
     this.isJumping=false;
+    this.airJumpsLeft=1;
+    
     this.update=function(dt){
         let grav=1;
-        if(keyboard.onDown(keycode.space)){
-            if(this.isGrounded){
-                this.vy=-300;
-                this.isJumping=true;
-            }
+        const jumpKeys=[keycode.w,keycode.up];
+        if(keyboard.onDown(jumpKeys)){
+            if(this.isGrounded)this.jump(false);
+            else if(this.airJumpsLeft>0)this.jump(true);
         }
-        if(this.isJumping&&keyboard.isDown(keycode.space)&&this.vy<0){
+        if(this.isJumping&&keyboard.isDown(jumpKeys)&&this.vy<0){
             grav=.4;
         }else{
             this.isJumping=false;
@@ -63,10 +64,15 @@ function Player(){
         }
         if(fix.y!=0){
             this.vy=0;
-            if(fix.y<0)this.isGrounded=true;
+            if(fix.y<0){
+                this.isGrounded=true;
+                this.airJumpsLeft=1;
+            }
         }
     };
-    this.jump=function(){
-        
+    this.jump=function(isAirJump){
+        this.vy=-300;
+        this.isJumping=true;
+        if(isAirJump)this.airJumpsLeft--;
     };
 }

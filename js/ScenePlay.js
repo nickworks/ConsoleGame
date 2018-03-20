@@ -16,7 +16,8 @@ function ScenePlay(){
     this.modal=null;
     this.update = function(dt){
         if(this.modal){
-            this.modal.update(dt);
+            const newScene=this.modal.update(dt);
+            if(newScene)return newScene;
             if(this.modal.remove)this.modal=null;
         } else {
             this.player.update(dt);
@@ -32,6 +33,11 @@ function ScenePlay(){
                 d.update(dt);
                 this.player.fixOverlap(d.rect);
             });
+            
+            if(keyboard.onDown([keycode.p,keycode.escape])){
+                this.modal=new Pause(this);
+            }
+            
         }
         this.cam.update(dt, this.player);
     };

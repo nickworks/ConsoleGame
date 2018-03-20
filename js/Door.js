@@ -3,11 +3,11 @@ function Door(x,y){
     this.opening=false;
     this.done=false;
     this.rectA=new Rect(x,y,30,100);
-    this.rectB=new Rect(x,y-100,30,100);
+    this.rectB=new Rect(x,y,30,5);
     this.timer=0;
     this.timespan=1;
     this.update=function(dt){
-        if(keyboard.onDown(keycode.s)) this.opening=true;
+        if(keyboard.onDown(keycode.s)) this.open();
         if(this.opening){
             this.timer+=dt;
             var p = this.timer/this.timespan;
@@ -22,5 +22,8 @@ function Door(x,y){
     this.draw=function(gfx){
         const r=this.rect;
         gfx.fillRect(r.x,r.y,r.w,r.h);
+    };
+    this.open=function(){
+        this.opening=true;
     };
 }
