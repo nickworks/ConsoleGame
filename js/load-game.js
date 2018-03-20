@@ -23,6 +23,7 @@
     'js/keyboard.js',
     'js/mouse.js',
     'js/console.js',
+    'js/levels.js',
     'js/game.js'
 ],()=>{
     game.begin("myCanvas");

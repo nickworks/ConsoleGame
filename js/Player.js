@@ -1,5 +1,5 @@
-function Player(){
-    this.rect = new Rect(0,0,25,25);
+function Player(x,y){
+    this.rect = new Rect(x,y,25,25);
     this.vx = 0;
     this.vy = 0;
     this.a = 800;

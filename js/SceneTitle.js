@@ -12,7 +12,7 @@ function SceneTitle(){
     this.update = function(dt){
         this.menu.update(dt);
         if(this.switchToPlay){
-            return new ScenePlay();
+            return new ScenePlay(0);
         }
     };
     this.draw = function(gfx){

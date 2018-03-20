@@ -1,26 +1,18 @@
-function ScenePlay(){
+function ScenePlay(n){
     this.cam=new Camera();
-    this.player=new Player();
-    this.platforms=[
-        new Platform(new Rect(5,250,200,30)),
-        new Platform(new Rect(210,200,200,30)),
-        new Platform(new Rect(-205,200,200,60)),
-        new Platform(new Rect(230,100,200,30)),
-    ];
-    this.npcs=[
-        new NPC()
-    ];
-    this.doors=[
-        new Door(300,100)  
-    ];
+    this.player=null;
+    this.platforms=[];
+    this.npcs=[];
+    this.doors=[];
     this.modal=null;
     this.update = function(dt){
         if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene)return newScene;
             if(this.modal.remove)this.modal=null;
+            if(this.modal.reloadLevel)this.reload();
         } else {
-            this.player.update(dt);
+            if(this.player)this.player.update(dt);
             this.platforms.forEach(p=>{
                 p.update(dt);
                 this.player.fixOverlap(p.rect);
@@ -51,4 +43,17 @@ function ScenePlay(){
         this.cam.drawEnd(gfx);
         if(this.modal)this.modal.draw(gfx);
     };
+    this.load=function(levelIndex){
+        this.modal=null;
+        this.levelIndex=levelIndex;
+        const level=levelData(levelIndex);
+        this.player=level.player;
+        this.platforms=level.platforms;
+        this.npcs=level.npcs;
+        this.doors=level.doors;
+    };
+    this.reload=function(){
+        this.load(this.levelIndex);
+    };
+    this.load(n);
 }

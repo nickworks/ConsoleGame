@@ -3,6 +3,9 @@ function Pause(){
         caption:"Resume",
         callback:()=>{this.remove=true;}
     },{
+        caption:"Reload Level",
+        callback:()=>{this.reloadLevel=true;}
+    },{
         caption:"Quit",
         callback:()=>{this.backToMainMenu=true;}
     }]);
