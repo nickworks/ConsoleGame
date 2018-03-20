@@ -3,6 +3,8 @@ function Camera(){
     this.y=0;
     this.tx=0;
     this.ty=0;
+    this.sx=game.width/2;
+    this.sy=game.height/2;
     this.update=function(dt, target){
         if(target){
             if(target.rect){
@@ -18,9 +20,15 @@ function Camera(){
         this.y+=(this.ty-this.y)*dt*speed;
     };
     this.drawStart=function(gfx){
-        gfx.translate(game.width/2-this.x, game.height/2-this.y);
+        gfx.translate(this.sx-this.x,this.sy-this.y);
     };
     this.drawEnd=function(gfx){
         gfx.resetTransform();
-    }
+    };
+    this.worldMouse=function(){
+        return {
+            x:mouse.x-(this.sx-this.x),
+            y:mouse.y-(this.sy-this.y)
+        };
+    };
 }

@@ -9,8 +9,8 @@ function ScenePlay(n){
         if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene)return newScene;
+            if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
             if(this.modal.remove)this.modal=null;
-            if(this.modal.reloadLevel)this.reload();
         } else {
             if(this.player)this.player.update(dt);
             this.platforms.forEach(p=>{
@@ -25,11 +25,9 @@ function ScenePlay(n){
                 d.update(dt);
                 this.player.fixOverlap(d.rect);
             });
-            
             if(keyboard.onDown([keycode.p,keycode.escape])){
                 this.modal=new Pause(this);
             }
-            
         }
         this.cam.update(dt, this.player);
     };
@@ -52,8 +50,9 @@ function ScenePlay(n){
         this.npcs=level.npcs;
         this.doors=level.doors;
     };
-    this.reload=function(){
-        this.load(this.levelIndex);
+    this.edit=function(){
+        this.modal=new Editor();
     };
     this.load(n);
+    
 }

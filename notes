@@ -1,3 +1,7 @@
+//TODO: level exporter
+//TODO: redo level importer
+//TODO: use context.createPattern for repeating fills
+
 
 Lookup a puzzle solution (lock combination?)
 Change an enemy to friendly
@@ -8,6 +12,7 @@ change a function body
 look in the HTML source code
 look in the JavaScript source code
 change the camera target to something else (a steerable projectile?)
+load an additional javascript file
 
 roguelike
 platformer

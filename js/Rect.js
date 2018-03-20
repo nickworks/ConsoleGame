@@ -3,6 +3,9 @@ function Rect(x,y,w,h){
     this.y=y;
     this.w=w;
     this.h=h;
+    this.hits=function(p){
+        return (p.x>this.x&&p.x<this.x+this.w&&p.y>this.y&&p.y<this.y+this.h);
+    };
     this.overlaps=function(o){
         const r=this;
         if(r.x>o.x+o.w) return false;
@@ -26,6 +29,13 @@ function Rect(x,y,w,h){
         else
             res.x=0;
         return res;
+    };
+    this.toString=function(){
+        return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
+    };
+    this.setPosition=function(pos,snap=1){
+        this.x = Math.round(pos.x/snap)*snap;
+        this.y = Math.round(pos.y/snap)*snap;
     };
 }
 Rect.lerp=function(a,b,t){

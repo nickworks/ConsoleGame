@@ -20,6 +20,7 @@
     'js/Dialog.js',
     'js/Door.js',
     'js/Pause.js',
+    'js/editor.js',
     'js/keyboard.js',
     'js/mouse.js',
     'js/console.js',

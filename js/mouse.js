@@ -1,23 +1,33 @@
-const mouse = {
-    x: 0,
-    y: 0,
-    down: false,
-    prev: false,
-    setup: function(element, game){
-        element.addEventListener("mousemove", (e)=>{
-            this.x = e.offsetX;
-            this.y = e.offsetY;
+const mouse={
+    x:0,
+    y:0,
+    px:0,
+    py:0,
+    down:false,
+    prev:false,
+    setup:function(element,game){
+        element.addEventListener("mousemove",(e)=>{
+            this.x=e.offsetX;
+            this.y=e.offsetY;
         });
-        element.addEventListener("mousedown", (e)=>{this.down=true;});
-        document.addEventListener("mouseup", (e)=>{this.down=false;});
+        element.addEventListener("mousedown",(e)=>{this.down=true;});
+        document.addEventListener("mouseup",(e)=>{this.down=false;});
     },
-    update: function(){
-        this.prev = this.down;
+    update:function(){
+        this.prev=this.down;
+        this.px=this.x;
+        this.py=this.y;
     },
-    isDown: function(){
+    isDown:function(){
         return this.down;
     },
-    onDown: function(){
-        return (this.down && !this.prev);
+    onDown:function(){
+        return(this.down&&!this.prev);
+    },
+    pos:function(){
+        return{x:this.x,y:this.y};  
+    },
+    delta:function(){
+        return{x:this.x-this.px,y:this.y-this.py};
     }
 };
