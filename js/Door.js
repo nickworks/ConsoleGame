@@ -20,8 +20,7 @@ function Door(x,y){
         }
     };
     this.draw=function(gfx){
-        const r=this.rect;
-        gfx.fillRect(r.x,r.y,r.w,r.h);
+        this.rect.draw(gfx);
     };
     this.open=function(){
         this.opening=true;

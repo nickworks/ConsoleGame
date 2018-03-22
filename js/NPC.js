@@ -10,7 +10,6 @@ function NPC(){
     };
     this.draw=function(gfx){
         // TODO: use this.canTalk to show a "talk" icon
-        const r=this.rect;
-        gfx.fillRect(r.x,r.y,r.w,r.h);
+        this.rect.draw(gfx);
     };
 }

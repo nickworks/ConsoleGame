@@ -19,6 +19,7 @@
     'js/TextField.js',
     'js/Dialog.js',
     'js/Door.js',
+    'js/Bullet.js',
     'js/Pause.js',
     'js/editor.js',
     'js/keyboard.js',

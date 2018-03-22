@@ -9,26 +9,15 @@ function Player(x,y){
     this.airJumpsLeft=1;
     
     this.update=function(dt){
-        let grav=1;
-        const jumpKeys=[keycode.w,keycode.up];
-        if(keyboard.onDown(jumpKeys)){
-            if(this.isGrounded)this.jump(false);
-            else if(this.airJumpsLeft>0)this.jump(true);
-        }
-        if(this.isJumping&&keyboard.isDown(jumpKeys)&&this.vy<0){
-            grav=.4;
-        }else{
-            this.isJumping=false;
-        }
-        this.vy+=800*grav*dt;
-        this.move(dt);
+        if(keyboard.isDown(keycode.space)) this.shoot();
+        this.moveV(dt);
+        this.moveH(dt);
         this.isGrounded=false;
     };
     this.draw=function(gfx){
-        const r=this.rect;
-        gfx.fillRect(r.x,r.y,r.w,r.h);
+        this.rect.draw(gfx);
     };
-    this.move=function(dt){
+    this.moveH=function(dt){
         let move=0;
         let slowDown=false;
         if(keyboard.isDown([keycode.a,keycode.left]))move--;
@@ -51,6 +40,20 @@ function Player(x,y){
             if(move>0&&this.vx>0)this.vx=0;
         }
     };
+    this.moveV=function(dt){
+        let grav=1;
+        const jumpKeys=[keycode.w,keycode.up];
+        if(keyboard.onDown(jumpKeys)){
+            if(this.isGrounded)this.jump(false);
+            else if(this.airJumpsLeft>0)this.jump(true);
+        }
+        if(this.isJumping&&keyboard.isDown(jumpKeys)&&this.vy<0){
+            grav=.4;
+        }else{
+            this.isJumping=false;
+        }
+        this.vy+=800*grav*dt;
+    }
     this.fixOverlap=function(rect){
         if(!this.rect.overlaps(rect))return;//return if not overlapping
         const fix=rect.findFix(this.rect);
@@ -74,5 +77,9 @@ function Player(x,y){
         this.vy=-300;
         this.isJumping=true;
         if(isAirJump)this.airJumpsLeft--;
+    };
+    this.shoot=function(){
+        const b = new Bullet(this.rect.pos(), {x:0,y:0});
+        
     };
 }

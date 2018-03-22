@@ -5,8 +5,7 @@ function Platform(rect){
         
     };
     this.draw=function(gfx){
-        const r=this.rect;
         gfx.fillStyle="#00F";
-        gfx.fillRect(r.x,r.y,r.w,r.h);  
+        this.rect.draw(gfx);
     };
 }

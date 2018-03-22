@@ -37,6 +37,12 @@ function Rect(x,y,w,h){
         this.x = Math.round(pos.x/snap)*snap;
         this.y = Math.round(pos.y/snap)*snap;
     };
+    this.draw=function(gfx){
+        gfx.fillRect(this.x,this.y,this.w,this.h);
+    };
+    this.pos=function(){
+        return {x:this.x,y:this.x};
+    };
 }
 Rect.lerp=function(a,b,t){
     let x=a.x+(b.x-a.x)*t;
