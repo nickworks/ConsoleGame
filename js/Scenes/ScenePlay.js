@@ -38,11 +38,12 @@ function ScenePlay(n){
             for(var i in this.bullets){
                 const b=this.bullets[i];
                 b.update(dt);
-                const die=(o)=>{this.bullets.splice(i,1);};
+                const die=(o)=>b.dead=true;
                 b.rect.groupCheck(this.npcs, die);
                 b.rect.groupCheck(this.doors, die);
                 b.rect.groupCheck(this.platforms, die);
                 //TODO: bullet overlaps enemy
+                if(b.dead)this.bullets.splice(i,1);
             }
             if(keyboard.onDown([keycode.p,keycode.escape])){
                 this.modal=new Pause(this);
