@@ -3,6 +3,9 @@ function Rect(x,y,w,h){
     this.y=y;
     this.w=w;
     this.h=h;
+    this.copy=function(){
+        return new Rect(this.x,this.y,this.w,this.h);
+    };
     this.hits=function(p){
         return (p.x>this.x&&p.x<this.x+this.w&&p.y>this.y&&p.y<this.y+this.h);
     };

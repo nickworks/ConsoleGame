@@ -2,8 +2,8 @@ function Door(x,y){
     this.rect=new Rect(x,y,30,100);
     this.opening=false;
     this.done=false;
-    this.rectA=new Rect(x,y,30,100);
-    this.rectB=new Rect(x,y,30,5);
+    this.rectA=null;
+    this.rectB=null;
     this.timer=0;
     this.timespan=1;
     this.update=function(dt){
@@ -24,5 +24,8 @@ function Door(x,y){
     };
     this.open=function(){
         this.opening=true;
+        this.rectA=this.rect.copy();
+        this.rectB=this.rect.copy();
+        this.rectB.h=20;
     };
 }
