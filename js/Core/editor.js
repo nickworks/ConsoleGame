@@ -1,4 +1,5 @@
 function Editor(){
+    scene.cam.target=null;
     this.dragObj=null;
     this.dragOrig=null;//original position of obj
     this.dragStart=null;//original position of mouse
@@ -7,7 +8,17 @@ function Editor(){
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(keycode.escape)){
             this.remove=true;
+            scene.cam.target=scene.player;
         }
+        this.moveCam(dt);        
+    };
+    this.moveCam=function(dt){
+        const c=scene.cam;
+        const s=300;
+        if(keyboard.isDown(keycode.w)) c.ty-=s*dt;
+        if(keyboard.isDown(keycode.a)) c.tx-=s*dt;
+        if(keyboard.isDown(keycode.s)) c.ty+=s*dt;
+        if(keyboard.isDown(keycode.d)) c.tx+=s*dt;
     };
     this.handleClick=function(){
         const m=scene.cam.worldMouse();
@@ -43,6 +54,8 @@ function Editor(){
         gfx.font="8pt Arial";
         gfx.textAlign="left";
         gfx.textBaseline="hanging";
-        gfx.fillText("EDIT MODE (escape to exit)", 10, 10);
+        gfx.fillText("== EDIT MODE ==", 10, 10);
+        gfx.fillText("ESC : exit mode", 10, 22);
+        gfx.fillText("WASD: move cam", 10, 34);
     };
 };

@@ -5,14 +5,16 @@ function Camera(){
     this.ty=0;
     this.sx=game.width/2;
     this.sy=game.height/2;
-    this.update=function(dt, target){
-        if(target){
-            if(target.rect){
-                this.tx=target.rect.x;
-                this.ty=target.rect.y;
+    this.target=null;
+    this.update=function(dt){
+        if(this.target){
+            if(this.target.rect){
+                const m=this.target.rect.mid();
+                this.tx=m.x;
+                this.ty=m.y;
             } else {
-                this.tx=target.x||this.tx;
-                this.ty=target.y||this.ty;
+                this.tx=this.target.x||this.tx;
+                this.ty=this.target.y||this.ty;
             }
         }
         const speed=5;

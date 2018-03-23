@@ -73,6 +73,7 @@ function ScenePlay(n){
         this.doors=level.doors;
         this.enemies=[new Enemy()];
         this.bullets=[];
+        this.cam.target=this.player;
     };
     this.edit=function(){
         this.modal=new Editor();
