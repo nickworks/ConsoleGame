@@ -6,12 +6,16 @@ function Pause(){
         caption:"Reload Level",
         callback:()=>{this.reloadLevel=true;}
     },{
+        caption:"Editor",
+        callback:()=>{this.launchEditor=true;}
+    },{
         caption:"Quit",
         callback:()=>{this.backToMainMenu=true;}
     }]);
     this.update=function(dt){
         this.menu.update(dt);
         if(this.backToMainMenu)return new SceneTitle();
+        if(this.launchEditor)scene.modal=new Editor();
     };
     this.draw=function(gfx){
         gfx.fillStyle="rgba(0,0,0,.75)";
