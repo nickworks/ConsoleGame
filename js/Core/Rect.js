@@ -62,6 +62,9 @@ function Rect(x,y,w,h){
         return(scene.cam && this.hits(scene.cam.worldMouse()));
     }
 }
+Rect.from=function(raw){
+    return new Rect(raw.x,raw.y,raw.w,raw.h);
+};
 Rect.lerp=function(a,b,t){
     let x=a.x+(b.x-a.x)*t;
     let y=a.y+(b.y-a.y)*t;

@@ -68,12 +68,13 @@ function ScenePlay(n){
         this.levelIndex=levelIndex;
         const level=new Level1();
         
-        this.modal=null;
         this.player=level.player;
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
-        this.enemies=[new Enemy(100,0)];
+        this.enemies=level.enemies;
+        
+        this.modal=null;
         this.bullets=[];
         this.cam.target=this.player.pawn;
     };

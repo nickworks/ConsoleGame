@@ -1,5 +1,5 @@
-function NPC(){
-    this.rect=new Rect(230, 70, 25, 25);
+function NPC(raw){
+    this.rect=new Rect(raw.x, raw.y, 25, 25);
     this.canTalk=false;
     this.update=function(dt, overlaps){
         this.canTalk=overlaps;

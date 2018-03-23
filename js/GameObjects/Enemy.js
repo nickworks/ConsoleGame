@@ -1,6 +1,6 @@
-function Enemy(x,y){
+function Enemy(raw){
     this.seesPlayer=true;
-    this.pawn=new Pawn(x,y);
+    this.pawn=new Pawn(raw);
     this.update=function(dt){
         
         let move=0;

@@ -1,5 +1,5 @@
-function Pawn(x,y){
-    this.rect = new Rect(x,y,25,25);
+function Pawn(raw){
+    this.rect = new Rect(raw.x,raw.y,25,25);
     this.vx = 0;
     this.vy = 0;
     this.a = 800;

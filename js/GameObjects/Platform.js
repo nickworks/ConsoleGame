@@ -1,5 +1,5 @@
-function Platform(rect){
-    this.rect=rect;
+function Platform(raw){
+    this.rect=Rect.from(raw);
     
     this.update=function(dt){
         
