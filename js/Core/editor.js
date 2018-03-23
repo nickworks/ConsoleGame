@@ -28,7 +28,7 @@ function Editor(){
             this.dragModeSize=resize;
             this.dragStart=m;
             this.dragObj=o;
-            this.dragOrig=o.rect.raw();
+            this.dragOrig=(o.rect||o.pawn.rect).raw();
         };
         if(keyboard.isDown(keycode["1"])){//platforms
             const o=new Platform(new Rect(m.x,m.y,1,1));
@@ -52,13 +52,16 @@ function Editor(){
         }
         else {
             const check=(a)=>{
-                for(var i in a)if(a[i].rect.hits(m)){
-                    if(keyboard.isDown(keycode.q)){
-                        a.splice(i,1);//destroy
-                    } else {
-                        drag(a[i],keyboard.isDown(keycode.r));//grab
+                for(var i in a){
+                    const r=a[i].rect||a[i].pawn.rect;
+                    if(r.hits(m)){
+                        if(keyboard.isDown(keycode.q)){
+                            a.splice(i,1);//destroy
+                        } else {
+                            drag(a[i],keyboard.isDown(keycode.r));//grab
+                        }
+                        break;
                     }
-                    break;
                 }
             };
             check(scene.platforms);
@@ -79,7 +82,7 @@ function Editor(){
             raw.x+=d.x;
             raw.y+=d.y;
         }
-        this.dragObj.rect.setRaw(raw, 25);
+        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw, 25);
         if(!mouse.isDown())this.dragObj=null;
     };
     this.draw=function(gfx){
@@ -96,6 +99,5 @@ function Editor(){
         gfx.fillText("LC+2 : spawn door", 10, 82);
         gfx.fillText("LC+3 : spawn npc", 10, 94);
         gfx.fillText("LC+4 : spawn enemy", 10, 106);
-
     };
 };
