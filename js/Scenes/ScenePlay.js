@@ -53,13 +53,17 @@ function ScenePlay(n){
         if(this.modal)this.modal.draw(gfx);
     };
     this.load=function(levelIndex){
-        this.modal=null;
+        
         this.levelIndex=levelIndex;
-        const level=levelData(levelIndex);
+        
+        const level=new Level1();
+        
+        this.modal=null;
         this.player=level.player;
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
+        this.bullets=[];
     };
     this.edit=function(){
         this.modal=new Editor();

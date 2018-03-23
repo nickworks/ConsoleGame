@@ -18,14 +18,14 @@
     'js/GameObjects/Door.js',
     'js/GameObjects/Bullet.js',
     'js/core/Rect.js',
-    'js/core/ScenePlay.js',
-    'js/core/SceneTitle.js',
     'js/core/Sprite.js',
     'js/core/editor.js',
     'js/core/keyboard.js',
     'js/core/mouse.js',
     'js/core/console.js',
-    'js/core/levels.js',
+    'js/Scenes/ScenePlay.js',
+    'js/Scenes/SceneTitle.js',
+    'js/Scenes/Level1.js',
     'js/core/game.js'
 ],()=>{
     game.begin("myCanvas");
