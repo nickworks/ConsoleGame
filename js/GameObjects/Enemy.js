@@ -1,9 +1,13 @@
 function Enemy(x,y){
-    this.rect=new Rect(x,y,25,25);
+    this.pawn=new Pawn(x,y);
     this.update=function(dt){
         
+        let move=0;
+        
+        this.pawn.moveV(dt);
+        this.pawn.moveH(dt,move);
     };
     this.draw=function(gfx){
-        this.rect.draw(gfx);  
+        this.pawn.draw(gfx);  
     };
 }

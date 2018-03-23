@@ -16,15 +16,16 @@ function ScenePlay(n){
         } else {
             if(mouse.onDown()) this.handleClick();
             if(this.player)this.player.update(dt);
-            this.platforms.forEach(p=>{
-                p.update(dt);
-                this.player.pawn.fixOverlap(p.rect);
-            });
             this.enemies.forEach(e=>{
                 e.update(dt);
-                if(e.rect.overlaps(this.player.pawn.rect)){
+                if(e.pawn.rect.overlaps(this.player.pawn.rect)){
                     // TODO: enemy overlaps player
                 }
+            });
+            this.platforms.forEach(p=>{
+                p.update(dt);
+                p.fixOverlaps(this.player);
+                p.fixOverlaps(this.enemies);
             });
             this.npcs.forEach(n=>{
                 const overlaps=n.rect.overlaps(this.player.pawn.rect);
@@ -71,7 +72,7 @@ function ScenePlay(n){
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
-        this.enemies=[new Enemy()];
+        this.enemies=[new Enemy(100,0)];
         this.bullets=[];
         this.cam.target=this.player.pawn;
     };
@@ -80,9 +81,12 @@ function ScenePlay(n){
     };
     this.handleClick=function(){
         const pre="you clicked on scene.";
-        if(this.player.rect.mouseOver()) this.log(pre+"player");
+        if(this.player.pawn.rect.mouseOver()) this.log(pre+"player");
         const check=(a,str)=>{
-            for(var i in a)if(a[i].rect.mouseOver())this.log(pre+str+"["+i+"]");
+            for(var i in a){
+                const rect=a[i].rect||a[i].pawn.rect;
+                if(rect.mouseOver())this.log(pre+str+"["+i+"]");
+            }
         };
         check(this.bullets, "bullets");
         check(this.platforms, "platforms");
