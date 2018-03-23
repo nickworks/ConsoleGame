@@ -2,6 +2,7 @@
 //TODO: redo level importer
 //TODO: use context.createPattern for repeating fills
 
+//TODO: add elevators
 
 move a platform
 Lookup a puzzle solution (lock combination?)

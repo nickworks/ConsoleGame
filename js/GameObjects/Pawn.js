@@ -8,6 +8,8 @@ function Pawn(x,y){
     this.isJumping=false;
     this.airJumpsLeft=1;
     this.dir=1;
+    this.jumpCooldown=0;
+    this.jumpCooldownAmt=.5;
     this.shootCooldown=0;
     this.shootCooldownAmt=.5;
     this.reloadCooldown=0;
@@ -25,6 +27,9 @@ function Pawn(x,y){
             if(this.reloadCooldown<=0)this.reload();
         }
         else if(this.shootCooldown>0)this.shootCooldown-=dt;
+        
+        if(this.isGrounded && this.jumpCooldown>0) this.jumpCooldown-=dt;
+        this.isGrounded=false;
     };
     this.moveH=function(dt,move=0){
         let slowDown=false;
@@ -53,7 +58,6 @@ function Pawn(x,y){
         }
         this.vy+=800*grav*dt;
         this.rect.y+=this.vy*dt;
-        this.isGrounded=false;
     };
     this.fixOverlap=function(rect){
         if(!this.rect.overlaps(rect))return;//return if not overlapping
@@ -76,9 +80,12 @@ function Pawn(x,y){
     };
     this.jump=function(isAirJump=false){ // try to jump...
         if(!isAirJump&&!this.isGrounded)return;
+        if(!isAirJump&&this.jumpCooldown>0)return;
         if(isAirJump&&this.airJumpsLeft<=0)return;
+        
         this.vy=-300;
         this.isJumping=true;
+        this.jumpCooldown=this.jumpCooldownAmt;
         if(isAirJump)this.airJumpsLeft--;
     };
     this.shoot=function(){

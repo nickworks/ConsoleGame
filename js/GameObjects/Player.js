@@ -1,5 +1,6 @@
 function Player(x,y){
     this.pawn=new Pawn(x,y);
+    this.pawn.jumpCooldownAmt=0;
     
     this.update=function(dt){
         
