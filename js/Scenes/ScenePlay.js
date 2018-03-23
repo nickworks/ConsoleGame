@@ -3,6 +3,7 @@ function ScenePlay(n){
     this.player=null;
     this.platforms=[];
     this.npcs=[];
+    this.enemies=[];
     this.doors=[];
     this.bullets=[];
     this.modal=null;
@@ -19,6 +20,12 @@ function ScenePlay(n){
                 p.update(dt);
                 this.player.fixOverlap(p.rect);
             });
+            this.enemies.forEach(e=>{
+                e.update(dt);
+                if(e.rect.overlaps(this.player.rect)){
+                    // TODO: enemy overlaps player
+                }
+            });
             this.npcs.forEach(n=>{
                 const overlaps=n.rect.overlaps(this.player.rect);
                 n.update(dt, overlaps);
@@ -34,6 +41,7 @@ function ScenePlay(n){
                 b.rect.groupCheck(this.npcs, die);
                 b.rect.groupCheck(this.doors, die);
                 b.rect.groupCheck(this.platforms, die);
+                //TODO: bullet overlaps enemy
             }
             if(keyboard.onDown([keycode.p,keycode.escape])){
                 this.modal=new Pause(this);
@@ -46,6 +54,7 @@ function ScenePlay(n){
         this.cam.drawStart(gfx);
         this.player.draw(gfx);
         this.npcs.forEach(n=>n.draw(gfx));
+        this.enemies.forEach(e=>e.draw(gfx));
         this.platforms.forEach(p=>p.draw(gfx));
         this.doors.forEach(d=>d.draw(gfx));
         this.bullets.forEach(b=>b.draw(gfx));
@@ -62,6 +71,7 @@ function ScenePlay(n){
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
+        this.enemies=[new Enemy()];
         this.bullets=[];
     };
     this.edit=function(){
@@ -70,10 +80,14 @@ function ScenePlay(n){
     this.handleClick=function(){
         const pre="you clicked on scene.";
         if(this.player.rect.mouseOver()) this.log(pre+"player");
-        for(var i in this.bullets) if(this.bullets[i].rect.mouseOver()) this.log(pre+"bullets["+i+"]");
-        for(var i in this.platforms) if(this.platforms[i].rect.mouseOver()) this.log(pre+"platforms["+i+"]");
-        for(var i in this.doors) if(this.doors[i].rect.mouseOver()) this.log(pre+"doors["+i+"]");
-        for(var i in this.npcs) if(this.npcs[i].rect.mouseOver()) this.log(pre+"npcs["+i+"]");
+        const check=(a,str)=>{
+            for(var i in a)if(a[i].rect.mouseOver())this.log(pre+str+"["+i+"]");
+        };
+        check(this.bullets, "bullets");
+        check(this.platforms, "platforms");
+        check(this.doors, "doors");
+        check(this.npcs, "npcs");
+        check(this.enemies, "enemies");
     };
     this.log=function(msg){
         console.log(msg);
