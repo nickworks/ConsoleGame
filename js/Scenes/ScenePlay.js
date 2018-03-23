@@ -18,21 +18,21 @@ function ScenePlay(n){
             if(this.player)this.player.update(dt);
             this.platforms.forEach(p=>{
                 p.update(dt);
-                this.player.fixOverlap(p.rect);
+                this.player.pawn.fixOverlap(p.rect);
             });
             this.enemies.forEach(e=>{
                 e.update(dt);
-                if(e.rect.overlaps(this.player.rect)){
+                if(e.rect.overlaps(this.player.pawn.rect)){
                     // TODO: enemy overlaps player
                 }
             });
             this.npcs.forEach(n=>{
-                const overlaps=n.rect.overlaps(this.player.rect);
+                const overlaps=n.rect.overlaps(this.player.pawn.rect);
                 n.update(dt, overlaps);
             });
             this.doors.forEach(d=>{
                 d.update(dt);
-                this.player.fixOverlap(d.rect);
+                this.player.pawn.fixOverlap(d.rect);
             });
             for(var i in this.bullets){
                 const b=this.bullets[i];
@@ -73,7 +73,7 @@ function ScenePlay(n){
         this.doors=level.doors;
         this.enemies=[new Enemy()];
         this.bullets=[];
-        this.cam.target=this.player;
+        this.cam.target=this.player.pawn;
     };
     this.edit=function(){
         this.modal=new Editor();

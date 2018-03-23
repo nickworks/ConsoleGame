@@ -14,6 +14,7 @@
     'js/GameObjects/Camera.js',
     'js/GameObjects/NPC.js',
     'js/GameObjects/Platform.js',
+    'js/GameObjects/Pawn.js',
     'js/GameObjects/Player.js',
     'js/GameObjects/Door.js',
     'js/GameObjects/Bullet.js',
