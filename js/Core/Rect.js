@@ -14,6 +14,11 @@ function Rect(x,y,w,h){
         if(r.y+r.h<o.y) return false;
         return true;
     };
+    this.groupCheck=function(g,o){
+        g.forEach(i=>{
+            if(this.overlaps(i.rect)) o(i);
+        });
+    };
     this.findFix=function(o){
         // how far to move o to get it out
         const r=this;
@@ -41,7 +46,10 @@ function Rect(x,y,w,h){
         gfx.fillRect(this.x,this.y,this.w,this.h);
     };
     this.pos=function(){
-        return {x:this.x,y:this.x};
+        return {x:this.x,y:this.y};
+    };
+    this.mid=function(){
+        return {x:this.x+this.w/2,y:this.y+this.h/2};
     };
 }
 Rect.lerp=function(a,b,t){

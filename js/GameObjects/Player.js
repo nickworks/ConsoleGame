@@ -7,6 +7,7 @@ function Player(x,y){
     this.isGrounded=false;
     this.isJumping=false;
     this.airJumpsLeft=1;
+    this.dir=1;
     
     this.update=function(dt){
         if(keyboard.isDown(keycode.space)) this.shoot();
@@ -22,19 +23,18 @@ function Player(x,y){
         let slowDown=false;
         if(keyboard.isDown([keycode.a,keycode.left]))move--;
         if(keyboard.isDown([keycode.d,keycode.right]))move++;
-        
         if(move==0){ // if no input, slowdown
             if(this.vx<0)move+=2;
             if(this.vx>0)move-=2;
             slowDown=true;
+        } else {
+            this.dir=move;
         }
-        
         this.vx+=this.a*move*dt;
-        if(this.vx>this.maxv) this.vx=this.maxv;
-        if(this.vx<-this.maxv) this.vx=-this.maxv;
+        if(this.vx>this.maxv)this.vx=this.maxv;
+        if(this.vx<-this.maxv)this.vx=-this.maxv;
         this.rect.x+=this.vx*dt;
         this.rect.y+=this.vy*dt;
-        
         if(slowDown){
             if(move<0&&this.vx<0)this.vx=0;
             if(move>0&&this.vx>0)this.vx=0;
@@ -79,7 +79,7 @@ function Player(x,y){
         if(isAirJump)this.airJumpsLeft--;
     };
     this.shoot=function(){
-        const b = new Bullet(this.rect.pos(), {x:0,y:0});
-        
+        const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0});
+        if(level.bullets)level.bullets.push(b);
     };
 }
