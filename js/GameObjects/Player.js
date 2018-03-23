@@ -80,6 +80,6 @@ function Player(x,y){
     };
     this.shoot=function(){
         const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0});
-        if(level.bullets)level.bullets.push(b);
+        if(scene.bullets)scene.bullets.push(b);
     };
 }

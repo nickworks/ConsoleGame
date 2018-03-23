@@ -1,4 +1,4 @@
-var consoleObj = {
+const consoleObj = {
     consoleDiv:undefined,
     output:undefined, // the <div> that contains several <p>
     inputP:undefined, // the <p> that contains <input>
@@ -49,12 +49,12 @@ var consoleObj = {
         } catch(e){
             result = e.message;
         }
-        this.outputToConsole("js> " + this.input.value, true);
-        this.outputToConsole(result);
+        this.log("js> " + this.input.value, true);
+        this.log(result);
         this.input.value = "";
         this.scrollToBottom();
     },
-    outputToConsole:function(msg, isIn = false){
+    log:function(msg, isIn = false){
         const p = document.createElement("p");
         if(isIn) p.classList.add("in");
         p.appendChild(document.createTextNode(msg));

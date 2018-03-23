@@ -27,8 +27,12 @@ body {
     padding:5px;
     margin:0;
 }
+#console p:not(.in){
+    border-bottom:1px dotted #888;
+    margin-bottom:6px;
+}
 #console p.in {
-    background:#999;
+    background:#888;
     border-radius:3px;
     margin:4px 5px;
     color:#333;
@@ -43,6 +47,7 @@ body {
 }
 #console #input-p {
     background:#AAA;
+    border:1px solid #444;
 }
 #console-output {
     width:500px;

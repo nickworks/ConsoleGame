@@ -51,6 +51,9 @@ function Rect(x,y,w,h){
     this.mid=function(){
         return {x:this.x+this.w/2,y:this.y+this.h/2};
     };
+    this.mouseOver=function(){
+        return(scene.cam && this.hits(scene.cam.worldMouse()));
+    }
 }
 Rect.lerp=function(a,b,t){
     let x=a.x+(b.x-a.x)*t;

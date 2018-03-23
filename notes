@@ -3,6 +3,7 @@
 //TODO: use context.createPattern for repeating fills
 
 
+move a platform
 Lookup a puzzle solution (lock combination?)
 Change an enemy to friendly
 Spawn a key item

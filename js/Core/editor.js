@@ -10,11 +10,11 @@ function Editor(){
         }
     };
     this.handleClick=function(){
-        const m=level.cam.worldMouse();
-        const objs=[level.player].concat(
-            level.platforms,
-            level.npcs,
-            level.doors
+        const m=scene.cam.worldMouse();
+        const objs=[scene.player].concat(
+            scene.platforms,
+            scene.npcs,
+            scene.doors
         );
         let obj=null;
         for(var i in objs){
@@ -28,7 +28,7 @@ function Editor(){
         this.dragObj=obj;
     }
     this.handleDrag=function(){
-        const d=level.cam.worldMouse();
+        const d=scene.cam.worldMouse();
         d.x-=this.dragStart.x;
         d.y-=this.dragStart.y;
         const pos={

@@ -13,6 +13,7 @@ function ScenePlay(n){
             if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
             if(this.modal.remove)this.modal=null;
         } else {
+            if(mouse.onDown()) this.handleClick();
             if(this.player)this.player.update(dt);
             this.platforms.forEach(p=>{
                 p.update(dt);
@@ -26,7 +27,6 @@ function ScenePlay(n){
                 d.update(dt);
                 this.player.fixOverlap(d.rect);
             });
-            
             for(var i in this.bullets){
                 const b=this.bullets[i];
                 b.update(dt);
@@ -55,7 +55,6 @@ function ScenePlay(n){
     this.load=function(levelIndex){
         
         this.levelIndex=levelIndex;
-        
         const level=new Level1();
         
         this.modal=null;
@@ -68,6 +67,18 @@ function ScenePlay(n){
     this.edit=function(){
         this.modal=new Editor();
     };
+    this.handleClick=function(){
+        const pre="you clicked on scene.";
+        if(this.player.rect.mouseOver()) this.log(pre+"player");
+        for(var i in this.bullets) if(this.bullets[i].rect.mouseOver()) this.log(pre+"bullets["+i+"]");
+        for(var i in this.platforms) if(this.platforms[i].rect.mouseOver()) this.log(pre+"platforms["+i+"]");
+        for(var i in this.doors) if(this.doors[i].rect.mouseOver()) this.log(pre+"doors["+i+"]");
+        for(var i in this.npcs) if(this.npcs[i].rect.mouseOver()) this.log(pre+"npcs["+i+"]");
+    };
+    this.log=function(msg){
+        console.log(msg);
+        consoleObj.log(msg);
+    }
     this.load(n);
     
 }

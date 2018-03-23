@@ -1,4 +1,4 @@
-let level = null;
+let scene = null;
 const game = {
     timePrev: 0,
     dt: 0,
@@ -45,7 +45,7 @@ const game = {
         
         if(nextScene){
             this.scene = nextScene;
-            level = nextScene;
+            scene = nextScene;
         }
         
         ///////////////////////////// LATE UPDATE:
