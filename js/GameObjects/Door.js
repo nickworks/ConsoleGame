@@ -7,7 +7,6 @@ function Door(x,y){
     this.timer=0;
     this.timespan=1;
     this.update=function(dt){
-        if(keyboard.onDown(keycode.s)) this.open();
         if(this.opening){
             this.timer+=dt;
             var p = this.timer/this.timespan;

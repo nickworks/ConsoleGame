@@ -1,5 +1,5 @@
-function Enemy(){
-    this.rect=new Rect(100,0,25,25);
+function Enemy(x,y){
+    this.rect=new Rect(x,y,25,25);
     this.update=function(dt){
         
     };
