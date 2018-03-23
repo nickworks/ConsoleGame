@@ -41,15 +41,19 @@ function Rect(x,y,w,h){
     this.toString=function(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
     };
-    this.setPosition=function(pos,snap=1){
-        this.x = Math.round(pos.x/snap)*snap;
-        this.y = Math.round(pos.y/snap)*snap;
+    this.setRaw=function(raw,snap=1){
+        this.x=Math.round(raw.x/snap)*snap;
+        this.y=Math.round(raw.y/snap)*snap;
+        this.w=Math.round(raw.w/snap)*snap;
+        this.h=Math.round(raw.h/snap)*snap;
+        if(this.w<snap)this.w=snap;
+        if(this.h<snap)this.h=snap;
     };
     this.draw=function(gfx){
         gfx.fillRect(this.x,this.y,this.w,this.h);
     };
-    this.pos=function(){
-        return {x:this.x,y:this.y};
+    this.raw=function(){
+        return {x:this.x,y:this.y,w:this.w,h:this.h};
     };
     this.mid=function(){
         return {x:this.x+this.w/2,y:this.y+this.h/2};

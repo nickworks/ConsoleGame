@@ -5,6 +5,7 @@ const keycode = {
     d:68,
     e:69,
     p:80,
+    r:82,
     left:37,
     up:38,
     right:39,

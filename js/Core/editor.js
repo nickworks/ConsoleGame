@@ -3,6 +3,7 @@ function Editor(){
     this.dragObj=null;
     this.dragOrig=null;//original position of obj
     this.dragStart=null;//original position of mouse
+    this.dragModeSize=false;
     this.update=function(dt){
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
@@ -21,6 +22,7 @@ function Editor(){
         if(keyboard.isDown(keycode.d)) c.tx+=s*dt;
     };
     this.handleClick=function(){
+        this.dragModeSize=keyboard.isDown(keycode.r);
         const m=scene.cam.worldMouse();
         const objs=[scene.player].concat(
             scene.platforms,
@@ -32,7 +34,7 @@ function Editor(){
             if(objs[i].rect.hits(m)){
                 obj=objs[i];
                 this.dragStart=m;
-                this.dragOrig={x:obj.rect.x,y:obj.rect.y};
+                this.dragOrig=obj.rect.raw();
                 break;
             }
         }
@@ -42,11 +44,15 @@ function Editor(){
         const d=scene.cam.worldMouse();
         d.x-=this.dragStart.x;
         d.y-=this.dragStart.y;
-        const pos={
-            x:this.dragOrig.x+d.x,
-            y:this.dragOrig.y+d.y
-        };
-        this.dragObj.rect.setPosition(pos, 25);
+        const raw = Object.assign({},this.dragOrig);//make copy
+        if(this.dragModeSize){
+            raw.w+=d.x;
+            raw.h+=d.y;
+        }else{ 
+            raw.x+=d.x;
+            raw.y+=d.y;
+        }
+        this.dragObj.rect.setRaw(raw, 25);
         if(!mouse.isDown())this.dragObj=null;
     };
     this.draw=function(gfx){
@@ -57,5 +63,6 @@ function Editor(){
         gfx.fillText("== EDIT MODE ==", 10, 10);
         gfx.fillText("ESC : exit mode", 10, 22);
         gfx.fillText("WASD: move cam", 10, 34);
+        gfx.fillText("R   : resize when dragging", 10, 46);
     };
 };
