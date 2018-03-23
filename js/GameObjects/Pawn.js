@@ -8,9 +8,23 @@ function Pawn(x,y){
     this.isJumping=false;
     this.airJumpsLeft=1;
     this.dir=1;
+    this.shootCooldown=0;
+    this.shootCooldownAmt=.5;
+    this.reloadCooldown=0;
+    this.reloadCooldownAmt=3;
+    this.ammo=0;
+    this.ammoAmt=5
     
     this.draw=function(gfx){
         this.rect.draw(gfx);
+    };
+    this.update=function(dt){
+        
+        if(this.reloadCooldown>0){
+            this.reloadCooldown-=dt;
+            if(this.reloadCooldown<=0)this.reload();
+        }
+        else if(this.shootCooldown>0)this.shootCooldown-=dt;
     };
     this.moveH=function(dt,move=0){
         let slowDown=false;
@@ -66,7 +80,20 @@ function Pawn(x,y){
         if(isAirJump)this.airJumpsLeft--;
     };
     this.shoot=function(){
-        const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0});
-        if(scene.bullets)scene.bullets.push(b);
+        if(this.reloadCooldown>0)return;
+        if(this.shootCooldown>0)return;
+        if(!scene.bullets)return;
+        
+        if(this.ammo>0){
+            const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0});
+            scene.bullets.push(b);
+            this.shootCooldown=this.shootCooldownAmt;
+            this.ammo--;
+        } else {
+            this.reloadCooldown=this.reloadCooldownAmt;
+        }
+    };
+    this.reload=function(){
+        this.ammo=this.ammoAmt;
     };
 }

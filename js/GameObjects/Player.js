@@ -21,6 +21,7 @@ function Player(x,y){
         
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
+        this.pawn.update(dt);
     };
     this.draw=function(gfx){
         this.pawn.draw(gfx);
