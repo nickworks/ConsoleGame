@@ -8,10 +8,17 @@ function Enemy(x,y){
         if(this.seesPlayer){
             const p=scene.player.pawn.rect.mid();
             const me=this.pawn.rect.mid();
+            this.pawn.dir=(me.x<p.x)?1:-1;
             if(me.x>p.x+200) move--;
             if(me.x<p.x-200) move++;
             
-            this.pawn.shoot();
+            if(me.y>p.y+25){//enemy is below player
+                this.pawn.jump();
+            } else if(me.y>p.y-25){
+                this.pawn.shoot();
+            }
+            
+            
         }
         
         this.pawn.moveV(dt);

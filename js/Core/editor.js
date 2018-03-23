@@ -9,7 +9,7 @@ function Editor(){
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(keycode.escape)){
             this.remove=true;
-            scene.cam.target=scene.player;
+            scene.cam.target=scene.player.pawn;
         }
         this.moveCam(dt);        
     };
@@ -64,6 +64,7 @@ function Editor(){
                     }
                 }
             };
+            check([scene.player.pawn]);
             check(scene.platforms);
             check(scene.npcs);
             check(scene.doors);

@@ -74,7 +74,9 @@ function Pawn(x,y){
             }
         }
     };
-    this.jump=function(isAirJump){
+    this.jump=function(isAirJump=false){ // try to jump...
+        if(!isAirJump&&!this.isGrounded)return;
+        if(isAirJump&&this.airJumpsLeft<=0)return;
         this.vy=-300;
         this.isJumping=true;
         if(isAirJump)this.airJumpsLeft--;
