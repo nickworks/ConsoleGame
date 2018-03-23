@@ -1,21 +1,23 @@
 const keycode = {
-    w:87,
-    a:65,
-    s:83,
-    d:68,
-    e:69,
-    p:80,
-    r:82,
+    enter:13,
+    escape:27,
+    space:32,
     left:37,
     up:38,
     right:39,
     down:40,
-    space:32,
-    enter:13,
-    escape:27
+    a:65,
+    d:68,
+    e:69,
+    p:80,
+    q:81,
+    r:82,
+    s:83,
+    w:87,
 };
 
 const keyboard = {
+    debug:false,
     keys:[],
     prev:[],
     isDown:function(keyCode){
@@ -42,7 +44,7 @@ const keyboard = {
         this.prev = this.keys.slice(0); // copy the array
     },
     updateKey: function(keyCode, value){
-        //console.log(keyCode + (value ? " down" : " up"));
+        if(this.debug)console.log(keyCode+(value?" down":" up"));
         
         if(document.activeElement == document.body)
             this.keys[keyCode] = value;

@@ -22,23 +22,27 @@ function Editor(){
         if(keyboard.isDown(keycode.d)) c.tx+=s*dt;
     };
     this.handleClick=function(){
-        this.dragModeSize=keyboard.isDown(keycode.r);
+        
         const m=scene.cam.worldMouse();
-        const objs=[scene.player].concat(
-            scene.platforms,
-            scene.npcs,
-            scene.doors
-        );
-        let obj=null;
-        for(var i in objs){
-            if(objs[i].rect.hits(m)){
-                obj=objs[i];
-                this.dragStart=m;
-                this.dragOrig=obj.rect.raw();
+
+        const check=(a)=>{
+            for(var i in a)if(a[i].rect.hits(m)){
+                if(keyboard.isDown(keycode.q)){
+                    a.splice(i,1);
+                } else {
+                    this.dragModeSize=keyboard.isDown(keycode.r);
+                    this.dragStart=m;
+                    this.dragObj=a[i];
+                    this.dragOrig=a[i].rect.raw();
+                }
                 break;
             }
-        }
-        this.dragObj=obj;
+        };
+        check(scene.platforms);
+        check(scene.npcs);
+        check(scene.doors);
+        check(scene.enemies);
+        
     }
     this.handleDrag=function(){
         const d=scene.cam.worldMouse();
@@ -57,12 +61,14 @@ function Editor(){
     };
     this.draw=function(gfx){
         gfx.fillStyle="#000";
-        gfx.font="8pt Arial";
+        gfx.font="8pt Courier";
         gfx.textAlign="left";
         gfx.textBaseline="hanging";
         gfx.fillText("== EDIT MODE ==", 10, 10);
-        gfx.fillText("ESC : exit mode", 10, 22);
-        gfx.fillText("WASD: move cam", 10, 34);
-        gfx.fillText("R   : resize when dragging", 10, 46);
+        gfx.fillText(" ESC : exit mode", 10, 22);
+        gfx.fillText("WASD : move cam", 10, 34);
+        gfx.fillText("   R : resize when dragging", 10, 46);
+        gfx.fillText("   Q : destroy on click", 10, 58);
+
     };
 };
