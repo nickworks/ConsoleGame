@@ -1,7 +1,9 @@
 function Player(raw){
     this.pawn=new Pawn(raw);
     this.pawn.jumpCooldownAmt=0;
-    
+    this.hp=100;
+    this.dead=false;
+    this.friend=true;
     this.serialize=function(){
         return{
             x:this.pawn.rect.x,
@@ -24,7 +26,7 @@ function Player(raw){
             this.pawn.isJumping=false;
         }
         
-        if(keyboard.isDown(keycode.space)) this.pawn.shoot();
+        if(keyboard.isDown(keycode.space)) this.pawn.shoot(true);
         
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
@@ -33,6 +35,10 @@ function Player(raw){
     this.draw=function(gfx){
         this.pawn.draw(gfx);
     };
+    this.hurt=function(amt){
+        this.hp-=amt;
+        if(this.hp<=0)this.dead=true;
+    }
 }
 
 

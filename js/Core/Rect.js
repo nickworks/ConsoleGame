@@ -19,7 +19,7 @@ function Rect(x,y,w,h){
     };
     this.groupCheck=function(g,o){
         g.forEach(i=>{
-            if(this.overlaps(i.rect)) o(i);
+            if(this.overlaps(i.rect||i.pawn.rect)) o(i);
         });
     };
     this.findFix=function(o){
@@ -37,6 +37,13 @@ function Rect(x,y,w,h){
         else
             res.x=0;
         return res;
+    };
+    this.fixOverlaps=function(o){
+        if(!Array.isArray(o))o=[o];
+        o.forEach(i=>{
+            if(i.pawn) i.pawn.fixOverlap(this);
+            else if(i.fixOverlap) i.fixOverlap(this);
+        });
     };
     this.toString=function(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";

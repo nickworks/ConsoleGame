@@ -20,8 +20,7 @@ function Pawn(raw){
     this.draw=function(gfx){
         this.rect.draw(gfx);
     };
-    this.update=function(dt){
-        
+    this.update=function(dt){    
         if(this.reloadCooldown>0){
             this.reloadCooldown-=dt;
             if(this.reloadCooldown<=0)this.reload();
@@ -88,13 +87,13 @@ function Pawn(raw){
         this.jumpCooldown=this.jumpCooldownAmt;
         if(isAirJump)this.airJumpsLeft--;
     };
-    this.shoot=function(){
+    this.shoot=function(isFriend){
         if(this.reloadCooldown>0)return;
         if(this.shootCooldown>0)return;
         if(!scene.bullets)return;
         
         if(this.ammo>0){
-            const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0});
+            const b=new Bullet(this.rect.mid(),{x:this.dir*600,y:0},isFriend);
             scene.bullets.push(b);
             this.shootCooldown=this.shootCooldownAmt;
             this.ammo--;

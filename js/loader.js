@@ -18,7 +18,6 @@
     'js/GameObjects/Player.js',
     'js/GameObjects/Door.js',
     'js/GameObjects/Bullet.js',
-    'js/GameObjects/Enemy.js',
     'js/core/Rect.js',
     'js/core/Sprite.js',
     'js/core/editor.js',

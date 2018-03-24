@@ -5,6 +5,8 @@ function NPC(raw){
     this.canTalk=false;
     this.friend=raw.f;
     this.dialog=raw.d;
+    this.hp=100;
+    this.dead=false;
     this.serialize=function(){
         return{
             x:this.pawn.rect.x,
@@ -38,7 +40,7 @@ function NPC(raw){
             if(me.y>p.y+25){//enemy is below player
                 this.pawn.jump();
             } else if(me.y>p.y-25){
-                this.pawn.shoot();
+                this.pawn.shoot(false);
             }
         }
         
@@ -46,11 +48,15 @@ function NPC(raw){
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
     };
-    
     this.draw=function(gfx){
         if(this.friend && this.canTalk){
             // TODO: use this.canTalk to show a "talk" icon
         }
+        gfx.fillStyle=this.friend?"#6A3":"#F43";
         this.pawn.draw(gfx);  
     };
+    this.hurt=function(amt){
+        this.hp-=amt;
+        if(this.hp<=0)this.dead=true;
+    }
 }

@@ -1,10 +1,12 @@
-function Bullet(p,v,g=false){
+function Bullet(p,v,f,g=false){
     this.rect=new Rect(p.x,p.y,10,10);
     this.vx=v.x;
     this.vy=v.y;
     this.g=g?400:0;
+    this.friend=f;
     this.lifespan=3;
     this.dead=false;
+    this.dmg=25;
     this.update=function(dt){
         this.vy+=this.g*dt;
         this.rect.x+=this.vx*dt;

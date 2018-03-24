@@ -17,25 +17,34 @@ function ScenePlay(n){
             if(this.player)this.player.update(dt);
             this.platforms.forEach(p=>{
                 p.update(dt);
-                p.fixOverlaps(this.player);
-                p.fixOverlaps(this.npcs);
+                p.rect.fixOverlaps(this.player);
+                p.rect.fixOverlaps(this.npcs);
             });
-            this.npcs.forEach(n=>{
+            for(var i in this.npcs){
+                const n=this.npcs[i];
                 const overlaps=n.pawn.rect.overlaps(this.player.pawn.rect);
                 n.update(dt, overlaps);
-            });
+                if(n.dead)this.npcs.splice(i,1);
+            }
             this.doors.forEach(d=>{
                 d.update(dt);
-                this.player.pawn.fixOverlap(d.rect);
+                //this.player.pawn.fixOverlap(d.rect);
+                d.rect.fixOverlaps(this.player);
+                d.rect.fixOverlaps(this.npcs);
             });
+            
             for(var i in this.bullets){
                 const b=this.bullets[i];
                 b.update(dt);
-                const die=(o)=>b.dead=true;
-                b.rect.groupCheck(this.npcs, die);
-                b.rect.groupCheck(this.doors, die);
-                b.rect.groupCheck(this.platforms, die);
-                //TODO: bullet overlaps enemy
+                const hit=(o)=>{
+                    if(o.friend===b.friend)return;
+                    b.dead=true;
+                    if(o.hurt)o.hurt(b.dmg);
+                };
+                b.rect.groupCheck([this.player], hit);
+                b.rect.groupCheck(this.npcs, hit);
+                b.rect.groupCheck(this.doors, hit);
+                b.rect.groupCheck(this.platforms, hit);
                 if(b.dead)this.bullets.splice(i,1);
             }
             if(keyboard.onDown([keycode.p,keycode.escape])){
