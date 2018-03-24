@@ -28,7 +28,7 @@ function NPC(raw){
         if(this.canTalk && keyboard.onDown([keycode.e,keycode.enter])){
             // do dialog
             const p=this.pawn.rect.mid();
-            scene.modal=new Dialog(p.x,p.y-50,this.dialog);
+            scene.modal=new Dialog(p.x,p.y-13,this.dialog);
         }
     };
     this.aiFoe=function(dt){
@@ -55,10 +55,10 @@ function NPC(raw){
     this.draw=function(gfx){
         gfx.fillStyle=this.friend?"#6A3":"#F43";
         this.pawn.draw(gfx);
-        if(this.friend && this.canTalk){
+        if(this.friend&&this.canTalk&&!scene.modal){
             const p=this.pawn.rect.mid();
             gfx.beginPath();
-            gfx.ellipse(p.x,p.y-20,10,10,0,0,Math.PI*2,false);
+            gfx.ellipse(p.x,p.y-25,10,10,0,0,Math.PI*2,false);
             gfx.closePath();
             gfx.fillStyle="#999";
             gfx.fill();
