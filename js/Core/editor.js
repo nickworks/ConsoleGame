@@ -113,11 +113,11 @@ function Editor(){
         const f=(t,a)=>{
             res+="{t:"+t.name+",d:[";
             a.forEach(i=>{
-                const r=(i.rect||i.pawn.rect).raw();
-                res+="{x:"+r.x;
-                res+=",y:"+r.y;
-                res+=",w:"+r.w;
-                res+=",h:"+r.h;
+                res+="{";
+                const r=i.serialize();
+                for(var p in r){
+                    res+=p+":"+JSON.stringify(r[p])+",";
+                }
                 res+="},";
             });
             res+="]},";
@@ -125,7 +125,6 @@ function Editor(){
         f(Player,[scene.player]);
         f(Platform,scene.platforms);
         f(NPC,scene.npcs);
-        f(Enemy,scene.enemies);
         f(Door,scene.doors);
         res+="]";
         consoleObj.log("serialized level data: "+res);

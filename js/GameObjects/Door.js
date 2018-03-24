@@ -6,6 +6,12 @@ function Door(raw){
     this.rectB=null;
     this.timer=0;
     this.timespan=1;
+    this.serialize=function(){
+        return{
+            x:this.rect.x,
+            y:this.rect.y
+        };
+    };
     this.update=function(dt){
         if(this.opening){
             this.timer+=dt;

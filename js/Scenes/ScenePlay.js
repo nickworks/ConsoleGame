@@ -3,7 +3,6 @@ function ScenePlay(n){
     this.player=null;
     this.platforms=[];
     this.npcs=[];
-    this.enemies=[];
     this.doors=[];
     this.bullets=[];
     this.modal=null;
@@ -16,19 +15,13 @@ function ScenePlay(n){
         } else {
             if(mouse.onDown()) this.handleClick();
             if(this.player)this.player.update(dt);
-            this.enemies.forEach(e=>{
-                e.update(dt);
-                if(e.pawn.rect.overlaps(this.player.pawn.rect)){
-                    // TODO: enemy overlaps player
-                }
-            });
             this.platforms.forEach(p=>{
                 p.update(dt);
                 p.fixOverlaps(this.player);
-                p.fixOverlaps(this.enemies);
+                p.fixOverlaps(this.npcs);
             });
             this.npcs.forEach(n=>{
-                const overlaps=n.rect.overlaps(this.player.pawn.rect);
+                const overlaps=n.pawn.rect.overlaps(this.player.pawn.rect);
                 n.update(dt, overlaps);
             });
             this.doors.forEach(d=>{
@@ -56,7 +49,6 @@ function ScenePlay(n){
         this.cam.drawStart(gfx);
         this.player.draw(gfx);
         this.npcs.forEach(n=>n.draw(gfx));
-        this.enemies.forEach(e=>e.draw(gfx));
         this.platforms.forEach(p=>p.draw(gfx));
         this.doors.forEach(d=>d.draw(gfx));
         this.bullets.forEach(b=>b.draw(gfx));
@@ -72,7 +64,6 @@ function ScenePlay(n){
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
-        this.enemies=level.enemies;
         
         this.modal=null;
         this.bullets=[];
@@ -94,7 +85,6 @@ function ScenePlay(n){
         check(this.platforms, "platforms");
         check(this.doors, "doors");
         check(this.npcs, "npcs");
-        check(this.enemies, "enemies");
     };
     this.log=function(msg){
         console.log(msg);

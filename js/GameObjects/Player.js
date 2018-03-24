@@ -2,6 +2,12 @@ function Player(raw){
     this.pawn=new Pawn(raw);
     this.pawn.jumpCooldownAmt=0;
     
+    this.serialize=function(){
+        return{
+            x:this.pawn.rect.x,
+            y:this.pawn.rect.y
+        };
+    };
     this.update=function(dt){
         
         let move=0;

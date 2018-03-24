@@ -1,6 +1,7 @@
 function Enemy(raw){
     this.seesPlayer=true;
     this.pawn=new Pawn(raw);
+    this.pawn.a=600;
     this.update=function(dt){
         
         let move=0;
@@ -17,8 +18,6 @@ function Enemy(raw){
             } else if(me.y>p.y-25){
                 this.pawn.shoot();
             }
-            
-            
         }
         
         this.pawn.moveV(dt);
@@ -28,5 +27,4 @@ function Enemy(raw){
     this.draw=function(gfx){
         this.pawn.draw(gfx);  
     };
-    this.pawn.a=600;
 }
