@@ -20,32 +20,10 @@ function deserialize(d){
     });
     return objs;
 }
-function serialize(){
-    let res="[";
-    const f=(t,a)=>{
-        res+="{t:"+t.name+",d:[";
-        a.forEach(i=>{
-            const r=(i.rect||i.pawn.rect).raw();
-            res+="{x:"+r.x;
-            res+=",y:"+r.y;
-            res+=",w:"+r.w;
-            res+=",h:"+r.h;
-            res+="},";
-        });
-        res+="]},";
-    };
-    f(Player,[scene.player]);
-    f(Platform,scene.platforms);
-    f(NPC,scene.npcs);
-    f(Enemy,scene.enemies);
-    f(Door,scene.doors);
-    res+="]";
-    return res;
-}
 
 function Level1(n){
     
-    const d = [{t:Player,d:[{x:0,y:175,w:25,h:25},]},{t:Platform,d:[{x:-1000,y:200,w:1100,h:100},{x:100,y:150,w:100,h:100},{x:200,y:200,w:100,h:100},]},{t:NPC,d:[{x:100,y:100,w:25,h:25},]},{t:Enemy,d:[{x:100,y:125,w:25,h:25},]},{t:Door,d:[{x:300,y:100,w:25,h:100},]},];
+    const d=[{t:Player,d:[{x:-750,y:175,w:25,h:25},]},{t:Platform,d:[{x:-1000,y:200,w:1325,h:100},{x:-1000,y:-100,w:1325,h:75},{x:-1000,y:-25,w:50,h:225},{x:275,y:-25,w:50,h:225},{x:-175,y:-25,w:75,h:125},{x:-525,y:100,w:150,h:100},]},{t:NPC,d:[{x:0,y:175,w:25,h:25},]},{t:Enemy,d:[{x:-275,y:175,w:25,h:25},]},{t:Door,d:[{x:-150,y:100,w:25,h:100},]},];
     
     const objs=deserialize(d);
     

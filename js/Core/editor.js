@@ -11,7 +11,10 @@ function Editor(){
             this.remove=true;
             scene.cam.target=scene.player.pawn;
         }
-        this.moveCam(dt);        
+        if(keyboard.onDown(keycode.enter)){
+            this.serialize();
+        }
+        this.moveCam(dt);
     };
     this.moveCam=function(dt){
         const c=scene.cam;
@@ -92,13 +95,39 @@ function Editor(){
         gfx.textAlign="left";
         gfx.textBaseline="hanging";
         gfx.fillText("== EDIT MODE ==", 10, 10);
-        gfx.fillText(" ESC : exit mode", 10, 22);
+        gfx.fillText(" ESC : exit edit mode", 10, 22);
         gfx.fillText("WASD : move cam", 10, 34);
-        gfx.fillText("LC+R : resize when dragging", 10, 46);
-        gfx.fillText("LC+Q : destroy on click", 10, 58);
-        gfx.fillText("LC+1 : spawn platform", 10, 70);
-        gfx.fillText("LC+2 : spawn door", 10, 82);
-        gfx.fillText("LC+3 : spawn npc", 10, 94);
-        gfx.fillText("LC+4 : spawn enemy", 10, 106);
+        gfx.fillText("ENTR : export level data", 10, 46);
+        
+        const x=game.width-200;
+        gfx.fillText("== MOUSE CLICK MODIFIERS ==", x, 10);
+        gfx.fillText(" +R : resize when dragging", x, 22);
+        gfx.fillText(" +Q : destroy on click", x, 34);
+        gfx.fillText(" +1 : spawn platform", x, 46);
+        gfx.fillText(" +2 : spawn door", x, 60);
+        gfx.fillText(" +3 : spawn npc", x, 72);
+        gfx.fillText(" +4 : spawn enemy", x, 84);
     };
+    this.serialize=function(){
+        let res="[";
+        const f=(t,a)=>{
+            res+="{t:"+t.name+",d:[";
+            a.forEach(i=>{
+                const r=(i.rect||i.pawn.rect).raw();
+                res+="{x:"+r.x;
+                res+=",y:"+r.y;
+                res+=",w:"+r.w;
+                res+=",h:"+r.h;
+                res+="},";
+            });
+            res+="]},";
+        };
+        f(Player,[scene.player]);
+        f(Platform,scene.platforms);
+        f(NPC,scene.npcs);
+        f(Enemy,scene.enemies);
+        f(Door,scene.doors);
+        res+="]";
+        consoleObj.log("serialized level data: "+res);
+    }
 };
