@@ -1,28 +1,33 @@
-function Dialog(texts){
+function Dialog(x,y,texts){
     if(typeof texts == "string") texts=[texts];
     if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
     
     this.index=0;
     this.texts=texts;
     this.lines=[];
-    this.x=20;
-    this.y=200;
-    this.w=100;
+    this.x=x;
+    this.y=y;
+    this.w=100;//max width
     this.h=14;
     
     this.color="#000";
     this.size=12;
     this.font="Arial";
     this.align="left";
-    this.baseline="Alphabtical";
+    this.baseline="top";
     
     this.timer=0;
     this.charNow=0;
     this.charMax=0;
     this.remove=false;
     
+    this.bg=new TalkBubble(0,0);
+    
     this.display=function(text){
         this.charMax=text.length;
+        this.charNow=0;
+        //this.timer=this.charMax*.01;
+        this.lines=[];
         this.readyFont(game.gfx);
         const words = text.split(' ');
         let line='';
@@ -36,6 +41,11 @@ function Dialog(texts){
             }
         }
         this.lines.push(line);
+        
+        const w=(this.lines.length==1)?game.gfx.measureText(this.lines[0]).width:this.w;
+        const h=this.h*this.lines.length;
+        this.bg.setSize(w,h);
+        
     };
     this.readyFont=function(gfx){
         gfx.fillStyle = this.color;
@@ -44,6 +54,8 @@ function Dialog(texts){
         gfx.textBaseline = this.baseline;
     };
     this.update=function(dt){
+        this.bg.update(dt);
+        if(this.bg.p<1)return;
         if(this.charNow < this.charMax){
             this.timer-=dt;
             if(this.timer<0){
@@ -55,6 +67,10 @@ function Dialog(texts){
         }
     };
     this.draw=function(gfx){
+        scene.cam.drawStart(gfx);
+        gfx.translate(this.x,this.y);
+        this.bg.draw(gfx);
+        const p=this.bg.pos();
         this.readyFont(gfx);
         var charOut=this.charNow;
         for(var n in this.lines){
@@ -65,9 +81,12 @@ function Dialog(texts){
                 str=str.substr(0,charOut);
                 charOut=0;
             }
-            gfx.fillText(str, this.x, this.y+n*this.h);
-        }  
+            gfx.fillText(str, p.x, p.y+n*this.h);
+        }
+        gfx.resetTransform();
+        scene.cam.drawEnd(gfx);
     };
+    
     this.showNext=function(){
         if(this.index>=this.texts.length)this.endDialog();
         else this.display(this.texts[this.index++]);
