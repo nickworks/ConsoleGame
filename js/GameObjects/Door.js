@@ -1,6 +1,6 @@
 function Door(raw){
     this.rect=new Rect(raw.x,raw.y,25,100);
-    this.opening=false;
+    this.animating=false;
     this.done=false;
     this.rectA=null;
     this.rectB=null;
@@ -13,13 +13,13 @@ function Door(raw){
         };
     };
     this.update=function(dt){
-        if(this.opening){
+        if(this.animating){
             this.timer+=dt;
             var p = this.timer/this.timespan;
             if(p>1){
                 p=1;
                 this.done=true;
-                this.opening=false;
+                this.animating=false;
             }
             this.rect=Rect.lerp(this.rectA, this.rectB, p);
         }
@@ -28,9 +28,20 @@ function Door(raw){
         this.rect.draw(gfx);
     };
     this.open=function(){
-        this.opening=true;
+        this.animate({h:25});
+    };
+    this.close=function(){
+        this.animate({h:100});
+    };
+    this.animate=function(dif, time=1){
+        this.animating=true;
+        this.timer=0;
+        this.timespan=time;
         this.rectA=this.rect.copy();
         this.rectB=this.rect.copy();
-        this.rectB.h=20;
-    };
+        if(dif.x)this.rectB.h=dif.x;
+        if(dif.y)this.rectB.h=dif.y;
+        if(dif.w)this.rectB.h=dif.w;
+        if(dif.h)this.rectB.h=dif.h;
+    }
 }
