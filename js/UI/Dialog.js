@@ -1,4 +1,4 @@
-function Dialog(x,y,texts){
+function Dialog(x,y,texts,callback){
     if(typeof texts == "string") texts=[texts];
     if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
     
@@ -7,7 +7,7 @@ function Dialog(x,y,texts){
     this.lines=[];
     this.x=x;
     this.y=y;
-    this.w=100;//max width
+    this.w=200;//max width
     this.h=14;
     
     this.color="#000";
@@ -20,6 +20,10 @@ function Dialog(x,y,texts){
     this.charNow=0;
     this.charMax=0;
     this.remove=false;
+    
+    this.callbacks={
+        onDone:callback
+    };
     
     this.bg=new TalkBubble(0,0);
     
@@ -93,6 +97,7 @@ function Dialog(x,y,texts){
     };
     this.endDialog=function(){
         this.remove=true;
+        if(this.callbacks.onDone)this.callbacks.onDone();
     };
     this.showNext();
 }

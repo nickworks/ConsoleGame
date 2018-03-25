@@ -7,6 +7,9 @@ function NPC(raw){
     this.dialog=raw.d;
     this.hp=100;
     this.dead=false;
+    this.callbacks={
+        onSpeak:null  
+    };
     this.serialize=function(){
         return{
             x:this.pawn.rect.x,
@@ -26,14 +29,11 @@ function NPC(raw){
     };
     this.aiFriend=function(dt){
         if(this.canTalk && keyboard.onDown([keycode.e,keycode.enter])){
-            // do dialog
-            const p=this.pawn.rect.mid();
-            scene.modal=new Dialog(p.x,p.y-13,this.dialog);
+            this.speak();
         }
     };
     this.aiFoe=function(dt){
         let move=0;
-        
         if(this.seesPlayer){
             const p=scene.player.pawn.rect.mid();
             const me=this.pawn.rect.mid();
@@ -47,10 +47,13 @@ function NPC(raw){
                 this.pawn.shoot(false);
             }
         }
-        
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
+    };
+    this.speak=function(){
+        const p=this.pawn.rect.mid();
+        scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks.onSpeak);
     };
     this.draw=function(gfx){
         gfx.fillStyle=this.friend?"#6A3":"#F43";
