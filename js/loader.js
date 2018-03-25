@@ -26,6 +26,7 @@
     'js/core/keyboard.js',
     'js/core/mouse.js',
     'js/core/console.js',
+    'js/core/sprites.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
     'js/Scenes/Level1.js',

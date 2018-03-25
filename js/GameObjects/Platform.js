@@ -1,5 +1,6 @@
 function Platform(raw){
     this.rect=Rect.from(raw);
+    this.pattern=sprites.tiles;
     this.serialize=function(){
         return{
             x:this.rect.x,
@@ -12,7 +13,7 @@ function Platform(raw){
         
     };
     this.draw=function(gfx){
-        gfx.fillStyle="#00F";
+        gfx.fillStyle=this.pattern;
         this.rect.draw(gfx);
     };
 }

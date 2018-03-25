@@ -21,6 +21,8 @@ const game = {
         keyboard.setup();
         mouse.setup(canvas, this);
         
+        sprites.init(this.gfx); // load images...
+        
         this.update(0); // begin game loop
     },
     calcDeltaTime:function(time){

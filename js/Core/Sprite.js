@@ -1,5 +1,4 @@
 function Sprite(url){
-    
     this.img = new Image();
     this.img.src = url;
     this.img.addEventListener("load", ()=>{
