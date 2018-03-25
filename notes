@@ -20,9 +20,20 @@ roguelike
 platformer
 
 
+== How do we PROTECT/SANDBOX elements? ==
 
-CAN WE SANDBOX?
-I'd like the ability to limit which objects the player can manipulate
-Put the game in a closure?
-Start the game, but don't make a global variable for it...
-Can we make a global variable for the current scene?
+hide objects in places other than the game
+    document.levelGoal={x:100,y:200,draw:function(gfx){}};
+
+for immutable state, we could "store" in a function...
+    function ScenePlay(){
+        this.goal=()=>return{x:100,y:200};
+    }
+
+what about local vars?
+    function ScenePlay(){
+        var goal={x:100,y:200};//can we access externally?
+    }
+    function ScenePlay(goal){
+    
+    }

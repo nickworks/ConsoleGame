@@ -1,5 +1,6 @@
 function Editor(){
     scene.cam.target=null;
+    this.snap=25;
     this.dragObj=null;
     this.dragOrig=null;//original position of obj
     this.dragStart=null;//original position of mouse
@@ -48,10 +49,10 @@ function Editor(){
             scene.npcs.push(o);
             drag(o);
         }
-        else if(keyboard.isDown(keycode["4"])){//enemy
-            const o=new Enemy(m.x,m.y);
-            scene.enemies.push(o);
-            drag(o);
+        else if(keyboard.isDown(keycode["4"])){//goal
+            var x=Math.round(m.x/this.snap)*this.snap;
+            var y=Math.round(m.y/this.snap)*this.snap;
+            scene.goal=new Goal(x,y);
         }
         else {
             const check=(a)=>{
@@ -86,7 +87,7 @@ function Editor(){
             raw.x+=d.x;
             raw.y+=d.y;
         }
-        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw, 25);
+        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw, this.snap);
         if(!mouse.isDown())this.dragObj=null;
     };
     this.draw=function(gfx){
@@ -106,7 +107,7 @@ function Editor(){
         gfx.fillText(" +1 : spawn platform", x, 46);
         gfx.fillText(" +2 : spawn door", x, 60);
         gfx.fillText(" +3 : spawn npc", x, 72);
-        gfx.fillText(" +4 : spawn enemy", x, 84);
+        gfx.fillText(" +4 : spawn goal", x, 84);
     };
     this.serialize=function(){
         let res="[";
