@@ -20,17 +20,17 @@
     'js/GameObjects/Door.js',
     'js/GameObjects/Bullet.js',
     'js/GameObjects/Goal.js',
-    'js/core/Rect.js',
-    'js/core/Sprite.js',
-    'js/core/editor.js',
-    'js/core/keyboard.js',
-    'js/core/mouse.js',
-    'js/core/console.js',
-    'js/core/sprites.js',
+    'js/Core/Rect.js',
+    'js/Core/Sprite.js',
+    'js/Core/editor.js',
+    'js/Core/keyboard.js',
+    'js/Core/mouse.js',
+    'js/Core/console.js',
+    'js/Core/sprites.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
     'js/Scenes/Level1.js',
-    'js/core/game.js'
+    'js/Core/game.js'
 ],()=>{
     game.begin("myCanvas");
 });

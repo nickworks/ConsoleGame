@@ -10,19 +10,21 @@ function Camera(){
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();
-                this.tx=m.x;
-                this.ty=m.y;
+                this.tx=(m.x)|0;
+                this.ty=(m.y-100)|0;
             } else {
                 this.tx=this.target.x||this.tx;
                 this.ty=this.target.y||this.ty;
             }
         }
         const speed=5;
-        this.x+=(this.tx-this.x)*dt*speed;
-        this.y+=(this.ty-this.y)*dt*speed;
+        this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
+        this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
     };
     this.drawStart=function(gfx){
-        gfx.translate(this.sx-this.x,this.sy-this.y);
+        const x=(this.sx-this.x)|0;
+        const y=(this.sy-this.y)|0;
+        gfx.translate(x,y);
     };
     this.drawEnd=function(gfx){
         gfx.resetTransform();
