@@ -1,8 +1,8 @@
 function Rect(x,y,w,h){
-    this.x=x|0;
-    this.y=y|0;
-    this.w=w|25;
-    this.h=h|25;
+    this.x=x||0;
+    this.y=y||0;
+    this.w=w||25;
+    this.h=h||25;
     this.copy=function(){
         return new Rect(this.x,this.y,this.w,this.h);
     };

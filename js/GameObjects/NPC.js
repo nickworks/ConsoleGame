@@ -1,10 +1,10 @@
 function NPC(raw){
     this.seesPlayer=true;
     this.pawn=new Pawn(raw);
-    this.pawn.a=raw.a|800;
+    this.pawn.a=raw.a||800;
     this.canTalk=false;
-    this.friend=raw.f|true;
-    this.dialog=raw.d|[];
+    this.friend=raw.f||true;
+    this.dialog=raw.d||[];
     this.hp=100;
     this.dead=false;
     this.callbacks={
