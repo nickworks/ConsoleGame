@@ -10,11 +10,13 @@ function ScenePlay(n){
     this.modal=null;
     this.update = function(dt){
         if(this.player==null)this.load();
+        
         else if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene)return newScene;
-            if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
-            if(this.modal.remove)this.modal=null;
+            else if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
+            else if(this.modal.remove)this.modal=null;
+            else if(mouse.onDown()) this.handleClick();
         } else {
             if(mouse.onDown()) this.handleClick();
             if(this.player)this.player.update(dt);
@@ -88,7 +90,7 @@ function ScenePlay(n){
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
-                if(rect.mouseOver())this.log(pre+str+"["+i+"]");
+                if(rect.mouseOver())this.log(pre+str+"["+i+"] (object id #"+a[i].id+")");
             }
         };
         check(this.bullets, "bullets");
