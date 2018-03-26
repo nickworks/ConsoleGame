@@ -1,4 +1,5 @@
 function ScenePlay(n){
+    this.levelIndex=n;
     this.cam=new Camera();
     this.player=null;
     this.goal=new Goal(Rect.from({x:200,y:200,w:50,h:100}));
@@ -8,8 +9,10 @@ function ScenePlay(n){
     this.bullets=[];
     this.modal=null;
     
+    
     this.update = function(dt){
-        if(this.modal){
+        if(this.player==null)this.load();
+        else if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene)return newScene;
             if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
@@ -68,9 +71,7 @@ function ScenePlay(n){
         if(this.modal)this.modal.draw(gfx);
     };
     this.load=function(levelIndex){
-        
-        this.levelIndex=levelIndex;
-        const level=LevelData.level(levelIndex);
+        const level=LevelData.level(levelIndex||this.levelIndex);
         
         this.player=level.player;
         this.platforms=level.platforms;
@@ -101,7 +102,22 @@ function ScenePlay(n){
     this.log=function(msg){
         console.log(msg);
         consoleObj.log(msg);
-    }
-    this.load(n);
-    
+    };
+    this.obj=function(id){
+        const all=[this.player].concat(this.platforms,this.npcs,this.doors);
+        const res=[];
+        all.forEach(i=>{if(i.id==id)res.push(i);});
+        return res;
+    };
+    this.call=function(c){
+        c.forEach(d=>{
+            var o=this.obj(d.i); // fetch object by id
+            o.forEach(obj=>{
+                obj.this=obj;
+                console.log(obj);
+                console.log(d.f);
+                if(obj[d.f])obj[d.f]();
+            });
+        });
+    };
 }

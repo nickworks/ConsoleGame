@@ -1,4 +1,5 @@
 function NPC(raw){
+    this.id=raw.i||0;
     this.seesPlayer=true;
     this.pawn=new Pawn(raw);
     this.pawn.a=raw.a||800;
@@ -7,8 +8,23 @@ function NPC(raw){
     this.dialog=raw.d||[];
     this.hp=100;
     this.dead=false;
+    
+    this.makeCallbacks=function(c){
+        let funcs=[];
+        c.forEach(d=>{
+            let o=scene.obj(d.i);
+            //funcs.push(scene.obj(d.id)[d.f])(this);
+        });
+        return ()=>{funcs.forEach(f=>f(this));};
+    };
     this.callbacks={
-        onSpeak:null  
+        onSpeak:(raw.onSpeak||[])
+    };
+    
+    this.jump=function(){
+      //this is testing the event system
+        console.log("JUMP");
+        this.hurt(500);
     };
     this.serialize=function(){
         return{

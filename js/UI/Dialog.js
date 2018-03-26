@@ -97,7 +97,7 @@ function Dialog(x,y,texts,callback){
     };
     this.endDialog=function(){
         this.remove=true;
-        if(this.callbacks.onDone)this.callbacks.onDone();
+        if(this.callbacks.onDone)scene.call(this.callbacks.onDone);
     };
     this.showNext();
 }

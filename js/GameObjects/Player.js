@@ -1,4 +1,5 @@
 function Player(raw){
+    this.id=raw.i||0;
     this.pawn=new Pawn(raw);
     this.pawn.jumpCooldownAmt=0;
     this.hp=100;

@@ -1,4 +1,5 @@
 function Door(raw){
+    this.id=raw.i||0;
     this.rect=new Rect(raw.x||0,raw.y||0,25,100);
     this.animating=false;
     this.done=false;

@@ -29,7 +29,7 @@
     'js/Core/sprites.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
-    'js/Scenes/Level1.js',
+    'js/Scenes/LevelData.js',
     'js/Core/game.js'
 ],()=>{
     game.begin("myCanvas");
