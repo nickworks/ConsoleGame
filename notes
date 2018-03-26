@@ -19,6 +19,19 @@ load an additional javascript file
 roguelike
 platformer
 
+== kinds of callbacks ==
+
+= NPC=
+onSpeak
+onDeath
+
+= Platform =
+
+
+= Door = 
+onOpen
+onClose
+
 
 == How do we PROTECT/SANDBOX elements? ==
 

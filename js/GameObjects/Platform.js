@@ -1,4 +1,5 @@
-function Platform(raw){
+function Platform(raw={}){
+    this.id=raw.id||0;
     this.rect=Rect.from(raw);
     this.pattern=sprites.tiles;
     this.serialize=function(){

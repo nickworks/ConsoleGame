@@ -86,7 +86,7 @@ const consoleObj = {
                     if(Array.isArray(obj[prop]))
                         result+="[Array]";
                     else
-                        result+="[Object]";
+                        result+="["+obj[prop].constructor.name+" Object]";
                     break;
                 case "function":
                     result+="[function]";

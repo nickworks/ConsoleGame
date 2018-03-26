@@ -1,4 +1,4 @@
-function Dialog(x,y,texts,callback){
+function Dialog(x,y,texts,callbacks){
     if(typeof texts == "string") texts=[texts];
     if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
     
@@ -22,7 +22,7 @@ function Dialog(x,y,texts,callback){
     this.remove=false;
     
     this.callbacks={
-        onDone:callback
+        onDone:callbacks
     };
     
     this.bg=new TalkBubble(0,0);
@@ -97,7 +97,7 @@ function Dialog(x,y,texts,callback){
     };
     this.endDialog=function(){
         this.remove=true;
-        if(this.callbacks.onDone)scene.call(this.callbacks.onDone);
+        scene.call(this.callbacks.onDone);
     };
     this.showNext();
 }

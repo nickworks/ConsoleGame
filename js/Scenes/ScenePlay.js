@@ -8,8 +8,6 @@ function ScenePlay(n){
     this.doors=[];
     this.bullets=[];
     this.modal=null;
-    
-    
     this.update = function(dt){
         if(this.player==null)this.load();
         else if(this.modal){
@@ -72,15 +70,14 @@ function ScenePlay(n){
     };
     this.load=function(levelIndex){
         const level=LevelData.level(levelIndex||this.levelIndex);
-        
         this.player=level.player;
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
-        
         this.modal=null;
         this.bullets=[];
         this.cam.target=this.player.pawn;
+        this.ids();
     };
     this.edit=function(){
         this.modal=new Editor();
@@ -103,13 +100,21 @@ function ScenePlay(n){
         console.log(msg);
         consoleObj.log(msg);
     };
-    this.obj=function(id){
-        const all=[this.player].concat(this.platforms,this.npcs,this.doors);
+    this.ids=function(){ // assign ids to non-id'd objects
+        this.all().forEach(o=>{
+            if(!o.id)o.id=this.id();
+        });
+    };
+    this.all=function(){
+        return [this.player].concat(this.npcs,this.doors,this.platforms);
+    };
+    this.obj=function(id){ // fetch object by id
         const res=[];
-        all.forEach(i=>{if(i.id==id)res.push(i);});
+        this.all().forEach(i=>{if(i.id==id)res.push(i);});
         return res;
     };
-    this.call=function(c){
+    this.call=function(c){ // execute a callback
+        c=c||[];
         c.forEach(d=>{
             var o=this.obj(d.i); // fetch object by id
             o.forEach(obj=>{
@@ -119,5 +124,13 @@ function ScenePlay(n){
                 if(obj[d.f])obj[d.f]();
             });
         });
+    };
+    this.id=function(){ // get new, unused id number
+        let i=0;
+        this.all().forEach(o=>{
+            const n=o.id|0;
+            if(n>i)i=n;
+        });
+        return i+1;
     };
 }

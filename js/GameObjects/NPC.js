@@ -1,4 +1,4 @@
-function NPC(raw){
+function NPC(raw={}){
     this.id=raw.i||0;
     this.seesPlayer=true;
     this.pawn=new Pawn(raw);
@@ -9,16 +9,9 @@ function NPC(raw){
     this.hp=100;
     this.dead=false;
     
-    this.makeCallbacks=function(c){
-        let funcs=[];
-        c.forEach(d=>{
-            let o=scene.obj(d.i);
-            //funcs.push(scene.obj(d.id)[d.f])(this);
-        });
-        return ()=>{funcs.forEach(f=>f(this));};
-    };
     this.callbacks={
-        onSpeak:(raw.onSpeak||[])
+        onSpeak:(raw.onSpeak||[]),
+        onDeath:(raw.onDeath||[])
     };
     
     this.jump=function(){
@@ -85,6 +78,9 @@ function NPC(raw){
     };
     this.hurt=function(amt){
         this.hp-=amt;
-        if(this.hp<=0)this.dead=true;
+        if(this.hp<=0){
+            if(this.dead==false)scene.call(this.callbacks.onDeath);
+            this.dead=true;
+        }
     }
 }

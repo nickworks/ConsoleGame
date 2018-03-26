@@ -1,4 +1,4 @@
-function Door(raw){
+function Door(raw={}){
     this.id=raw.i||0;
     this.rect=new Rect(raw.x||0,raw.y||0,25,100);
     this.animating=false;
@@ -7,6 +7,10 @@ function Door(raw){
     this.rectB=null;
     this.timer=0;
     this.timespan=1;
+    this.callbacks={
+        onOpen:(raw.onOpen||[]),
+        onClose:(raw.onClose||[])
+    };
     this.serialize=function(){
         return{
             x:this.rect.x,
@@ -30,9 +34,11 @@ function Door(raw){
     };
     this.open=function(){
         this.animate({h:25});
+        scene.call(this.callbacks.onOpen);
     };
     this.close=function(){
         this.animate({h:100});
+        scene.call(this.callbacks.onClose);
     };
     this.animate=function(dif, time=1){
         this.animating=true;

@@ -35,17 +35,17 @@ function Editor(){
             this.dragOrig=(o.rect||o.pawn.rect).raw();
         };
         if(keyboard.isDown(keycode["1"])){//platforms
-            const o=new Platform(new Rect(m.x,m.y,1,1));
+            const o=new Platform({x:m.x,y:m.y,w:25,h:25});
             scene.platforms.push(o);
             drag(o,true);
         }
         else if(keyboard.isDown(keycode["2"])){//door
-            const o=new Door(m.x,m.y);
+            const o=new Door({x:m.x,y:m.y});
             scene.doors.push(o);
             drag(o);
         }
         else if(keyboard.isDown(keycode["3"])){//npc
-            const o=new NPC();
+            const o=new NPC({x:m.x, y:m.y});
             scene.npcs.push(o);
             drag(o);
         }
@@ -55,7 +55,7 @@ function Editor(){
             scene.goal=new Goal(x,y);
         }
         else {
-            const check=(a)=>{
+            const check=(a)=>{ //check to see if objects in array a are clicked on...
                 for(var i in a){
                     const r=a[i].rect||a[i].pawn.rect;
                     if(r.hits(m)){
@@ -74,6 +74,7 @@ function Editor(){
             check(scene.doors);
             check(scene.enemies);
         }
+        scene.ids();
     }
     this.handleDrag=function(){
         const d=scene.cam.worldMouse();
