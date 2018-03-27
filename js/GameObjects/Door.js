@@ -12,10 +12,15 @@ function Door(raw={}){
         onClose:(raw.onClose||[])
     };
     this.serialize=function(){
-        return{
+        let data={
             x:this.rect.x,
             y:this.rect.y
         };
+        var a=this.callbacks.onOpen;
+        var b=this.callbacks.onClose;
+        if(a&&a.length>0)data.onOpen=a;
+        if(b&&b.length>0)data.onClose=b;
+        return data;
     };
     this.update=function(dt){
         if(this.animating){

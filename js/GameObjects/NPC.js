@@ -20,13 +20,18 @@ function NPC(raw={}){
         this.hurt(500);
     };
     this.serialize=function(){
-        return{
+        var data={
             x:this.pawn.rect.x,
             y:this.pawn.rect.y,
             d:this.dialog,
             f:this.friend,
             a:this.pawn.a
         };
+        var a=this.callbacks.onSpeak;
+        var b=this.callbacks.onDeath;
+        if(a&&a.length>0)data.onSpeak=a;
+        if(b&&b.length>0)data.onDeath=b;
+        return data;
     };
     this.update=function(dt,overlaps){
         this.canTalk=overlaps;

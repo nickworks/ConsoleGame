@@ -114,13 +114,17 @@ function Editor(){
         let res="[";
         const f=(t,a)=>{
             res+="{t:"+t.name+",d:[";
+            let idx1=0;
             a.forEach(i=>{
+                if(idx1++>0)res+=",";
                 res+="{";
                 const r=i.serialize();
+                let idx2=0;
                 for(var p in r){
-                    res+=p+":"+JSON.stringify(r[p])+",";
+                    if(idx2++>0)res+=",";
+                    res+=p+":"+JSON.stringify(r[p]);
                 }
-                res+="},";
+                res+="}";
             });
             res+="]},";
         };
