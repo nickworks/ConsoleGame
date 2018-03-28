@@ -1,4 +1,5 @@
 const keycode = {
+    tab:9,
     enter:13,
     escape:27,
     space:32,
@@ -19,6 +20,7 @@ const keycode = {
     r:82,
     s:83,
     w:87,
+    tilde:192,
 };
 
 const keyboard = {
@@ -51,9 +53,18 @@ const keyboard = {
     updateKey: function(e, value){
         if(this.debug)console.log(e.keyCode+(value?" down":" up"));
         
-        if(document.activeElement == document.body){
+        const gameInFocus=(document.activeElement==document.body);
+        const toggleFocus=(value&&e.keyCode==keycode.tab);
+        
+        if(gameInFocus){
             this.keys[e.keyCode] = value;
+            if(toggleFocus)consoleObj.input.focus();
             e.preventDefault();
+        } else {
+            if(toggleFocus){
+                consoleObj.input.blur();
+                e.preventDefault();
+            }
         }
     },
     setup: function(){
