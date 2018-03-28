@@ -6,6 +6,9 @@ const game = {
     width:500,
     height:400,
     scene:undefined,
+    settings:{
+        editModeEnabled:true,
+    },
     begin:function(id){
         
         const canvas = document.getElementById(id);
