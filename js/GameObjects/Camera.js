@@ -7,6 +7,12 @@ function Camera(){
     this.sy=game.height/2;
     this.target=null;
     this.update=function(dt){
+        this.updateTargetXY();
+        const speed=5;
+        this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
+        this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
+    };
+    this.updateTargetXY=function(andSnap=true){
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();
@@ -16,10 +22,11 @@ function Camera(){
                 this.tx=this.target.x||this.tx;
                 this.ty=this.target.y||this.ty;
             }
+            if(andSnap){
+                this.x=this.tx;
+                this.y=this.ty;
+            }
         }
-        const speed=5;
-        this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
-        this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
     };
     this.drawStart=function(gfx){
         const x=(this.sx-this.x)|0;

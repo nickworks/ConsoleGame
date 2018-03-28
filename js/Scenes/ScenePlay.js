@@ -36,7 +36,7 @@ function ScenePlay(n){
                 d.rect.fixOverlaps(this.player);
                 d.rect.fixOverlaps(this.npcs);
             });
-            if(this.goal.update(dt)){
+            if(this.goal&&this.goal.update(dt)){
                 this.player.win=true;
                 return new ScenePlay(this.goal.nextLevel());
             }
@@ -58,7 +58,7 @@ function ScenePlay(n){
                 this.modal=new Pause(this);
             }
         }
-        this.cam.update(dt, this.player);
+        this.cam.update(dt);
     };
     this.draw=function(gfx){
         game.clear();
@@ -134,6 +134,7 @@ function ScenePlay(n){
         this.modal=null;
         this.bullets=[];
         this.cam.target=this.player.pawn;
+        this.cam.updateTargetXY(true);
         this.ids();
     })();
 }

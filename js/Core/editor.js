@@ -18,6 +18,11 @@ function Editor(){
         if(keyboard.onDown(keycode.enter)){
             this.serialize();
         }
+        if(keyboard.onDown(keycode.n)){
+            var s = new ScenePlay();
+            s.modal=this;
+            return s;
+        }
         this.moveCam(dt);
     };
     this.moveCam=function(dt){
@@ -139,7 +144,7 @@ function Editor(){
             res+="]},";
         };
         f(Player,[scene.player]);
-        f(Goal,[scene.goal]);
+        if(scene.goal)f(Goal,[scene.goal]);
         f(Platform,scene.platforms);
         f(NPC,scene.npcs);
         f(Door,scene.doors);
