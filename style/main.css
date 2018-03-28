@@ -38,16 +38,19 @@ body {
     color:#333;
 }
 #console-input {
-    width:420px;
-    padding:0;
+    padding:0 3px;
     margin:0;
-    border:none;
+    background:#999;
+    border:solid 2px #999;
+    border-radius:3px;
     outline:none;
-    background:none;
+    display:block;
+    line-height:21px;
+    width:100%;
+    box-sizing:border-box;
 }
-#console #input-p {
-    background:#AAA;
-    border:1px solid #444;
+#console-input:focus{
+    border:solid 2px #9AF;
 }
 #console-output {
     width:500px;
@@ -60,25 +63,28 @@ body {
 .viz #console-output {
     display:block;
 }
-#console-output, #console input {
+#console-output,#console input,#console-title{
     font-family:"Consolas","Courier New",monospace;
     font-size:12px;
 }
 #console-title {
-    height:32px;
-    line-height:32px;
-    background:#CCF;
-    color:#000;
+    line-height:25px;
+    background:#777;
+    color:#9AF;
     font-weight:bold;
-    font-size:16px;
-    text-shadow:1px 1px 10px #FFF;
-    padding:0 4px;
+    font-size:10px;
+    display:flex;
+}
+#console-title>div{
+    flex-shrink:1;
+    padding:5px;
+}
+#console-title>div:nth-child(2){
+    flex-grow:1;
 }
 #console-title button {
-    float:right;
-    margin:4px 2px 0;
-    height:22px;
-    padding:0 5px;
+    font-size:10px;
+    height:100%;
 }
 .viz #bttn-show {
     display:none;

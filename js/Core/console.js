@@ -19,8 +19,8 @@ const consoleObj = {
             }
             e.preventDefault();
         });
-        document.getElementById("bttn-hide").addEventListener("click", () => this.hide());
-        document.getElementById("bttn-show").addEventListener("click", () => this.show());
+        //document.getElementById("bttn-hide").addEventListener("click", () => this.hide());
+        //document.getElementById("bttn-show").addEventListener("click", () => this.show());
         document.getElementById("bttn-clear").addEventListener("click", () => this.clear());
     },
     handleHistory:function(offset){
@@ -49,16 +49,25 @@ const consoleObj = {
         } catch(e){
             result = e.message;
         }
-        this.log("js> " + this.input.value, true);
-        this.log(result);
+        this.log(result, "js> " + this.input.value);
         this.input.value = "";
-        this.scrollToBottom();
     },
-    log:function(msg, isIn = false){
-        const p = document.createElement("p");
-        if(isIn) p.classList.add("in");
-        p.appendChild(document.createTextNode(msg));
-        this.output.insertBefore(p,this.inputP);
+    log:function(msg, msgIn=""){
+        
+        const makeP=(txt,clss="")=>{
+            var p=document.createElement("p");
+            if(clss)p.classList.add(clss);
+            p.appendChild(document.createTextNode(txt));
+            return p;
+        };
+        this.output.prepend(makeP(msg));
+        if(msgIn){
+            this.output.prepend(makeP(msgIn,"in"));
+        }
+        this.scrollToTop();
+    },
+    scrollToTop:function(){
+        this.output.scrollTop = 0;
     },
     scrollToBottom:function(){
         this.output.scrollTop = this.output.scrollHeight;

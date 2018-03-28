@@ -7,14 +7,13 @@
         <canvas id="myCanvas" width="800" height="500">
             <p>My game isn't supported by your browser. Please download a <a href="https://www.google.com/chrome/">better browser</a> and enable JavaScript.</p>
         </canvas>
-        <div id="console">
+        <div id="console" class="viz">
             <div id="console-title">
-                JavaScript Console
-                <button id="bttn-show">Show</button>
-                <button id="bttn-hide">Hide</button>
-                <button id="bttn-clear">Clear</button>
+                <div>js console &gt;</div>
+                <div><input id="console-input" type="text"></div>
+                <div><button id="bttn-clear">Clear</button></div>
             </div>
-            <pre id="console-output"><p id="input-p" class="in">js&gt; <input id="console-input" type="text"></p></pre>
+            <pre id="console-output"></pre>
         </div>
         <script type="text/javascript" src="js/loader.js"></script>
     </body>
