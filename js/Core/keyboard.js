@@ -48,14 +48,16 @@ const keyboard = {
     update:function(){
         this.prev = this.keys.slice(0); // copy the array
     },
-    updateKey: function(keyCode, value){
-        if(this.debug)console.log(keyCode+(value?" down":" up"));
+    updateKey: function(e, value){
+        if(this.debug)console.log(e.keyCode+(value?" down":" up"));
         
-        if(document.activeElement == document.body)
-            this.keys[keyCode] = value;
+        if(document.activeElement == document.body){
+            this.keys[e.keyCode] = value;
+            e.preventDefault();
+        }
     },
     setup: function(){
-        document.addEventListener("keydown", (e)=>this.updateKey(e.keyCode, true));
-        document.addEventListener("keyup", (e)=>this.updateKey(e.keyCode, false));
+        document.addEventListener("keydown", (e)=>this.updateKey(e, true));
+        document.addEventListener("keyup", (e)=>this.updateKey(e, false));
     }
 };

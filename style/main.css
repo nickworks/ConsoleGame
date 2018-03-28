@@ -57,10 +57,10 @@ body {
     border:solid 2px #9AF;
 }
 #console-output {
-    width:500px;
+    width:500px;/*
     min-height:100px;
     max-height:300px;
-    overflow-y:scroll;
+    overflow-y:scroll;*/
     margin:0;
 }
 #console-output,#console input,#console-title{
