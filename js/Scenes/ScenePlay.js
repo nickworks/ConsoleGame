@@ -9,7 +9,10 @@ function ScenePlay(n){
     this.bullets=[];
     this.modal=null;
     
+    var timerFade=1;
+    
     this.update=function(dt){
+        if(timerFade>0)timerFade-=dt;
         if(this.player==null)return;
         else if(this.modal){
             const newScene=this.modal.update(dt);
@@ -69,8 +72,11 @@ function ScenePlay(n){
         this.platforms.forEach(p=>p.draw(gfx));
         this.doors.forEach(d=>d.draw(gfx));
         this.bullets.forEach(b=>b.draw(gfx));
-        
         this.cam.drawEnd(gfx);
+        
+        gfx.fillStyle="rgba(0,0,0,"+(timerFade/1)+")";
+        gfx.fillRect(0,0,game.width,game.height);
+        
         if(this.modal)this.modal.draw(gfx);
     };
     this.edit=function(){
