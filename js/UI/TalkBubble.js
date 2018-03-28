@@ -15,7 +15,13 @@ function TalkBubble(w,h){
         this.r.start=this.r.now;
         this.time=0;
         this.p=0;
-    }
+    };
+    this.snap=function(){
+        this.p=1;
+        this.w.now=this.w.target;
+        this.h.now=this.h.target;
+        this.r.now=this.r.target;
+    };
     this.update=function(dt){
         this.time+=dt;
         if(this.p<1){

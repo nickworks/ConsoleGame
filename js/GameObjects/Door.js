@@ -7,6 +7,7 @@ function Door(raw={}){
     this.rectB=null;
     this.timer=0;
     this.timespan=1;
+    this.lockCode=null;
     this.callbacks={
         onOpen:(raw.onOpen||[]),
         onClose:(raw.onClose||[])
@@ -32,6 +33,11 @@ function Door(raw={}){
                 this.animating=false;
             }
             this.rect=Rect.lerp(this.rectA, this.rectB, p);
+        }
+    };
+    this.triggerArea=function(){
+        if(Rect.grow(this.rect, 25).overlaps(scene.player.pawn.rect)){
+            
         }
     };
     this.draw=function(gfx){

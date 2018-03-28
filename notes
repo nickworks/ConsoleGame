@@ -1,23 +1,15 @@
-//TODO: level exporter
-//TODO: redo level importer
-//TODO: use context.createPattern for repeating fills
-
 //TODO: add elevators
 
-move a platform
-Lookup a puzzle solution (lock combination?)
-Change an enemy to friendly
-Spawn a key item
-Look into a function body
-Change the scene manually to a different scene
-change a function body
-look in the HTML source code
-look in the JavaScript source code
-change the camera target to something else (a steerable projectile?)
-load an additional javascript file
+== experience map ==
 
-roguelike
-platformer
+1. movement & combat
+2. lookup a random door code
+3. change an enemy to friendly
+4. activate a door/elevator
+5. change the camera target to something else (a steerable projectile?)
+6. spawn items (keys, platforms, etc)
+7. (discover functions)
+8. (read and change a function)
 
 == kinds of callbacks ==
 
@@ -26,7 +18,6 @@ onSpeak
 onDeath
 
 = Platform =
-
 
 = Door = 
 onOpen

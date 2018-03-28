@@ -65,8 +65,11 @@ function Rect(x,y,w,h){
     };
     this.mouseOver=function(){
         return(scene.cam && this.hits(scene.cam.worldMouse()));
-    }
+    };
 }
+Rect.grow=function(r,a){
+    return new Rect(r.x-a/2,r.y-a/2,r.w+a,r.h+a);
+};
 Rect.from=function(raw){
     return new Rect(raw.x,raw.y,raw.w,raw.h);
 };
