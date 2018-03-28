@@ -94,6 +94,8 @@ const consoleObj = {
                 case "object":
                     if(Array.isArray(obj[prop]))
                         result+="[Array]";
+                    else if(obj[prop]===null)
+                        result+="null";
                     else
                         result+="["+obj[prop].constructor.name+" Object]";
                     break;
