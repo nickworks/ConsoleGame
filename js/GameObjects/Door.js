@@ -7,7 +7,9 @@ function Door(raw={}){
     this.rectB=null;
     this.timer=0;
     this.timespan=1;
-    this.lockCode=null;
+    this.lockCode=parseInt(Math.random()*10000+10000).toString();
+    this.canActivate=false;
+    
     this.callbacks={
         onOpen:(raw.onOpen||[]),
         onClose:(raw.onClose||[])
@@ -33,17 +35,31 @@ function Door(raw={}){
                 this.animating=false;
             }
             this.rect=Rect.lerp(this.rectA, this.rectB, p);
+            this.canActivate=false;
+        }else{
+            this.canActivate=Rect.grow(this.rect, 25).overlaps(scene.player.pawn.rect);
+            if(keyboard.onDown([keycode.e,keycode.enter]))this.activate();
         }
     };
-    this.triggerArea=function(){
-        if(Rect.grow(this.rect, 25).overlaps(scene.player.pawn.rect)){
-            
+    this.activate=function(){
+        if(this.canActivate){
+            if(this.lockCode){
+                const p=this.rect.mid();
+                scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
+            }else{
+                this.open();
+            }
         }
     };
     this.draw=function(gfx){
         this.rect.draw(gfx);
     };
-    this.open=function(){
+    this.open=function(code){
+        if(this.lockCode && this.lockCode != code){
+            consoleObj.log("Access Denied");
+            return;
+        }
+        
         this.animate({h:25});
         scene.call(this.callbacks.onOpen);
     };

@@ -1,6 +1,7 @@
-function Keypad(x,y,callbacks){
+function Keypad(x,y,onDone){
     this.index=0;
-    this.texts="CODE: ";
+    this.val="";
+    this.txt="CODE: ";
     this.x=x;
     this.y=y;
     
@@ -14,18 +15,16 @@ function Keypad(x,y,callbacks){
     this.timerBlink=0;
     this.showCursor=true;
     
-    this.callbacks={
-        onDone:callbacks
-    };
+    this.onDone=onDone;
     
     this.bg=new TalkBubble(0,0);
     
     this.append=function(txt){
-        this.texts+=txt;
+        this.val+=txt;
         this.resizeBG(true);
     };
     this.resizeBG=function(snap=false){
-        const size=game.gfx.measureText(this.texts+"_");
+        const size=game.gfx.measureText(this.txt+this.val+"_");
         this.bg.setSize(size.width,14);
         if(snap)this.bg.snap();
     };
@@ -61,7 +60,7 @@ function Keypad(x,y,callbacks){
         this.bg.draw(gfx);
         this.readyFont(gfx);
         const p=this.bg.pos();
-        let o=this.texts;
+        let o=this.txt+this.val;
         if(this.showCursor)o+="_";
         if(this.bg.p>=1)gfx.fillText(o, p.x, p.y);
         gfx.resetTransform();
@@ -69,7 +68,7 @@ function Keypad(x,y,callbacks){
     };
     this.end=function(submit){
         this.remove=true;
-        scene.call(this.callbacks.onDone);
+        if(submit&&this.onDone)this.onDone(this.val);
     };
     this.resizeBG();
 }

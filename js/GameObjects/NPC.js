@@ -33,8 +33,9 @@ function NPC(raw={}){
         if(b&&b.length>0)data.onDeath=b;
         return data;
     };
-    this.update=function(dt,overlaps){
-        this.canTalk=overlaps;
+    this.update=function(dt){
+        this.canTalk=this.pawn.rect.overlaps(scene.player.pawn.rect);
+        
         if(this.friend){
             this.aiFriend(dt);
         } else {
