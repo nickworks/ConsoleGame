@@ -18,6 +18,7 @@
     'js/GameObjects/Pawn.js',
     'js/GameObjects/Player.js',
     'js/GameObjects/Door.js',
+    'js/GameObjects/Weapon.js',
     'js/GameObjects/Bullet.js',
     'js/GameObjects/Goal.js',
     'js/Core/Rect.js',

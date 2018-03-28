@@ -2,7 +2,7 @@ function ScenePlay(n){
     this.levelIndex=n;
     this.cam=new Camera();
     this.player=null;
-    this.goal=new Goal(Rect.from({x:200,y:200,w:50,h:100}));
+    this.goal=null;
     this.platforms=[];
     this.npcs=[];
     this.doors=[];
@@ -66,13 +66,16 @@ function ScenePlay(n){
         this.platforms.forEach(p=>p.draw(gfx));
         this.doors.forEach(d=>d.draw(gfx));
         this.bullets.forEach(b=>b.draw(gfx));
-        this.goal.draw(gfx);
+        if(this.goal)this.goal.draw(gfx);
         this.cam.drawEnd(gfx);
         if(this.modal)this.modal.draw(gfx);
     };
     this.load=function(levelIndex){
         const level=LevelData.level(levelIndex||this.levelIndex);
+        
         this.player=level.player;
+        this.goal=level.goal;
+        
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;

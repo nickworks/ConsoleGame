@@ -52,7 +52,7 @@ function Editor(){
         else if(keyboard.isDown(keycode["4"])){//goal
             var x=Math.round(m.x/this.snap)*this.snap;
             var y=Math.round(m.y/this.snap)*this.snap;
-            scene.goal=new Goal(x,y);
+            scene.goal=new Goal({x:x,y:y});
         }
         else {
             const check=(a)=>{ //check to see if objects in array a are clicked on...
@@ -129,6 +129,7 @@ function Editor(){
             res+="]},";
         };
         f(Player,[scene.player]);
+        f(Goal,[scene.goal]);
         f(Platform,scene.platforms);
         f(NPC,scene.npcs);
         f(Door,scene.doors);
