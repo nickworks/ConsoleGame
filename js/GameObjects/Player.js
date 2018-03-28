@@ -1,6 +1,7 @@
 function Player(raw={}){
     this.id=raw.i||0;
-    this.pawn=new Pawn(raw);
+    this.canDoubleJump=true;
+    this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
     this.hp=100;
     this.dead=false;

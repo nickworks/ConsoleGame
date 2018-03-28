@@ -1,4 +1,4 @@
-function Pawn(raw){
+function Pawn(raw,canDoubleJump=()=>{return false;}){
     
     this.rect = new Rect(raw.x||0,raw.y||0,25,25);
     this.vx = 0;
@@ -17,7 +17,7 @@ function Pawn(raw){
     this.update=function(dt){    
         if(this.weapon)this.weapon.update(dt);
         
-        if(this.isGrounded && this.jumpCooldown>0) this.jumpCooldown-=dt;
+        if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
         this.isGrounded=false;
     };
     this.moveH=function(dt,move=0){
@@ -45,7 +45,7 @@ function Pawn(raw){
         }else{
             this.isJumping=false;
         }
-        this.vy+=800*grav*dt;
+        this.vy+=1200*grav*dt;
         this.rect.y+=this.vy*dt;
     };
     this.fixOverlap=function(rect){
@@ -71,7 +71,7 @@ function Pawn(raw){
         if(!isAirJump&&!this.isGrounded)return;
         if(!isAirJump&&this.jumpCooldown>0)return;
         if(isAirJump&&this.airJumpsLeft<=0)return;
-        
+        if(isAirJump&&!canDoubleJump())return;
         this.vy=-300;
         this.isJumping=true;
         this.jumpCooldown=this.jumpCooldownAmt;
