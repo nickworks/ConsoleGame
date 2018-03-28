@@ -1,10 +1,13 @@
 function Editor(){
     scene.cam.target=null;
-    this.snap=25;
+    this.snapSize=25;
     this.dragObj=null;
     this.dragOrig=null;//original position of obj
     this.dragStart=null;//original position of mouse
     this.dragModeSize=false;
+    this.snap=function(v){
+        return Math.round(v/this.snapSize)*this.snapSize
+    }
     this.update=function(dt){
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
@@ -50,8 +53,8 @@ function Editor(){
             drag(o);
         }
         else if(keyboard.isDown(keycode["4"])){//goal
-            var x=Math.round(m.x/this.snap)*this.snap;
-            var y=Math.round(m.y/this.snap)*this.snap;
+            var x=this.snap(m.x);
+            var y=this.snap(m.y);
             scene.goal=new Goal({x:x,y:y});
         }
         else {
@@ -88,7 +91,13 @@ function Editor(){
             raw.x+=d.x;
             raw.y+=d.y;
         }
-        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw, this.snap);
+        
+        raw.x=this.snap(raw.x);
+        raw.y=this.snap(raw.y);
+        raw.w=this.snap(raw.w);
+        raw.h=this.snap(raw.h);
+        
+        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw);
         if(!mouse.isDown())this.dragObj=null;
     };
     this.draw=function(gfx){
@@ -100,6 +109,7 @@ function Editor(){
         gfx.fillText(" ESC : exit edit mode", 10, 22);
         gfx.fillText("WASD : move cam", 10, 34);
         gfx.fillText("ENTR : export level data", 10, 46);
+        gfx.fillText("   N : new level", 10, 58);
         
         const x=game.width-200;
         gfx.fillText("== MOUSE CLICK MODIFIERS ==", x, 10);

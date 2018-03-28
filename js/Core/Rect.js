@@ -48,13 +48,11 @@ function Rect(x,y,w,h){
     this.toString=function(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
     };
-    this.setRaw=function(raw,snap=1){
-        this.x=Math.round(raw.x/snap)*snap;
-        this.y=Math.round(raw.y/snap)*snap;
-        this.w=Math.round(raw.w/snap)*snap;
-        this.h=Math.round(raw.h/snap)*snap;
-        if(this.w<snap)this.w=snap;
-        if(this.h<snap)this.h=snap;
+    this.setRaw=function(raw){
+        this.x=raw.x;
+        this.y=raw.y;
+        this.w=raw.w;
+        this.h=raw.h;
     };
     this.draw=function(gfx){
         gfx.fillRect(this.x,this.y,this.w,this.h);

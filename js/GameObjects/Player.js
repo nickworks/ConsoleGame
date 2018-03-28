@@ -11,8 +11,7 @@ function Player(raw={}){
             y:this.pawn.rect.y
         };
     };
-    this.update=function(dt){
-        
+    this.update=function(dt){    
         let move=0;
         let slowDown=false;
         if(keyboard.isDown([keycode.a,keycode.left]))move--;
@@ -34,6 +33,7 @@ function Player(raw={}){
         this.pawn.update(dt);
     };
     this.draw=function(gfx){
+        gfx.fillStyle="#000";
         this.pawn.draw(gfx);
     };
     this.hurt=function(amt){
