@@ -15,8 +15,11 @@ const game = {
         if(canvas == undefined) return;
         this.gfx = canvas.getContext("2d");
         if(this.gfx == undefined) return;
-        this.width = canvas.width;
-        this.height = canvas.height;
+        this.size=function(w,h){
+            this.width=canvas.width=w;
+            this.height=canvas.height=h;
+        };
+        this.size(500,400);
         
         window.addEventListener("blur",()=>{/*pause*/this.cleanupPause=true;});
         window.addEventListener("focus",()=>{/*unpause*/this.cleanupPause=true;});
@@ -60,5 +63,5 @@ const game = {
     },
     clear:function(){
         this.gfx.clearRect(0, 0, this.width, this.height); // clear screen
-    },
+    }
 };

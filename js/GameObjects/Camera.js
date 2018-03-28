@@ -7,6 +7,7 @@ function Camera(){
     this.sy=game.height/2;
     this.target=null;
     this.update=function(dt){
+        this.updateScreenOffset();
         this.updateTargetXY();
         const speed=5;
         this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
@@ -35,6 +36,10 @@ function Camera(){
     };
     this.drawEnd=function(gfx){
         gfx.resetTransform();
+    };
+    this.updateScreenOffset=function(){
+        this.sx=game.width/2;
+        this.sy=game.height/2;  
     };
     this.worldMouse=function(){
         return {

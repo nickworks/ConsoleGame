@@ -7,7 +7,7 @@ function Door(raw={}){
     this.rectB=null;
     this.timer=0;
     this.timespan=1;
-    this.lockCode=parseInt(Math.random()*10000+10000).toString();
+    this.lockCode=null;
     this.canActivate=false;
     
     this.callbacks={
@@ -53,6 +53,9 @@ function Door(raw={}){
     };
     this.draw=function(gfx){
         this.rect.draw(gfx);
+    };
+    this.lock=function(){
+        this.lockCode=parseInt(Math.random()*10000+10000).toString();
     };
     this.open=function(code){
         if(this.lockCode && this.lockCode != code){
