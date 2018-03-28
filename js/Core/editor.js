@@ -149,6 +149,6 @@ function Editor(){
         f(NPC,scene.npcs);
         f(Door,scene.doors);
         res+="]";
-        consoleObj.log("serialized level data: "+res);
+        consoleObj.logData(res,"level data:");
     }
 };

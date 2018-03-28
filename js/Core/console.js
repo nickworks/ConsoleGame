@@ -67,6 +67,20 @@ const consoleObj = {
         }
         this.scrollToTop();
     },
+    logData:function(msg,pre=""){
+        var i=document.createElement("textarea");
+        i.setAttribute("readonly", "true");
+        i.addEventListener("click", ()=>i.setSelectionRange(0,i.value.length));
+        i.appendChild(document.createTextNode(msg));
+        
+        var d=document.createElement("div");
+        d.appendChild(i);
+        
+        var p=document.createElement("p");
+        p.appendChild(document.createTextNode(pre));
+        p.appendChild(d);
+        this.output.prepend(p);
+    },
     scrollToTop:function(){
         this.output.scrollTop = 0;
     },
