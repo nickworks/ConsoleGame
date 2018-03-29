@@ -1,4 +1,4 @@
-function Dialog(x,y,texts,callbacks){
+function Dialog(x,y,texts,callbacks={}){
     if(typeof texts == "string") texts=[texts];
     if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
     
@@ -18,15 +18,13 @@ function Dialog(x,y,texts,callbacks){
     this.remove=false;
     
     this.callbacks={
-        onDone:callbacks
+        onDone:(callbacks?callbacks.onDone:null),
+        onData:(callbacks?callbacks.onData:null)
     };
     
     this.bg=new TalkBubble(0,0);
     
-    this.display=function(text){
-        this.charMax=text.length;
-        this.charNow=0;
-        //this.timer=this.charMax*.01;
+    this.chopUpText=function(text){
         this.lines=[];
         const words = text.split(' ');
         let line='';
@@ -40,14 +38,6 @@ function Dialog(x,y,texts,callbacks){
             }
         }
         this.lines.push(line);
-
-        
-        const w=(this.lines.length==1)
-            ?this.font.measure(game.gfx(),this.lines[0]).width
-            :this.w;
-        const h=this.h*this.lines.length;
-        this.bg.setSize(w,h);
-        
     };
     this.update=function(dt){
         this.bg.update(dt);
@@ -85,7 +75,25 @@ function Dialog(x,y,texts,callbacks){
     
     this.showNext=function(){
         if(this.index>=this.texts.length)this.endDialog();
-        else this.display(this.texts[this.index++]);
+        else {
+            let txt=this.texts[this.index++];
+            
+            txt=txt.replace(/\$([0-9]+)/g,(s,p)=>{
+                const cb=this.callbacks.onData?this.callbacks.onData[p|0]:null;
+                return cb
+                    ?scene.call([cb]).toString()
+                    :"???";
+            });
+            
+            this.chopUpText(txt);
+            this.charMax=txt.length;
+            this.charNow=0;
+            const w=(this.lines.length==1)
+                ?this.font.measure(game.gfx(),this.lines[0]).width
+                :this.w;
+            const h=this.h*this.lines.length;
+            this.bg.setSize(w,h);
+        }
     };
     this.endDialog=function(){
         this.remove=true;

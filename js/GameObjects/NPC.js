@@ -14,7 +14,8 @@ function NPC(raw={}){
     
     this.callbacks={
         onSpeak:(raw.onSpeak||[]),
-        onDeath:(raw.onDeath||[])
+        onDeath:(raw.onDeath||[]),
+        onData:(raw.onData||[])
     };
     
     this.jump=function(){
@@ -33,8 +34,10 @@ function NPC(raw={}){
         };
         var a=this.callbacks.onSpeak;
         var b=this.callbacks.onDeath;
+        var c=this.callbacks.onData;
         if(a&&a.length>0)data.onSpeak=a;
         if(b&&b.length>0)data.onDeath=b;
+        if(c&&c.length>0)data.onData=b;
         return data;
     };
     this.id=function(i){
@@ -109,7 +112,7 @@ function NPC(raw={}){
     };
     this.speak=function(){
         const p=this.pawn.rect.mid();
-        scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks.onSpeak);
+        scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks);
     };
     this.draw=function(gfx){
         gfx.fillStyle=this.friend?"#6A3":"#F43";

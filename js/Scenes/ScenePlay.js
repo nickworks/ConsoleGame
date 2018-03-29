@@ -116,18 +116,18 @@ function ScenePlay(n){
         return [this.player].concat(this.npcs,this.doors,this.platforms);
     };
     this.obj=function(id){ // fetch objects by id
-        const res=[];
-        this.all().forEach(i=>{if(i.id()==id)res.push(i);});
+        var res=null;
+        this.all().forEach(i=>{if(i.id()==id)res=i;});
         return res;
     };
     this.call=function(c){ // execute a callback
         c=c||[];
+        var res=null;
         c.forEach(d=>{
             var o=this.obj(d.i); // fetch object by id
-            o.forEach(obj=>{
-                if(obj[d.f])obj[d.f]();
-            });
+            if(o[d.f])res=o[d.f]();
         });
+        return res;
     };
     this.id=function(){ // get new, unused id number
         let i=0;
