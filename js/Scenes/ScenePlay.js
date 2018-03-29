@@ -1,5 +1,5 @@
 function ScenePlay(n){
-    this.levelIndex=n;
+    this.levelIndex=n;//private
     this.cam=new Camera();
     this.player=null;
     this.goal=null;
@@ -8,7 +8,6 @@ function ScenePlay(n){
     this.doors=[];
     this.bullets=[];
     this.modal=null;
-    
     var timerFade=1;
     
     this.update=function(dt){
@@ -58,10 +57,16 @@ function ScenePlay(n){
                 if(b.dead)this.bullets.splice(i,1);
             }
             if(keyboard.onDown([keycode.p,keycode.escape])){
-                this.modal=new Pause(this);
+                this.pause();
             }
         }
         this.cam.update(dt);
+    };
+    this.pause=function(){
+        this.modal=new Pause();
+    };
+    this.unpause=function(){
+        this.modal=null;  
     };
     this.draw=function(gfx){
         game.clear();

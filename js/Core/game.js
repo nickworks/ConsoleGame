@@ -15,7 +15,7 @@ function Game(){
     this.settings={
         editModeEnabled:true,
     };
-    
+  
     this.calcDeltaTime=function(time){
         if(time === undefined) time = 0;
         dt = (time - timePrev) / 1000;
@@ -30,6 +30,10 @@ function Game(){
         if(currentScene){
             nextScene=currentScene.update(dt);
             currentScene.draw(gfx);
+            if(!this.isFocus()){
+                gfx.fillStyle="rgba(0,0,0,.5)";
+                gfx.fillRect(0,0,width,height);
+            }
         } else {
             nextScene=new SceneTitle();
         }
@@ -41,6 +45,7 @@ function Game(){
         mouse.update();
         requestAnimationFrame((time)=>this.update(time));
     };
+    this.isFocus=()=>{return(document.activeElement==document.body)};
     this.clear=function(){
         gfx.clearRect(0, 0, width, height); // clear screen
     };
@@ -56,7 +61,10 @@ function Game(){
         };
         this.size(500,400);
         
-        window.addEventListener("blur",()=>{if(scene&&scene.player&&!scene.modal)scene.modal=new Pause();});
+        window.addEventListener("blur",()=>{
+            if(scene&&scene.pause)scene.pause();
+            keyboard.blur();
+        });
         
         keyboard.setup();
         mouse.setup(canvas, this);

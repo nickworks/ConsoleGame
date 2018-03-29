@@ -16,9 +16,7 @@ body {
     padding:20px;
 }
 #console {
-    background:#666;
     color:#FFF;
-    box-shadow:1px 1px 3px rgba(0, 0, 0, .5);
     width:500px;
     margin:20px auto;
     cursor:default;
@@ -32,29 +30,30 @@ body {
     margin:0;
 }
 #console p:not(.in){
-    border-bottom:1px dotted #888;
+    border-bottom:1px dotted #111;
     margin-bottom:6px;
+    padding-bottom:10px;
 }
 #console p.in {
-    background:#888;
+    background:#343;
     border-radius:3px;
     margin:4px 5px;
-    color:#333;
+    color:#000;
 }
 #console-input {
-    padding:0 3px;
+    padding:0 5px;
     margin:0;
-    background:#999;
-    border:solid 2px #999;
+    background:#444;
+    border:none;
     border-radius:3px;
     outline:none;
     display:block;
-    line-height:21px;
+    line-height:25px;
     width:100%;
     box-sizing:border-box;
 }
 #console-input:focus{
-    border:solid 2px #9AF;
+    background:#9AF;
 }
 #console-output {
     width:500px;/*
@@ -77,8 +76,7 @@ body {
 }
 #console-title {
     line-height:25px;
-    background:#777;
-    color:#9AF;
+    color:#09A;
     font-weight:bold;
     font-size:10px;
     display:flex;

@@ -30,10 +30,10 @@
     'js/Core/mouse.js',
     'js/Core/console.js',
     'js/Core/sprites.js',
+    'js/Scenes/SceneLoad.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
     'js/Scenes/LevelData.js',
-    'js/Scenes/Loading.js',
     'js/Core/game.js'
 ],()=>{
     game.start("myCanvas");

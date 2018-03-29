@@ -2,8 +2,8 @@ function Button(caption, callback, x, y, w, h){
     this.text=new TextField(caption, 0, 0, {align:"center",valign:"middle"});
     this.callback=callback;
     this.rect=new Rect(x,y,w,h);
-    this.colorNormal="#CCC";
-    this.colorHover="#EEE";
+    this.colorNormal="rgba(128,128,128,.5)";
+    this.colorHover="#9AF";
     this.hover=false;
     this.selected=false;
     this.update=function(dt, selected){
@@ -14,8 +14,10 @@ function Button(caption, callback, x, y, w, h){
     };
     this.draw=function(gfx){
         gfx.translate(this.rect.x, this.rect.y);
-        gfx.fillStyle=(this.hover||this.selected)?this.colorHover:this.colorNormal;
+        const hover=this.hover||this.selected;
+        gfx.fillStyle=hover?this.colorHover:this.colorNormal;
         gfx.fillRect(0,0,this.rect.w,this.rect.h);
+        
         this.text.x=this.rect.w/2;
         this.text.y=this.rect.h/2;
         this.text.draw(gfx);

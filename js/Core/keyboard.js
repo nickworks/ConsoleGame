@@ -70,14 +70,19 @@ const keyboard = {
         if(this.debug)console.log(e.keyCode+(value?" down":" up"));
         
         const gameInFocus=(document.activeElement==document.body);
-        const toggleFocus=(value&&e.keyCode==keycode.tab);
+        const toggleFocus=(value&&e.keyCode==keycode.tab); // are we trying to toggle focus?
         
         if(gameInFocus){
             this.keys[e.keyCode] = value;
-            if(toggleFocus)consoleObj.input.focus();
+            if(toggleFocus){
+                //if(scene.pause)scene.pause();
+                keyboard.blur();
+                consoleObj.input.focus();
+            }
             e.preventDefault();
         } else {
             if(toggleFocus){
+                //if(scene.unpause)scene.unpause();
                 consoleObj.input.blur();
                 e.preventDefault();
             }
@@ -86,5 +91,10 @@ const keyboard = {
     setup: function(){
         document.addEventListener("keydown", (e)=>this.updateKey(e, true));
         document.addEventListener("keyup", (e)=>this.updateKey(e, false));
-    }
+    },
+    blur:function(){
+        for(var i in this.keys){
+            this.keys[i]=false;
+        }
+    },
 };
