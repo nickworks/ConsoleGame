@@ -6,6 +6,7 @@
         s.src=u; document.head.appendChild(s);
     });
 })([
+    'js/UI/Font.js',
     'js/UI/Button.js',
     'js/UI/Menu.js',
     'js/UI/TextField.js',
@@ -32,6 +33,7 @@
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
     'js/Scenes/LevelData.js',
+    'js/Scenes/Loading.js',
     'js/Core/game.js'
 ],()=>{
     game.start("myCanvas");

@@ -5,11 +5,7 @@ function Keypad(x,y,onDone){
     this.x=x;
     this.y=y;
     
-    this.color="#000";
-    this.size=12;
-    this.font="Arial";
-    this.align="left";
-    this.baseline="top";
+    this.font=new Font({valign:"top"});
     
     this.remove=false;
     this.timerBlink=0;
@@ -24,15 +20,9 @@ function Keypad(x,y,onDone){
         this.resizeBG(true);
     };
     this.resizeBG=function(snap=false){
-        const size=game.gfx.measureText(this.txt+this.val+"_");
+        const size=this.font.measure(game.gfx(),this.txt+this.val+"_");
         this.bg.setSize(size.width,14);
         if(snap)this.bg.snap();
-    };
-    this.readyFont=function(gfx){
-        gfx.fillStyle = this.color;
-        gfx.font = this.size + "px " + this.font;
-        gfx.textAlign = this.align;
-        gfx.textBaseline = this.baseline;
     };
     this.update=function(dt){
         this.timerBlink-=dt;
@@ -58,7 +48,7 @@ function Keypad(x,y,onDone){
         scene.cam.drawStart(gfx);
         gfx.translate(this.x,this.y);
         this.bg.draw(gfx);
-        this.readyFont(gfx);
+        this.font.apply(gfx);
         const p=this.bg.pos();
         let o=this.txt+this.val;
         if(this.showCursor)o+="_";

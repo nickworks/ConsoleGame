@@ -1,6 +1,5 @@
 function Button(caption, callback, x, y, w, h){
-    this.text=new TextField(caption, 0, 0, 12);
-    this.text.baseline="middle";
+    this.text=new TextField(caption, 0, 0, {align:"center",valign:"middle"});
     this.callback=callback;
     this.rect=new Rect(x,y,w,h);
     this.colorNormal="#CCC";

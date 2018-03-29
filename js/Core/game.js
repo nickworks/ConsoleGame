@@ -8,9 +8,14 @@ function Game(){
     var height=0;
     var gfx=null;
     
+    this.width=function(){return width;}
+    this.height=function(){return height;}
+    this.gfx=function(){return gfx;}
+    
     this.settings={
         editModeEnabled:true,
     };
+    
     this.calcDeltaTime=function(time){
         if(time === undefined) time = 0;
         dt = (time - timePrev) / 1000;
@@ -39,12 +44,6 @@ function Game(){
     this.clear=function(){
         gfx.clearRect(0, 0, width, height); // clear screen
     };
-    this.width=function(){
-        return width;
-    }
-    this.height=function(){
-        return height;
-    }
     this.start=function(id){
         const canvas=document.getElementById(id);
         if(canvas==undefined) return;

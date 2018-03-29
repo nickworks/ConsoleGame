@@ -10,11 +10,7 @@ function Dialog(x,y,texts,callbacks){
     this.w=200;//max width
     this.h=14;
     
-    this.color="#000";
-    this.size=12;
-    this.font="Arial";
-    this.align="left";
-    this.baseline="top";
+    this.font=new Font({valign:"top"});
     
     this.timer=0;
     this.charNow=0;
@@ -32,12 +28,11 @@ function Dialog(x,y,texts,callbacks){
         this.charNow=0;
         //this.timer=this.charMax*.01;
         this.lines=[];
-        this.readyFont(game.gfx);
         const words = text.split(' ');
         let line='';
         for(var i in words){
             const t=line+words[i]+' ';
-            if(i>0&&game.gfx.measureText(t).width>this.w){
+            if(i>0&&this.font.measure(game.gfx(),t).width>this.w){
                 this.lines.push(line);
                 line=words[i]+' ';
             }else{
@@ -45,17 +40,14 @@ function Dialog(x,y,texts,callbacks){
             }
         }
         this.lines.push(line);
+
         
-        const w=(this.lines.length==1)?game.gfx.measureText(this.lines[0]).width:this.w;
+        const w=(this.lines.length==1)
+            ?this.font.measure(game.gfx(),this.lines[0]).width
+            :this.w;
         const h=this.h*this.lines.length;
         this.bg.setSize(w,h);
         
-    };
-    this.readyFont=function(gfx){
-        gfx.fillStyle = this.color;
-        gfx.font = this.size + "px " + this.font;
-        gfx.textAlign = this.align;
-        gfx.textBaseline = this.baseline;
     };
     this.update=function(dt){
         this.bg.update(dt);
@@ -75,7 +67,7 @@ function Dialog(x,y,texts,callbacks){
         gfx.translate(this.x,this.y);
         this.bg.draw(gfx);
         const p=this.bg.pos();
-        this.readyFont(gfx);
+        this.font.apply(gfx);
         var charOut=this.charNow;
         for(var n in this.lines){
             var str=this.lines[n];

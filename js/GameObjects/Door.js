@@ -10,6 +10,8 @@ function Door(raw={}){
     this.lockCode=null;
     this.canActivate=false;
     
+    var isOpen=false;
+    
     this.callbacks={
         onOpen:(raw.onOpen||[]),
         onClose:(raw.onClose||[])
@@ -47,7 +49,7 @@ function Door(raw={}){
                 const p=this.rect.mid();
                 scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
             }else{
-                this.open();
+                isOpen?this.close():this.open();
             }
         }
     };
@@ -64,10 +66,12 @@ function Door(raw={}){
         }
         
         this.animate({h:25});
+        isOpen=true;
         scene.call(this.callbacks.onOpen);
     };
     this.close=function(){
         this.animate({h:100});
+        isOpen=false;
         scene.call(this.callbacks.onClose);
     };
     this.animate=function(dif, time=1){
