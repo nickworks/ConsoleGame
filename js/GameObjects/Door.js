@@ -74,6 +74,9 @@ function Door(raw={}){
         isOpen=false;
         scene.call(this.callbacks.onClose);
     };
+    this.logLockCode=function(){
+        consoleObj.log("door lock code: "+this.lockCode);  
+    };
     this.animate=function(dif, time=1){
         this.animating=true;
         this.timer=0;

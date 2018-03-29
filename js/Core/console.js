@@ -20,9 +20,10 @@ const consoleObj = {
             }
             e.preventDefault();
         });
-        //document.getElementById("bttn-hide").addEventListener("click", () => this.hide());
-        //document.getElementById("bttn-show").addEventListener("click", () => this.show());
-        document.getElementById("bttn-clear").addEventListener("click", () => this.clear());
+        
+        const bttn=document.getElementById("bttn-clear");
+        bttn.addEventListener("focus",()=>bttn.blur());
+        bttn.addEventListener("click",()=>this.clear());
     },
     handleHistory:function(offset){
         const h = this.history;
