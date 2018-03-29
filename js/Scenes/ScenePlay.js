@@ -75,7 +75,7 @@ function ScenePlay(n){
         this.cam.drawEnd(gfx);
         
         gfx.fillStyle="rgba(0,0,0,"+(timerFade/1)+")";
-        gfx.fillRect(0,0,game.width,game.height);
+        gfx.fillRect(0,0,game.width(),game.height());
         
         if(this.modal)this.modal.draw(gfx);
     };

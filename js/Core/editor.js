@@ -116,7 +116,7 @@ function Editor(){
         gfx.fillText("ENTR : export level data", 10, 46);
         gfx.fillText("   N : new level", 10, 58);
         
-        const x=game.width-200;
+        const x=game.width()-200;
         gfx.fillText("== MOUSE CLICK MODIFIERS ==", x, 10);
         gfx.fillText(" +R : resize when dragging", x, 22);
         gfx.fillText(" +Q : destroy on click", x, 34);

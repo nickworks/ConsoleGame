@@ -3,8 +3,6 @@ function Camera(){
     this.y=0;
     this.tx=0;
     this.ty=0;
-    this.sx=game.width/2;
-    this.sy=game.height/2;
     this.target=null;
     this.update=function(dt){
         this.updateScreenOffset();
@@ -38,8 +36,8 @@ function Camera(){
         gfx.resetTransform();
     };
     this.updateScreenOffset=function(){
-        this.sx=game.width/2;
-        this.sy=game.height/2;  
+        this.sx=game.width()/2;
+        this.sy=game.height()/2;  
     };
     this.worldMouse=function(){
         return {

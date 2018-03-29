@@ -34,5 +34,5 @@
     'js/Scenes/LevelData.js',
     'js/Core/game.js'
 ],()=>{
-    game.begin("myCanvas");
+    game.start("myCanvas");
 });

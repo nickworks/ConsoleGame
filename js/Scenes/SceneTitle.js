@@ -1,7 +1,6 @@
 function SceneTitle(){
     
-    this.title = new TextField("This is the Title", game.width/2, 100, 30);
-    //this.tag = new TextField("Press [ENTER] to play!", game.width/2, 150, 14);
+    this.title = new TextField("This is the Title", game.width()/2, 100, 30);
     
     this.menu = new Menu(25,25,100,32,[
         {caption:"Play",callback:()=>{this.switchToPlay=true;}},

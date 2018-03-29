@@ -1,67 +1,68 @@
-let scene = null;
-const game = {
-    timePrev: 0,
-    dt: 0,
-    gfx:undefined,
-    width:500,
-    height:400,
-    scene:undefined,
-    settings:{
+let scene=null;
+let game=new Game();
+function Game(){
+    var timePrev=0;
+    var dt=0;
+    var currentScene=null;
+    var width=0;
+    var height=0;
+    var gfx=null;
+    
+    this.settings={
         editModeEnabled:true,
-    },
-    begin:function(id){
-        
-        const canvas = document.getElementById(id);
-        if(canvas == undefined) return;
-        this.gfx = canvas.getContext("2d");
-        if(this.gfx == undefined) return;
-        this.size=function(w,h){
-            this.width=canvas.width=w;
-            this.height=canvas.height=h;
-        };
-        this.size(500,400);
-        
-        window.addEventListener("blur",()=>{/*pause*/this.cleanupPause=true;});
-        window.addEventListener("focus",()=>{/*unpause*/this.cleanupPause=true;});
-        
-        keyboard.setup();
-        mouse.setup(canvas, this);
-        
-        sprites.init(this.gfx); // load images...
-        
-        this.update(0); // begin game loop
-    },
-    calcDeltaTime:function(time){
+    };
+    this.calcDeltaTime=function(time){
         if(time === undefined) time = 0;
-        if(this.cleanupPause){
-            this.timePrev=time;
-            this.cleanupPause=false;
-        }
-        this.dt = (time - this.timePrev) / 1000;
-        this.timePrev = time;
-    },
-    update:function(time){
+        dt = (time - timePrev) / 1000;
+        timePrev = time;
+    };
+    this.update=function(time){
         this.calcDeltaTime(time);
         let nextScene;
+        scene=currentScene;
+        game=this;
         
-        if(this.scene){
-            nextScene = this.scene.update(this.dt);
-            this.scene.draw(this.gfx);
+        if(currentScene){
+            nextScene=currentScene.update(dt);
+            currentScene.draw(gfx);
         } else {
-            nextScene = new SceneTitle();
+            nextScene=new SceneTitle();
         }
         
-        if(nextScene){
-            this.scene = nextScene;
-            scene = nextScene;
-        }
+        if(nextScene)currentScene=nextScene;
         
         ///////////////////////////// LATE UPDATE:
         keyboard.update();
         mouse.update();
-        requestAnimationFrame((time) => this.update(time));
-    },
-    clear:function(){
-        this.gfx.clearRect(0, 0, this.width, this.height); // clear screen
+        requestAnimationFrame((time)=>this.update(time));
+    };
+    this.clear=function(){
+        gfx.clearRect(0, 0, width, height); // clear screen
+    };
+    this.width=function(){
+        return width;
     }
-};
+    this.height=function(){
+        return height;
+    }
+    this.start=function(id){
+        const canvas=document.getElementById(id);
+        if(canvas==undefined) return;
+        gfx=canvas.getContext("2d");
+        if(gfx==undefined) return;
+        
+        this.size=function(w,h){
+            width=canvas.width=w;
+            height=canvas.height=h;
+        };
+        this.size(500,400);
+        
+        window.addEventListener("blur",()=>{if(scene&&scene.player&&!scene.modal)scene.modal=new Pause();});
+        
+        keyboard.setup();
+        mouse.setup(canvas, this);
+        
+        sprites.init(gfx);
+        this.update(0); // begin game loop
+    };
+}

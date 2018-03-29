@@ -25,7 +25,7 @@ function Pause(){
     };
     this.draw=function(gfx){
         gfx.fillStyle="rgba(0,0,0,.75)";
-        gfx.fillRect(0,0,game.width,game.height);
+        gfx.fillRect(0,0,game.width(),game.height());
         this.menu.draw(gfx);
     };
 }
