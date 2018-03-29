@@ -19,6 +19,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
         this.isGrounded=false;
+        this.rect.cache();
     };
     this.moveH=function(dt,move=0){
         let slowDown=false;

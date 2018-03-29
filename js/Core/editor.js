@@ -42,22 +42,22 @@ function Editor(){
             this.dragObj=o;
             this.dragOrig=(o.rect||o.pawn.rect).raw();
         };
-        if(keyboard.isDown(keycode["1"])){//platforms
+        if(keyboard.isDown([keycode.n1,keycode.p1])){//platforms
             const o=new Platform({x:m.x,y:m.y,w:25,h:25});
             scene.platforms.push(o);
             drag(o,true);
         }
-        else if(keyboard.isDown(keycode["2"])){//door
+        else if(keyboard.isDown([keycode.n2,keycode.p2])){//door
             const o=new Door({x:m.x,y:m.y});
             scene.doors.push(o);
             drag(o);
         }
-        else if(keyboard.isDown(keycode["3"])){//npc
+        else if(keyboard.isDown([keycode.n3,keycode.p3])){//npc
             const o=new NPC({x:m.x, y:m.y});
             scene.npcs.push(o);
             drag(o);
         }
-        else if(keyboard.isDown(keycode["4"])){//goal
+        else if(keyboard.isDown([keycode.n4,keycode.p4])){//goal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
             scene.goal=new Goal({x:x,y:y});

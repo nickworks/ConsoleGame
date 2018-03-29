@@ -3,6 +3,10 @@ function Rect(x,y,w,h){
     this.y=y||0;
     this.w=w||25;
     this.h=h||25;
+    this.prev={};
+    this.cache=function(){
+        this.prev=this.raw();  
+    };
     this.copy=function(){
         return new Rect(this.x,this.y,this.w,this.h);
     };
@@ -23,12 +27,14 @@ function Rect(x,y,w,h){
         });
     };
     this.findFix=function(o){
+        
         // how far to move o to get it out
         const r=this;
         let moveL=r.x-(o.x+o.w);
         let moveR=(r.x+r.w)-o.x;
         let moveU=r.y-(o.y+o.h);
         let moveD=(r.y+r.h)-o.y;
+        
         const res={x:0,y:0};
         res.x=(Math.abs(moveL)<Math.abs(moveR))?moveL:moveR;
         res.y=(Math.abs(moveU)<Math.abs(moveD))?moveU:moveD;

@@ -16,7 +16,7 @@ function Camera(){
             if(this.target.rect){
                 const m=this.target.rect.mid();
                 this.tx=(m.x)|0;
-                this.ty=(m.y-100)|0;
+                this.ty=(m.y-50)|0;
             } else {
                 this.tx=this.target.x||this.tx;
                 this.ty=this.target.y||this.ty;
