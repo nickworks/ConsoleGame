@@ -95,7 +95,7 @@ function ScenePlay(n){
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
-                if(rect.mouseOver())this.log(pre+str+"["+i+"] (object id #"+a[i].id+")");
+                if(rect.mouseOver())this.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
             }
         };
         check(this.bullets, "bullets");
@@ -109,15 +109,15 @@ function ScenePlay(n){
     };
     this.ids=function(){ // assign ids to non-id'd objects
         this.all().forEach(o=>{
-            if(!o.id)o.id=this.id();
+            if(!o.id())o.id(this.id());
         });
     };
     this.all=function(){
         return [this.player].concat(this.npcs,this.doors,this.platforms);
     };
-    this.obj=function(id){ // fetch object by id
+    this.obj=function(id){ // fetch objects by id
         const res=[];
-        this.all().forEach(i=>{if(i.id==id)res.push(i);});
+        this.all().forEach(i=>{if(i.id()==id)res.push(i);});
         return res;
     };
     this.call=function(c){ // execute a callback
@@ -132,7 +132,7 @@ function ScenePlay(n){
     this.id=function(){ // get new, unused id number
         let i=0;
         this.all().forEach(o=>{
-            const n=o.id|0;
+            const n=o.id()|0;
             if(n>i)i=n;
         });
         return i+1;

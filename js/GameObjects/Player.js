@@ -1,5 +1,5 @@
 function Player(raw={}){
-    this.id=raw.i||0;
+    var id=raw.i||0;
     this.canDoubleJump=true;
     this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
@@ -8,9 +8,14 @@ function Player(raw={}){
     this.friend=true;
     this.serialize=function(){
         return{
-            x:this.pawn.rect.x,
-            y:this.pawn.rect.y
+            i:id,
+            x:this.pawn.rect.x|0,
+            y:this.pawn.rect.y|0,
         };
+    };
+    this.id=function(i){
+        if(i)id=i;
+        return id;  
     };
     this.update=function(dt){    
         let move=0;
@@ -41,7 +46,7 @@ function Player(raw={}){
     this.hurt=function(amt){
         this.hp-=amt;
         if(this.hp<=0)this.dead=true;
-    }
+    };
 }
 
 

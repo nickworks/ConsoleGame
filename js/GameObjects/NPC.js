@@ -1,5 +1,5 @@
 function NPC(raw={}){
-    this.id=raw.i||0;
+    var id=raw.i||0;
     this.agro=false;
     this.pawn=new Pawn(raw);
     this.pawn.a=raw.a||800;
@@ -24,8 +24,9 @@ function NPC(raw={}){
     };
     this.serialize=function(){
         var data={
-            x:this.pawn.rect.x,
-            y:this.pawn.rect.y,
+            i:id,
+            x:this.pawn.rect.x|0,
+            y:this.pawn.rect.y|0,
             d:this.dialog,
             f:this.friend,
             a:this.pawn.a
@@ -35,6 +36,10 @@ function NPC(raw={}){
         if(a&&a.length>0)data.onSpeak=a;
         if(b&&b.length>0)data.onDeath=b;
         return data;
+    };
+    this.id=function(i){
+        if(i)id=i;
+        return id;  
     };
     this.update=function(dt){
         this.canTalk=this.pawn.rect.overlaps(scene.player.pawn.rect);

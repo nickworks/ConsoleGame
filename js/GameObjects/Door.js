@@ -1,5 +1,5 @@
 function Door(raw={}){
-    this.id=raw.i||0;
+    var id=raw.i||0;
     this.rect=new Rect(raw.x||0,raw.y||0,25,100);
     this.animating=false;
     this.done=false;
@@ -18,14 +18,20 @@ function Door(raw={}){
     };
     this.serialize=function(){
         let data={
+            i:id,
             x:this.rect.x,
-            y:this.rect.y
+            y:this.rect.y,
+            l:(!!this.lockCode),
         };
         var a=this.callbacks.onOpen;
         var b=this.callbacks.onClose;
         if(a&&a.length>0)data.onOpen=a;
         if(b&&b.length>0)data.onClose=b;
         return data;
+    };
+    this.id=function(i){
+        if(i)id=i;
+        return id;  
     };
     this.update=function(dt){
         if(this.animating){
@@ -69,6 +75,9 @@ function Door(raw={}){
         isOpen=true;
         scene.call(this.callbacks.onOpen);
     };
+    this.forceOpen=function(){
+        this.open(this.lockCode);
+    };
     this.close=function(){
         this.animate({h:100});
         isOpen=false;
@@ -88,4 +97,6 @@ function Door(raw={}){
         if(dif.w)this.rectB.h=dif.w;
         if(dif.h)this.rectB.h=dif.h;
     }
+    
+    if(raw.l)this.lock();
 }
