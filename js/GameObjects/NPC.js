@@ -1,6 +1,6 @@
 function NPC(raw={}){
     this.id=raw.i||0;
-    this.seesPlayer=true;
+    this.seesPlayer=false;
     this.pawn=new Pawn(raw);
     this.pawn.a=raw.a||800;
     this.canTalk=false;
@@ -8,6 +8,9 @@ function NPC(raw={}){
     this.dialog=raw.d||[];
     this.hp=100;
     this.dead=false;
+    this.patrolStart=this.pawn.rect.mid().x;
+    this.patrolDis=100;
+    this.patrolTimer=0;
     
     this.callbacks={
         onSpeak:(raw.onSpeak||[]),
@@ -61,10 +64,42 @@ function NPC(raw={}){
             } else if(me.y>p.y-25){
                 this.pawn.shoot(false);
             }
+        } else {
+            
+            move=this.patrol(dt);
+            
+            if(this.pawn.canSee(scene.player.pawn.rect))this.seesPlayer=true;
         }
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
+    };
+    this.patrol=function(dt){
+        let move=0;
+        const target=this.patrolStart+this.patrolDis*this.pawn.dir;
+        if(this.pawn.dir<0){
+            if(target<this.pawn.rect.x){
+                move=-1;
+                this.patrolTimer=1;
+            }else{
+                this.patrolTimer-=dt;
+                if(this.patrolTimer<=0){
+                    this.pawn.dir*=-1;
+                }
+            }
+        }
+        if(this.pawn.dir>0){
+            if(target>this.pawn.rect.x){
+                move=1;
+                this.patrolTimer=1;
+            }else{
+                this.patrolTimer-=dt;
+                if(this.patrolTimer<=0){
+                    this.pawn.dir*=-1;
+                }
+            }
+        }
+        return move;
     };
     this.speak=function(){
         const p=this.pawn.rect.mid();
