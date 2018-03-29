@@ -7,6 +7,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.vy = 0;
     this.a = 800;
     this.maxv = 400;
+    this.agro=false;
     this.isGrounded=false;
     this.isJumping=false;
     this.airJumpsLeft=1;
@@ -34,8 +35,9 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
             this.dir=move;
         }
         this.vx+=this.a*move*dt;
-        if(this.vx>this.maxv)this.vx=this.maxv;
-        if(this.vx<-this.maxv)this.vx=-this.maxv;
+        const clamp=this.agro?this.maxv:this.maxv/2;
+        if(this.vx>clamp)this.vx=clamp;
+        if(this.vx<-clamp)this.vx=-clamp;
         this.rect.x+=this.vx*dt;
         if(slowDown){
             if(move<0&&this.vx<0)this.vx=0;

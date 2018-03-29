@@ -1,6 +1,6 @@
 function NPC(raw={}){
     this.id=raw.i||0;
-    this.seesPlayer=false;
+    this.agro=false;
     this.pawn=new Pawn(raw);
     this.pawn.a=raw.a||800;
     this.canTalk=false;
@@ -52,7 +52,7 @@ function NPC(raw={}){
     };
     this.aiFoe=function(dt){
         let move=0;
-        if(this.seesPlayer){
+        if(this.agro){
             const p=scene.player.pawn.rect.mid();
             const me=this.pawn.rect.mid();
             this.pawn.dir=(me.x<p.x)?1:-1;
@@ -68,8 +68,9 @@ function NPC(raw={}){
             
             move=this.patrol(dt);
             
-            if(this.pawn.canSee(scene.player.pawn.rect))this.seesPlayer=true;
+            if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
+        this.pawn.agro=this.agro;
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
@@ -123,5 +124,8 @@ function NPC(raw={}){
             if(this.dead==false)scene.call(this.callbacks.onDeath);
             this.dead=true;
         }
-    }
+    };
+    this.seeFar=function(amt=300){
+        this.pawn.sightRange=amt;
+    };
 }
