@@ -21,7 +21,7 @@ function Door(raw={}){
             i:id,
             x:this.rect.x,
             y:this.rect.y,
-            l:(!!this.lockCode),
+            l:this.lockCode?1:0,
         };
         var a=this.callbacks.onOpen;
         var b=this.callbacks.onClose;
@@ -108,5 +108,5 @@ function Door(raw={}){
                 :o.applyFix(fix));
         });
     };
-    if(raw.l)this.lock();
+    if(!!raw.l)this.lock();
 }

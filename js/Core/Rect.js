@@ -3,9 +3,17 @@ function Rect(x,y,w,h){
     this.y=y||0;
     this.w=w||25;
     this.h=h||25;
-    this.prev={};
+    this.vx=0;
+    this.vy=0;
+    var prev={};
+    this.speed=function(){
+        // IMPORTANT: this velocity is per-second! It has delta-time already applied.
+        this.vx=this.x-prev.x;
+        this.vy=this.y-prev.y;
+        this.cache();
+    };
     this.cache=function(){
-        this.prev=this.raw();  
+        prev=this.raw();
     };
     this.copy=function(){
         return new Rect(this.x,this.y,this.w,this.h);

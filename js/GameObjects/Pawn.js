@@ -19,11 +19,10 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.sight=null;//trash this
     };
     this.update=function(dt){    
-        if(this.weapon)this.weapon.update(dt);
-        
+        if(this.weapon)this.weapon.update(dt); 
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
         this.isGrounded=false;
-        this.rect.cache();
+        this.rect.speed();
     };
     this.moveH=function(dt,move=0){
         let slowDown=false;
@@ -67,12 +66,14 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
                 this.airJumpsLeft=1;
             }
         }
+        this.rect.cache();
     };
     this.jump=function(isAirJump=false){ // try to jump...
         if(!isAirJump&&!this.isGrounded)return;
         if(!isAirJump&&this.jumpCooldown>0)return;
         if(isAirJump&&this.airJumpsLeft<=0)return;
         if(isAirJump&&!canDoubleJump())return;
+        
         this.vy=-300;
         this.isJumping=true;
         this.jumpCooldown=this.jumpCooldownAmt;

@@ -35,8 +35,8 @@ function ScenePlay(n){
             }
             this.platforms.forEach(p=>{
                 p.update(dt);
-                p.block(this.player);
-                p.block(this.npcs);
+                p.block(this.player, dt);
+                p.block(this.npcs, dt);
             });
             this.doors.forEach(d=>{
                 d.update(dt);
