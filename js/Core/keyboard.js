@@ -30,6 +30,7 @@ const key = {
     a:65,
     d:68,
     e:69,
+    f:70,
     n:78,
     p:80,
     q:81,
@@ -41,18 +42,18 @@ const key = {
     tilde:192,
     ////////////////////////// INPUT MAPPING:
     jump:function(){return this.space},
-    menuChoose:function(){return [this.w,this.d,this.enter,this.space]},
-    activate:function(){return [this.w,this.enter]},
+    menuChoose:function(){return [this.enter,this.space]},
+    activate:function(){return [this.e,this.enter]},
     moveLeft:function(){return [this.left]},
     moveRight:function(){return [this.right]},
     exit:function(){return this.escape},
     console:function(){return this.tab},
-    attack:function(){return this.d},
+    attack:function(){return this.f},
     sprint:function(){return this.shift},
 };
 
 const keyboard = {
-    debug:true,
+    debug:false,
     keys:[],
     prev:[],
     isDown:function(keyCode){

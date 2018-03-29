@@ -6,6 +6,9 @@ function Player(raw={}){
     this.hp=100;
     this.dead=false;
     this.friend=true;
+    this.canWallJump=function(){
+        return true;  
+    };
     this.serialize=function(){
         return{
             i:id,
@@ -24,7 +27,10 @@ function Player(raw={}){
         if(keyboard.isDown(key.moveRight()))move++;
 
         if(keyboard.onDown(key.jump())){
+            const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
+            
             if(this.pawn.isGrounded)this.pawn.jump(false);
+            else if(onWall&&this.canWallJump())this.pawn.jump(false,true);
             else if(this.pawn.airJumpsLeft>0)this.pawn.jump(true);
         }
         if(!keyboard.isDown(key.jump())){
@@ -47,5 +53,3 @@ function Player(raw={}){
         if(this.hp<=0)this.dead=true;
     };
 }
-
-

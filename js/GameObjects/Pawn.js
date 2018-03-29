@@ -52,8 +52,10 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         if(this.isJumping&&this.vy<0){
             grav=.4;
         }else{
+            if(this.onWallLeft||this.onWallRight)grav=.2;
             this.isJumping=false;
         }
+        
         this.vy+=1200*grav*dt;
         this.rect.y+=this.vy*dt;
     };
@@ -77,7 +79,21 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         }
         this.rect.cache();
     };
-    this.jump=function(isAirJump=false){ // try to jump...
+    this.jump=function(isAirJump=false,isWallJump=false){ // try to jump...
+        
+        if(!this.isGrounded&&this.onWallLeft){
+            this.vy=-300;
+            this.vx=200;
+            this.isJumping=true;    
+            return;
+        }
+        if(!this.isGrounded&&this.onWallRight){
+            this.vy=-300;
+            this.vx=-200;
+            this.isJumping=true;    
+            return;
+        }
+        
         if(!isAirJump&&!this.isGrounded)return;
         if(!isAirJump&&this.jumpCooldown>0)return;
         if(isAirJump&&this.airJumpsLeft<=0)return;
