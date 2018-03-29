@@ -35,13 +35,13 @@ function ScenePlay(n){
             }
             this.platforms.forEach(p=>{
                 p.update(dt);
-                p.rect.fixOverlaps(this.player);
-                p.rect.fixOverlaps(this.npcs);
+                p.block(this.player);
+                p.block(this.npcs);
             });
             this.doors.forEach(d=>{
                 d.update(dt);
-                d.rect.fixOverlaps(this.player);
-                d.rect.fixOverlaps(this.npcs);
+                d.block(this.player);
+                d.block(this.npcs);
             });
             if(this.goal&&this.goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
             for(var i in this.bullets){

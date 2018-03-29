@@ -97,6 +97,16 @@ function Door(raw={}){
         if(dif.w)this.rectB.h=dif.w;
         if(dif.h)this.rectB.h=dif.h;
     }
-    
+    this.block=function(a){
+        if(!Array.isArray(a))a=[a];
+        a.forEach(o=>{
+            const rect=(o.pawn?o.pawn.rect:o.rect);
+            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
+            const fix=this.rect.findFix(rect);
+            (o.pawn
+                ?o.pawn.applyFix(fix)
+                :o.applyFix(fix));
+        });
+    };
     if(raw.l)this.lock();
 }

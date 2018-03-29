@@ -15,10 +15,10 @@ function Rect(x,y,w,h){
     };
     this.overlaps=function(o){
         const r=this;
-        if(r.x>o.x+o.w) return false;
-        if(r.x+r.w<o.x) return false;
-        if(r.y>o.y+o.h) return false;
-        if(r.y+r.h<o.y) return false;
+        if(r.x>=o.x+o.w) return false;
+        if(r.x+r.w<=o.x) return false;
+        if(r.y>=o.y+o.h) return false;
+        if(r.y+r.h<=o.y) return false;
         return true;
     };
     this.groupCheck=function(g,o){
@@ -43,13 +43,6 @@ function Rect(x,y,w,h){
         else
             res.x=0;
         return res;
-    };
-    this.fixOverlaps=function(o){
-        if(!Array.isArray(o))o=[o];
-        o.forEach(i=>{
-            if(i.pawn) i.pawn.fixOverlap(this);
-            else if(i.fixOverlap) i.fixOverlap(this);
-        });
     };
     this.toString=function(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";

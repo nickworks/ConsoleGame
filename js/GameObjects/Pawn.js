@@ -54,11 +54,6 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.vy+=1200*grav*dt;
         this.rect.y+=this.vy*dt;
     };
-    this.fixOverlap=function(rect){
-        if(!this.rect.overlaps(rect))return;//return if not overlapping
-        const fix=rect.findFix(this.rect);
-        this.applyFix(fix);
-    };
     this.applyFix=function(fix){
         this.rect.x+=fix.x;
         this.rect.y+=fix.y;
