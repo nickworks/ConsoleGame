@@ -3,7 +3,7 @@ function Pause(){
         caption:"Resume",
         callback:()=>{this.remove=true;}
     },{
-        caption:"Reload Level",
+        caption:"Reset Level",
         callback:()=>{this.reloadLevel=true;}
     }];
     if(game.settings.editModeEnabled)options.push({
@@ -16,7 +16,7 @@ function Pause(){
         caption:"Quit",
         callback:()=>{this.backToMainMenu=true;}
     });
-    this.menu=new Menu(0,75,game.width(),32,options);
+    this.menu=new Menu(0,100,game.width(),32,options);
     this.update=function(dt){
         this.menu.update(dt);
         if(keyboard.onDown(keycode.escape))this.remove=true;

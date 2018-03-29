@@ -8,15 +8,20 @@ function ScenePlay(n){
     this.doors=[];
     this.bullets=[];
     this.modal=null;
-    var timerFade=1;
+    var alphaOverlay=1;
+    var fadeToScene=null;
     
-    this.update=function(dt){
-        if(timerFade>0)timerFade-=dt;
+    this.update=function(dt){       
+        if(fadeToScene){
+            if(alphaOverlay<1)alphaOverlay+=dt*2;
+            else return fadeToScene;
+        } else if(alphaOverlay>0)alphaOverlay-=dt*2;
+        
         if(this.player==null)return;
         else if(this.modal){
             const newScene=this.modal.update(dt);
-            if(newScene)return newScene;
-            else if(this.modal.reloadLevel)return new ScenePlay(this.levelIndex);
+            if(newScene&&!fadeToScene)fadeToScene=newScene;
+            else if(this.modal.reloadLevel&&!fadeToScene)fadeToScene=new ScenePlay(this.levelIndex);
             else if(this.modal.remove)this.modal=null;
             else if(mouse.onDown()) this.handleClick();
         } else {
@@ -38,10 +43,7 @@ function ScenePlay(n){
                 d.rect.fixOverlaps(this.player);
                 d.rect.fixOverlaps(this.npcs);
             });
-            if(this.goal&&this.goal.update(dt)){
-                this.player.win=true;
-                return new ScenePlay(this.goal.nextLevel());
-            }
+            if(this.goal&&this.goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
             for(var i in this.bullets){
                 const b=this.bullets[i];
                 b.update(dt);
@@ -63,13 +65,13 @@ function ScenePlay(n){
         this.cam.update(dt);
     };
     this.pause=function(){
-        this.modal=new Pause();
+        if(this.modal==null)this.modal=new Pause();
     };
     this.unpause=function(){
         this.modal=null;  
     };
     this.draw=function(gfx){
-        game.clear();
+        game.clear("#888");
         this.cam.drawStart(gfx);
         if(this.goal)this.goal.draw(gfx);
         this.player.draw(gfx);
@@ -79,10 +81,10 @@ function ScenePlay(n){
         this.bullets.forEach(b=>b.draw(gfx));
         this.cam.drawEnd(gfx);
         
-        gfx.fillStyle="rgba(0,0,0,"+(timerFade/1)+")";
-        gfx.fillRect(0,0,game.width(),game.height());
-        
         if(this.modal)this.modal.draw(gfx);
+        
+        gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
+        gfx.fillRect(0,0,game.width(),game.height());
     };
     this.edit=function(){
         this.modal=new Editor();

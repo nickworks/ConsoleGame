@@ -13,6 +13,7 @@ function Game(){
     this.gfx=function(){return gfx;}
     
     this.settings={
+        skipLoadingScenes:true,
         editModeEnabled:true,
     };
   
@@ -46,8 +47,9 @@ function Game(){
         requestAnimationFrame((time)=>this.update(time));
     };
     this.isFocus=()=>{return(document.activeElement==document.body)};
-    this.clear=function(){
-        gfx.clearRect(0, 0, width, height); // clear screen
+    this.clear=function(color="#000"){
+        gfx.fillStyle=color;
+        gfx.fillRect(0, 0, width, height); // clear screen
     };
     this.start=function(id){
         const canvas=document.getElementById(id);
@@ -59,7 +61,7 @@ function Game(){
             width=canvas.width=w;
             height=canvas.height=h;
         };
-        this.size(500,400);
+        this.size(800,400);
         
         window.addEventListener("blur",()=>{
             if(scene&&scene.pause)scene.pause();

@@ -1,22 +1,26 @@
 function SceneTitle(){
-    
-    this.title = new TextField("This is the Title", 20, 50, {size:30});
+    var alphaOverlay=1;
+    var fadeToScene=null;
+    this.title=new TextField("open source", 20, 50, {size:30,color:"#9AF"});
     
     this.menu = new Menu(0,100,game.width(),32,[
-        {caption:"Play",callback:()=>{this.switchToPlay=true;}},
+        {caption:"Play",callback:()=>{fadeToScene=new SceneLoad(new ScenePlay(0));}},
         {caption:"Tutorial",callback:()=>{}},
         {caption:"About",callback:()=>{}}
     ]);
     
     this.update = function(dt){
+        if(fadeToScene){
+            if(alphaOverlay<1)alphaOverlay+=dt;
+            else return fadeToScene;
+        } else if(alphaOverlay>0)alphaOverlay-=dt*2;
         this.menu.update(dt);
-        if(this.switchToPlay){
-            return new ScenePlay(0);
-        }
     };
     this.draw = function(gfx){
-        game.clear();
+        game.clear("#555");
         this.title.draw(gfx);
         this.menu.draw(gfx);
+        gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
+        gfx.fillRect(0,0,game.width(),game.height());
     };
 }

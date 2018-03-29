@@ -12,7 +12,7 @@ const consoleObj = {
         this.inputP = document.getElementById("input-p");
         this.input.addEventListener("keydown", (e) => {
             switch(e.keyCode){
-                case keycode.tab: console.log("consoleObj"); break; // prevent this from interfering with the page keyboard input
+                case keycode.tab: break; // prevent this from interfering with the page keyboard input
                 case keycode.up: this.handleHistory(-1); break;
                 case keycode.down: this.handleHistory(+1); break;
                 case keycode.enter: this.handleInput(); break;
@@ -50,7 +50,7 @@ const consoleObj = {
         } catch(e){
             result = e.message;
         }
-        this.log(result, "js> " + this.input.value);
+        this.log(result, "> " + this.input.value);
         this.input.value = "";
     },
     log:function(msg, msgIn=""){
