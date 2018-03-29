@@ -24,6 +24,13 @@ function Game(){
     };
     this.update=function(time){
         this.calcDeltaTime(time);
+        
+        if(keyboard.onDown(key.console())){
+            //if(scene.pause)scene.pause();
+            keyboard.blur();
+            consoleObj.input.focus();
+        }
+        
         let nextScene;
         scene=currentScene;
         game=this;

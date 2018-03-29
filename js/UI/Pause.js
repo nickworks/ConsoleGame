@@ -19,7 +19,7 @@ function Pause(){
     this.menu=new Menu(0,100,game.width(),32,options);
     this.update=function(dt){
         this.menu.update(dt);
-        if(keyboard.onDown(keycode.escape))this.remove=true;
+        if(keyboard.onDown(key.exit()))this.remove=true;
         if(this.backToMainMenu)return new SceneTitle();
         if(this.launchEditor)scene.modal=new Editor();
     };

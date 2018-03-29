@@ -45,11 +45,11 @@ function Dialog(x,y,texts,callbacks={}){
         if(this.charNow < this.charMax){
             this.timer-=dt;
             if(this.timer<0){
-                this.charNow+=(keyboard.isDown([keycode.e, keycode.enter]))?4:1;
+                this.charNow+=(keyboard.isDown(key.activate()))?4:1;
                 this.timer=.04;
             }
         } else {
-            if(keyboard.onDown([keycode.e, keycode.enter])) this.showNext();
+            if(keyboard.onDown(key.activate())) this.showNext();
         }
     };
     this.draw=function(gfx){

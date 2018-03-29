@@ -1,4 +1,4 @@
-const keycode = {
+const key = {
     tab:9,
     enter:13,
     escape:27,
@@ -36,11 +36,23 @@ const keycode = {
     r:82,
     s:83,
     w:87,
+    x:88,
+    z:90,
     tilde:192,
+    ////////////////////////// INPUT MAPPING:
+    jump:function(){return this.space},
+    menuChoose:function(){return [this.w,this.d,this.enter,this.space]},
+    activate:function(){return [this.w,this.enter]},
+    moveLeft:function(){return [this.left]},
+    moveRight:function(){return [this.right]},
+    exit:function(){return this.escape},
+    console:function(){return this.tab},
+    attack:function(){return this.d},
+    sprint:function(){return this.shift},
 };
 
 const keyboard = {
-    debug:false,
+    debug:true,
     keys:[],
     prev:[],
     isDown:function(keyCode){
@@ -70,18 +82,12 @@ const keyboard = {
         if(this.debug)console.log(e.keyCode+(value?" down":" up"));
         
         const gameInFocus=(document.activeElement==document.body);
-        const toggleFocus=(value&&e.keyCode==keycode.tab); // are we trying to toggle focus?
         
         if(gameInFocus){
             this.keys[e.keyCode] = value;
-            if(toggleFocus){
-                //if(scene.pause)scene.pause();
-                keyboard.blur();
-                consoleObj.input.focus();
-            }
-            e.preventDefault();
+            e.preventDefault(); // prevent page-scrolling
         } else {
-            if(toggleFocus){
+            if(value&&(e.keyCode==key.tab||e.keyCode==key.escape)){
                 //if(scene.unpause)scene.unpause();
                 consoleObj.input.blur();
                 e.preventDefault();

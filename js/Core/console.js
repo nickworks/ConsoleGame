@@ -12,10 +12,11 @@ const consoleObj = {
         this.inputP = document.getElementById("input-p");
         this.input.addEventListener("keydown", (e) => {
             switch(e.keyCode){
-                case keycode.tab: break; // prevent this from interfering with the page keyboard input
-                case keycode.up: this.handleHistory(-1); break;
-                case keycode.down: this.handleHistory(+1); break;
-                case keycode.enter: this.handleInput(); break;
+                case key.tab: break; // prevent this from interfering with the page keyboard input
+                case key.escape: break;
+                case key.up: this.handleHistory(-1); break;
+                case key.down: this.handleHistory(+1); break;
+                case key.enter: this.handleInput(); break;
                 default: return;
             }
             e.preventDefault();

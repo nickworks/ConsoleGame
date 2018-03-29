@@ -11,7 +11,7 @@ function Button(caption,callback,x,y,w,h,align="left"){
         this.hover=this.rect.hits(mouse.pos());
         this.selected=selected;
         if(this.hover && mouse.onDown()) this.callback();
-        if(this.selected && keyboard.onDown(keycode.enter)) this.callback();
+        if(this.selected && keyboard.onDown(key.menuChoose())) this.callback();
     };
     this.draw=function(gfx){
         gfx.translate(this.rect.x, this.rect.y);

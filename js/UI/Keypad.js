@@ -31,18 +31,18 @@ function Keypad(x,y,onDone){
             this.timerBlink=.5;
         }
         this.bg.update(dt); 
-        if(keyboard.onDown([keycode.n0,keycode.p0])) this.append("0");
-        if(keyboard.onDown([keycode.n1,keycode.p1])) this.append("1");
-        if(keyboard.onDown([keycode.n2,keycode.p2])) this.append("2");
-        if(keyboard.onDown([keycode.n3,keycode.p3])) this.append("3");
-        if(keyboard.onDown([keycode.n4,keycode.p4])) this.append("4");
-        if(keyboard.onDown([keycode.n5,keycode.p5])) this.append("5");
-        if(keyboard.onDown([keycode.n6,keycode.p6])) this.append("6");
-        if(keyboard.onDown([keycode.n7,keycode.p7])) this.append("7");
-        if(keyboard.onDown([keycode.n8,keycode.p8])) this.append("8");
-        if(keyboard.onDown([keycode.n9,keycode.p9])) this.append("9");
-        if(keyboard.onDown(keycode.enter)) this.end(true);
-        if(keyboard.onDown(keycode.escape)) this.end(false);
+        if(keyboard.onDown([key.n0,key.p0])) this.append("0");
+        if(keyboard.onDown([key.n1,key.p1])) this.append("1");
+        if(keyboard.onDown([key.n2,key.p2])) this.append("2");
+        if(keyboard.onDown([key.n3,key.p3])) this.append("3");
+        if(keyboard.onDown([key.n4,key.p4])) this.append("4");
+        if(keyboard.onDown([key.n5,key.p5])) this.append("5");
+        if(keyboard.onDown([key.n6,key.p6])) this.append("6");
+        if(keyboard.onDown([key.n7,key.p7])) this.append("7");
+        if(keyboard.onDown([key.n8,key.p8])) this.append("8");
+        if(keyboard.onDown([key.n9,key.p9])) this.append("9");
+        if(keyboard.onDown(key.menuChoose())) this.end(true);
+        if(keyboard.onDown(key.exit())) this.end(false);
     };
     this.draw=function(gfx){
         scene.cam.drawStart(gfx);

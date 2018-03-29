@@ -58,7 +58,7 @@ function ScenePlay(n){
                 b.rect.groupCheck(this.platforms, hit);
                 if(b.dead)this.bullets.splice(i,1);
             }
-            if(keyboard.onDown([keycode.p,keycode.escape])){
+            if(keyboard.onDown(key.exit())){
                 this.pause();
             }
         }

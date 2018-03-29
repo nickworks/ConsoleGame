@@ -8,6 +8,8 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.a = 800;
     this.maxv = 400;
     this.agro=false;
+    this.onWallLeft=false;
+    this.onWallRight=false;
     this.isGrounded=false;
     this.isJumping=false;
     this.airJumpsLeft=1;
@@ -22,6 +24,8 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         if(this.weapon)this.weapon.update(dt); 
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
         this.isGrounded=false;
+        this.onWallLeft=false;
+        this.onWallRight=false;
         this.rect.speed();
     };
     this.moveH=function(dt,move=0){
@@ -58,6 +62,11 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.rect.y+=fix.y;
         if(fix.x!=0){
             this.vx=0;
+            if(fix.x>0){
+                this.onWallLeft=true;
+            } else{
+                this.onWallRight=true;
+            }
         }
         if(fix.y!=0){
             this.vy=0;

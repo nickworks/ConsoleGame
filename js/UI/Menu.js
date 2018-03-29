@@ -10,8 +10,8 @@ function Menu(x,y,w,h,buttons=[]){
         
         const b = this.buttons;
         
-        if(keyboard.onDown(keycode.up)) this.index--;
-        if(keyboard.onDown(keycode.down)) this.index++;
+        if(keyboard.onDown(key.up)) this.index--;
+        if(keyboard.onDown(key.down)) this.index++;
         
         if(this.index < 0) this.index = 0;
         if(this.index >= b.length) this.index = b.length-1;

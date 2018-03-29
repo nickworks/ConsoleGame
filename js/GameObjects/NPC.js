@@ -54,7 +54,7 @@ function NPC(raw={}){
         }
     };
     this.aiFriend=function(dt){
-        if(this.canTalk && keyboard.onDown([keycode.e,keycode.enter])){
+        if(this.canTalk && keyboard.onDown(key.activate())){
             this.speak();
         }
     };

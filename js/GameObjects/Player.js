@@ -20,19 +20,18 @@ function Player(raw={}){
     this.update=function(dt){    
         let move=0;
         let slowDown=false;
-        if(keyboard.isDown([keycode.a,keycode.left]))move--;
-        if(keyboard.isDown([keycode.d,keycode.right]))move++;
+        if(keyboard.isDown(key.moveLeft()))move--;
+        if(keyboard.isDown(key.moveRight()))move++;
 
-        const jumpKeys=[keycode.w,keycode.up];
-        if(keyboard.onDown(jumpKeys)){
+        if(keyboard.onDown(key.jump())){
             if(this.pawn.isGrounded)this.pawn.jump(false);
             else if(this.pawn.airJumpsLeft>0)this.pawn.jump(true);
         }
-        if(!keyboard.isDown(jumpKeys)){
+        if(!keyboard.isDown(key.jump())){
             this.pawn.isJumping=false;
         }
         
-        if(keyboard.isDown(keycode.space)) this.pawn.shoot(true);
+        if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         
         this.pawn.agro=true;
         this.pawn.moveV(dt);

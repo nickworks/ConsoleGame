@@ -11,14 +11,14 @@ function Editor(){
     this.update=function(dt){
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
-        if(keyboard.onDown(keycode.escape)){
+        if(keyboard.onDown(key.escape)){
             this.remove=true;
             scene.cam.target=scene.player.pawn;
         }
-        if(keyboard.onDown(keycode.enter)){
+        if(keyboard.onDown(key.enter)){
             this.serialize();
         }
-        if(keyboard.onDown(keycode.n)){
+        if(keyboard.onDown(key.n)){
             var s = new ScenePlay();
             s.modal=this;
             return s;
@@ -28,10 +28,10 @@ function Editor(){
     this.moveCam=function(dt){
         const c=scene.cam;
         const s=300;
-        if(keyboard.isDown(keycode.w)) c.ty-=s*dt;
-        if(keyboard.isDown(keycode.a)) c.tx-=s*dt;
-        if(keyboard.isDown(keycode.s)) c.ty+=s*dt;
-        if(keyboard.isDown(keycode.d)) c.tx+=s*dt;
+        if(keyboard.isDown(key.w)) c.ty-=s*dt;
+        if(keyboard.isDown(key.a)) c.tx-=s*dt;
+        if(keyboard.isDown(key.s)) c.ty+=s*dt;
+        if(keyboard.isDown(key.d)) c.tx+=s*dt;
     };
     this.handleClick=function(){
         
@@ -42,22 +42,22 @@ function Editor(){
             this.dragObj=o;
             this.dragOrig=(o.rect||o.pawn.rect).raw();
         };
-        if(keyboard.isDown([keycode.n1,keycode.p1])){//platforms
+        if(keyboard.isDown([key.n1,key.p1])){//platforms
             const o=new Platform({x:m.x,y:m.y,w:25,h:25});
             scene.platforms.push(o);
             drag(o,true);
         }
-        else if(keyboard.isDown([keycode.n2,keycode.p2])){//door
+        else if(keyboard.isDown([key.n2,key.p2])){//door
             const o=new Door({x:m.x,y:m.y});
             scene.doors.push(o);
             drag(o);
         }
-        else if(keyboard.isDown([keycode.n3,keycode.p3])){//npc
+        else if(keyboard.isDown([key.n3,key.p3])){//npc
             const o=new NPC({x:m.x, y:m.y});
             scene.npcs.push(o);
             drag(o);
         }
-        else if(keyboard.isDown([keycode.n4,keycode.p4])){//goal
+        else if(keyboard.isDown([key.n4,key.p4])){//goal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
             scene.goal=new Goal({x:x,y:y});
@@ -67,10 +67,10 @@ function Editor(){
                 for(var i in a){
                     const r=a[i].rect||a[i].pawn.rect;
                     if(r.hits(m)){
-                        if(keyboard.isDown(keycode.q)){
+                        if(keyboard.isDown(key.q)){
                             a.splice(i,1);//destroy
                         } else {
-                            drag(a[i],keyboard.isDown(keycode.r));//grab
+                            drag(a[i],keyboard.isDown(key.r));//grab
                         }
                         break;
                     }

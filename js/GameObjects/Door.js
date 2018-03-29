@@ -46,7 +46,7 @@ function Door(raw={}){
             this.canActivate=false;
         }else{
             this.canActivate=Rect.grow(this.rect, 25).overlaps(scene.player.pawn.rect);
-            if(keyboard.onDown([keycode.e,keycode.enter]))this.activate();
+            if(keyboard.onDown(key.activate()))this.activate();
         }
     };
     this.activate=function(){
