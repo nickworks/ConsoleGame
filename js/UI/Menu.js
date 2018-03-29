@@ -3,7 +3,7 @@ function Menu(x,y,w,h,buttons=[]){
     this.index = 0;
     let ty=y;
     buttons.forEach((b)=>{
-        this.buttons.push(new Button(b.caption,b.callback,x,ty,w,h));
+        this.buttons.push(new Button(b.caption,b.callback,x,ty,w,h,"left"));
         ty+=h;
     });
     this.update=function(dt){
@@ -16,14 +16,7 @@ function Menu(x,y,w,h,buttons=[]){
         if(this.index < 0) this.index = 0;
         if(this.index >= b.length) this.index = b.length-1;
         
-        for(var i in b){
-            b[i].update(dt, (i==this.index));
-        }
-        /*
-        this.buttons.forEach((b)=>{
-            b.update(dt);
-        });
-        */
+        for(var i in b)b[i].update(dt,(i==this.index));
     };
     this.draw=function(gfx){
         this.buttons.forEach((b)=>{

@@ -16,7 +16,7 @@ function Pause(){
         caption:"Quit",
         callback:()=>{this.backToMainMenu=true;}
     });
-    this.menu=new Menu(25,25,100,32,options);
+    this.menu=new Menu(0,75,game.width(),32,options);
     this.update=function(dt){
         this.menu.update(dt);
         if(keyboard.onDown(keycode.escape))this.remove=true;
