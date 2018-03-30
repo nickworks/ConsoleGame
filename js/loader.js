@@ -1,11 +1,12 @@
-((a,c)=>{
+function loadjs(a,c){
     let loaded=0;
     a.forEach((u)=>{
         const s=document.createElement('script');
         s.addEventListener("load", ()=>{if(++loaded==a.length)c();});
         s.src=u; document.head.appendChild(s);
     });
-})([
+}
+loadjs([
     'js/UI/Font.js',
     'js/UI/Button.js',
     'js/UI/Menu.js',
@@ -27,7 +28,7 @@
     'js/GameObjects/Goal.js',
     'js/Core/Rect.js',
     'js/Core/Sprite.js',
-    'js/Core/editor.js',
+    'js/Core/Editor.js',
     'js/Core/keyboard.js',
     'js/Core/mouse.js',
     'js/Core/console.js',
@@ -35,8 +36,5 @@
     'js/Scenes/SceneLoad.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
-    'js/Scenes/LevelData.js',
-    'js/Core/game.js'
-],()=>{
-    game.start("myCanvas");
-});
+    'js/Core/Game.js'
+],()=>loadjs(['js/Scenes/LevelData.js',],()=>game.start("myCanvas")));
