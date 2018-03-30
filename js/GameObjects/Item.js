@@ -5,6 +5,7 @@ function Item(raw={}){
     this.vx=0;
     this.vy=0;
     this.isAsleep=false;
+    this.dead=false;
     this.serialize=function(){
         return{
             i:id,
@@ -36,7 +37,7 @@ function Item(raw={}){
         }
     };
     this.activate=function(){
-        
+        this.dead=true;
     };
     this.draw=function(gfx){
         

@@ -32,12 +32,12 @@ function ScenePlay(n){
             if(this.player)this.player.update(dt);
             for(var i in this.items){
                 this.items[i].update(dt);
+                if(this.items[i].rect.overlaps(this.player.pawn.rect))this.items[i].activate();
+                if(this.items[i].dead)this.items.splice(i,1);
             }
             for(var i in this.npcs){
-                const n=this.npcs[i];
-                const overlaps=n.pawn.rect.overlaps(this.player.pawn.rect);
-                n.update(dt, overlaps);
-                if(n.dead)this.npcs.splice(i,1);
+                this.npcs[i].update(dt);
+                if(this.npcs[i].dead)this.npcs.splice(i,1);
             }
             this.platforms.forEach(p=>{
                 p.update(dt);
@@ -139,7 +139,7 @@ function ScenePlay(n){
         var res=null;
         c.forEach(d=>{
             var o=this.obj(d.i); // fetch object by id
-            if(o[d.f])res=o[d.f]();
+            if(o&&o[d.f])res=o[d.f]();
         });
         return res;
     };
