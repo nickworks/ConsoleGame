@@ -7,6 +7,7 @@ function ScenePlay(n){
     this.npcs=[];
     this.doors=[];
     this.bullets=[];
+    this.items=[];
     this.modal=null;
     this.hud=new HUD();
     
@@ -29,6 +30,9 @@ function ScenePlay(n){
         } else {
             if(mouse.onDown()) this.handleClick();
             if(this.player)this.player.update(dt);
+            for(var i in this.items){
+                this.items[i].update(dt);
+            }
             for(var i in this.npcs){
                 const n=this.npcs[i];
                 const overlaps=n.pawn.rect.overlaps(this.player.pawn.rect);
@@ -39,12 +43,15 @@ function ScenePlay(n){
                 p.update(dt);
                 p.block(this.player, dt);
                 p.block(this.npcs, dt);
+                p.block(this.items, dt);
             });
             this.doors.forEach(d=>{
                 d.update(dt);
                 d.block(this.player);
                 d.block(this.npcs);
+                d.block(this.items, dt);
             });
+            
             if(this.goal&&this.goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
             for(var i in this.bullets){
                 const b=this.bullets[i];
@@ -77,11 +84,12 @@ function ScenePlay(n){
         game.clear("#888");
         this.cam.drawStart(gfx);
         if(this.goal)this.goal.draw(gfx);
+        this.platforms.forEach(p=>p.draw(gfx));
         this.player.draw(gfx);
         this.npcs.forEach(n=>n.draw(gfx));
-        this.platforms.forEach(p=>p.draw(gfx));
         this.doors.forEach(d=>d.draw(gfx));
         this.bullets.forEach(b=>b.draw(gfx));
+        this.items.forEach(i=>i.draw(gfx));
         this.cam.drawEnd(gfx);
         
         if(this.hud)this.hud.draw(gfx);
@@ -107,6 +115,7 @@ function ScenePlay(n){
         check(this.platforms, "platforms");
         check(this.doors, "doors");
         check(this.npcs, "npcs");
+        check(this.items, "items");
     };
     this.log=function(msg){
         console.log(msg);
@@ -118,7 +127,7 @@ function ScenePlay(n){
         });
     };
     this.all=function(){
-        return [this.player].concat(this.npcs,this.doors,this.platforms);
+        return [this.player].concat(this.npcs,this.doors,this.platforms,this.items);
     };
     this.obj=function(id){ // fetch objects by id
         var res=null;
@@ -149,6 +158,7 @@ function ScenePlay(n){
         this.platforms=level.platforms;
         this.npcs=level.npcs;
         this.doors=level.doors;
+        this.items=level.items;
         this.modal=null;
         this.bullets=[];
         this.cam.target=this.player.pawn;

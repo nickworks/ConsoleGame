@@ -16,6 +16,7 @@
     'js/UI/Keypad.js',
     'js/UI/HUD.js',
     'js/GameObjects/Camera.js',
+    'js/GameObjects/Item.js',
     'js/GameObjects/NPC.js',
     'js/GameObjects/Platform.js',
     'js/GameObjects/Pawn.js',

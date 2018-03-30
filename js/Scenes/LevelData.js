@@ -5,7 +5,8 @@ const LevelData={
             goal:null,
             platforms:[],
             npcs:[],
-            doors:[]
+            doors:[],
+            items:[],
         };
         d.forEach(t=>{
             t.d.forEach(o=>{
