@@ -1,16 +1,16 @@
 function Pawn(raw,canDoubleJump=()=>{return false;}){
-    
-    this.rect = new Rect(raw.x||0,raw.y||0,25,25);
+    this.rect=new Rect(raw.x||0,raw.y||0,25,25);
     this.sightRange=100;
     this.sight=null;//debug RECT for AI perception
-    this.vx = 0;
-    this.vy = 0;
-    this.a = 800;
-    this.maxv = 400;
+    this.vx=0;
+    this.vy=0;
+    this.a=400;
+    this.maxv=200;
     this.agro=false;
     this.onWallLeft=false;
     this.onWallRight=false;
     this.isGrounded=false;
+    this.isSliding=false;
     this.isJumping=false;
     this.airJumpsLeft=1;
     this.dir=1;
@@ -26,19 +26,24 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.isGrounded=false;
         this.onWallLeft=false;
         this.onWallRight=false;
+        this.isSliding=false;
         this.rect.speed();
     };
     this.moveH=function(dt,move=0){
         let slowDown=false;
+        if(this.isSliding)move*=2;
         if(move==0){ // if no input, slowdown
-            if(this.vx<0)move+=2;
-            if(this.vx>0)move-=2;
-            slowDown=true;
+            if(this.isGrounded){
+                if(this.vx<0)move+=2;
+                if(this.vx>0)move-=2;
+                if(this.isSliding)move/=4;
+                slowDown=true;
+            }
         } else {
             this.dir=move;
         }
         this.vx+=this.a*move*dt;
-        const clamp=this.agro?this.maxv:this.maxv/2;
+        const clamp=(this.agro||this.isSliding)?this.maxv*2:this.maxv;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
         this.rect.x+=this.vx*dt;
@@ -59,7 +64,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.vy+=1200*grav*dt;
         this.rect.y+=this.vy*dt;
     };
-    this.applyFix=function(fix){
+    this.applyFix=function(fix,slippery){
         this.rect.x+=fix.x;
         this.rect.y+=fix.y;
         if(fix.x!=0){
@@ -73,6 +78,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         if(fix.y!=0){
             this.vy=0;
             if(fix.y<0){
+                this.isSliding=slippery;
                 this.isGrounded=true;
                 this.airJumpsLeft=1;
             }
@@ -81,19 +87,20 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     };
     this.jump=function(isAirJump=false,isWallJump=false){ // try to jump...
         
-        if(!this.isGrounded&&this.onWallLeft){
-            this.vy=-300;
-            this.vx=200;
-            this.isJumping=true;    
-            return;
+        if(isWallJump&&!this.isGrounded){
+            if(this.onWallLeft){
+                this.vy=-300;
+                this.vx=100;
+                this.isJumping=true;    
+                return;
+            }
+            if(this.onWallRight){
+                this.vy=-300;
+                this.vx=-100;
+                this.isJumping=true;    
+                return;
+            }
         }
-        if(!this.isGrounded&&this.onWallRight){
-            this.vy=-300;
-            this.vx=-200;
-            this.isJumping=true;    
-            return;
-        }
-        
         if(!isAirJump&&!this.isGrounded)return;
         if(!isAirJump&&this.jumpCooldown>0)return;
         if(isAirJump&&this.airJumpsLeft<=0)return;

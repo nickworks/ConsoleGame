@@ -2,7 +2,8 @@ function Platform(raw={}){
     var id=raw.id||0;
     this.rect=Rect.from(raw);
     this.pattern=sprites.tiles;
-    this.solid=(!raw.s);
+    this.oneway=(!!raw.o);
+    this.slippery=(!!raw.s);
     this.serialize=function(){
         const data={
             i:id,
@@ -11,7 +12,8 @@ function Platform(raw={}){
             w:this.rect.w,
             h:this.rect.h,
         };
-        if(!this.solid)data.s=1;
+        if(this.oneway)data.o=1;
+        if(this.slippery)data.s=1;
         return data;
     };
     this.id=function(i){
@@ -31,7 +33,7 @@ function Platform(raw={}){
             const rect=(o.pawn?o.pawn.rect:o.rect);
             if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
             const fix=this.rect.findFix(rect);
-            if(!this.solid){
+            if(this.oneway){
                 fix.x=0;
                 //when should we IGNORE vertical fixes?
                 if(rect.vy<=0)return; //if the object is moving UP, this platform shouldn't affect it
@@ -39,8 +41,8 @@ function Platform(raw={}){
                 if(fix.y<-rect.vy*3)return; //if we have to push it up MORE than it could have reasonably moved in the last 3 frames
             }
             (o.pawn
-                ?o.pawn.applyFix(fix)
-                :o.applyFix(fix));
+                ?o.pawn.applyFix(fix,this.slippery)
+                :o.applyFix(fix,this.slippery));
             
         });
     };

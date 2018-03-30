@@ -39,7 +39,6 @@ function Player(raw={}){
         
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         
-        this.pawn.agro=true;
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
