@@ -4,6 +4,7 @@ function Player(raw={}){
     this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
     this.hp=100;
+    this.hpMax=100;
     this.dead=false;
     this.friend=true;
     this.canWallJump=function(){
@@ -23,6 +24,12 @@ function Player(raw={}){
     this.update=function(dt){    
         let move=0;
         let slowDown=false;
+        
+        if(this.hp<=0||this.dead==true){
+            this.dead=true;
+            return;
+        } else this.dead=false;
+        
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
 
@@ -47,8 +54,11 @@ function Player(raw={}){
         gfx.fillStyle="#000";
         this.pawn.draw(gfx);
     };
-    this.hurt=function(amt){
-        this.hp-=amt;
-        if(this.hp<=0)this.dead=true;
+    this.hurt=function(amt=10){
+        //this.hp-=amt;
+    };
+    this.heal=function(amt=10){
+        this.hp+=amt;
+        if(this.hp>this.hpMax)this.hp=this.hpMax;
     };
 }

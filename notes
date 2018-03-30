@@ -10,34 +10,3 @@
 6. spawn items (keys, platforms, etc)
 7. (discover functions)
 8. (read and change a function)
-
-== kinds of callbacks ==
-
-= NPC=
-onSpeak
-onDeath
-
-= Platform =
-
-= Door = 
-onOpen
-onClose
-
-
-== How do we PROTECT/SANDBOX elements? ==
-
-hide objects in places other than the game
-    document.levelGoal={x:100,y:200,draw:function(gfx){}};
-
-for immutable state, we could "store" in a function...
-    function ScenePlay(){
-        this.goal=()=>return{x:100,y:200};
-    }
-
-what about local vars?
-    function ScenePlay(){
-        var goal={x:100,y:200};//can we access externally?
-    }
-    function ScenePlay(goal){
-    
-    }

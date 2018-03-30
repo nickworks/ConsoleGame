@@ -111,6 +111,11 @@ function ScenePlay(n){
     this.edit=function(){
         this.modal=new Editor();
     };
+    this.spawnLoot=function(amt=1,raw={}){
+        for(var i=0;i<amt;i++){
+            items.push(Item.random(raw))
+        }
+    };
     this.handleClick=function(){
         const pre="you clicked on scene.";
         if(player.pawn.rect.mouseOver()) this.log(pre+"player");

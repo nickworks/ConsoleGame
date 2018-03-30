@@ -1,31 +1,35 @@
 function Weapon(raw={}){
-    this.jumpCooldown=0;
-    this.jumpCooldownAmt=.5;
-    this.shootCooldown=0;
-    this.shootCooldownAmt=.25;
-    this.reloadCooldown=0;
-    this.reloadCooldownAmt=1;
+    
+    var shootDelay=0;
+    var reloadDelay=0;
+    
+    this.shootCooldown=.25;
+    this.reloadCooldown=1;
+    
     this.ammo=100;
-    this.ammoAmt=100;
+    this.ammoMax=100;
     
     this.clip=0;
-    this.clipAmt=5;
+    this.clipMax=5;
     
     this.update=function(dt){
-        if(this.reloadCooldown>0){
-            this.reloadCooldown-=dt;
-            if(this.reloadCooldown<=0)this.doReload();
-        }
-        else if(this.shootCooldown>0)this.shootCooldown-=dt;
         
+        if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
+        if(this.clip>this.clipMax)this.clip=this.clipMax;
+        
+        if(reloadDelay>0){
+            reloadDelay-=dt;
+            if(reloadDelay<=0)this.doReload();
+        }
+        else if(shootDelay>0)shootDelay-=dt;
         
         if(keyboard.onDown(key.reload())){
             this.reload();
         }        
     };
     this.shoot=function(pos,dir,isFriend){
-        if(this.reloadCooldown>0)return;
-        if(this.shootCooldown>0)return;
+        if(reloadDelay>0)return;
+        if(shootDelay>0)return;
         if(!scene.bullets)return;
         
         if(this.clip>0){
@@ -36,7 +40,7 @@ function Weapon(raw={}){
             
             const b=new Bullet(pos,dir,isFriend);
             scene.bullets.push(b);
-            this.shootCooldown=this.shootCooldownAmt;
+            shootDelay=this.shootCooldown;
             this.ammo--;
             this.clip--;
         } else {
@@ -44,13 +48,21 @@ function Weapon(raw={}){
         }
     };
     this.reload=function(){
-        if(this.reloadCooldown>0)return;
-        if(this.shootCooldown>0)return;
-        if(this.clip>=this.clipAmt)return;
-        this.reloadCooldown=this.reloadCooldownAmt;
+        if(reloadDelay>0)return;
+        if(shootDelay>0)return;
+        if(this.clip>=this.clipMax)return;
+        reloadDelay=this.reloadCooldown;
     };
     this.doReload=function(){
-        this.clip=Math.min(this.ammo,this.clipAmt);
+        this.clip=Math.min(this.ammo,this.clipMax);
     };
-    this.clip=this.clipAmt;
+    this.getReloadProgress=function(){
+        if(reloadDelay<=0)return 1;
+        return reloadDelay/this.reloadCooldown;
+    }
+    this.addAmmo=function(amt=10){
+        this.ammo+=amt;
+        if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
+    };
+    this.clip=this.clipMax;
 }

@@ -1,16 +1,25 @@
 function Item(raw={}){
+    
+    const TYPE_HEAL=1;
+    const TYPE_AMMO=2;
+    const TYPE_COIN=3;
+    
     var id=raw.i||0;
     this.type=raw.t||0;
+    this.amt=raw.a||25;
     this.rect=Rect.from(raw);
     this.vx=0;
     this.vy=0;
     this.isAsleep=false;
     this.dead=false;
+        
     this.serialize=function(){
         return{
             i:id,
             x:this.rect.x|0,
             y:this.rect.y|0,
+            t:this.type|0,
+            a:this.amt|0,
         };
     };
     this.id=function(i){
@@ -38,10 +47,21 @@ function Item(raw={}){
     };
     this.activate=function(){
         this.dead=true;
+        switch(this.type){
+            case TYPE_HEAL:scene.player.heal(25);break;
+            case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
+            case TYPE_COIN:break;
+        }
     };
     this.draw=function(gfx){
         
-        this.rect.draw(gfx);
+        var img;
+        if(this.type==TYPE_HEAL)img=sprites.item1;
+        if(this.type==TYPE_AMMO)img=sprites.item2;
+        if(this.type==TYPE_COIN)img=sprites.item3;
+        
+        if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
+        else this.rect.draw(gfx);
     };
     this.applyFix=function(fix){
         this.rect.x+=fix.x;
@@ -56,3 +76,10 @@ function Item(raw={}){
         this.rect.cache();
     };
 }
+Item.random=function(raw){
+    raw.t=((Math.random()*3)|0)+1;
+    const i=new Item(raw);
+    i.vx=Math.random()*400-200;
+    i.vy=-(Math.random()*200+200);
+    return i;
+};

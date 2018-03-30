@@ -2,7 +2,7 @@ const sprites={
     load:(url, onLoad)=>{
         const img=new Image();
         img.src=url;
-        img.addEventListener("load",()=>onLoad(img));
+        if(onLoad)img.addEventListener("load",()=>onLoad(img));
         return img;
     },
     
@@ -13,5 +13,9 @@ const sprites={
         this.load("imgs/tiles.gif",(i)=>{
             this.tiles=pattern(i);
         });
+        
+        this.item1=this.load("imgs/item_health.gif");
+        this.item2=this.load("imgs/item_ammo.gif");
+        this.item3=this.load("imgs/item_coin.gif");
     }
 };

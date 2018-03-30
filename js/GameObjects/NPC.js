@@ -127,10 +127,16 @@ function NPC(raw={}){
         }
     };
     this.hurt=function(amt){
+        if(this.dead)return;
         this.hp-=amt;
+        
+        const r=this.pawn.rect;
+        const raw={x:r.x,y:r.y};
+        
         if(this.hp<=0){
             if(this.dead==false)scene.call(this.callbacks.onDeath);
             this.dead=true;
+            scene.spawnLoot(3,raw);
         }
     };
     this.seeFar=function(amt=300){

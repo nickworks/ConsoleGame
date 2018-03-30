@@ -1,7 +1,6 @@
 function HUD(){
     
-    this.font1=new Font({color:"#FFF",size:19,align:"right",valign:"middle"});
-    this.font2=new Font({color:"#FFF",size:19,align:"left",valign:"middle"});
+    this.font=new Font({color:"#FFF",size:19,align:"left",valign:"middle"});
     
     var x1=0;
     const bw=7;//bullet width
@@ -19,22 +18,21 @@ function HUD(){
     this.drawAmmo=function(gfx){
         const w=scene.player.pawn.weapon;//weapon
         const b=w.clip;//loaded bullets
-        const c=w.clipAmt;//clip size
+        const c=w.clipMax;//clip size
         
         var txt=w.ammo.toString();
         const txtx=bs*c+8;
-        const bgw=txtx+this.font2.measure(gfx,txt).width+7;
+        const bgw=txtx+this.font.measure(gfx,txt).width+7;
         const bgx=-(c-b)*bs-2;
         
-        let tx=bgx;
-        if(w.reloadCooldown>0) tx*=w.reloadCooldown/w.reloadCooldownAmt;
+        let tx=bgx*w.getReloadProgress();
         x1+=(tx-x1)*.3;//slide
         
         gfx.translate(x1,game.height()-35);
         gfx.fillStyle="#000";
         
         gfx.fillRect(0,-13,bgw,26);
-        this.font2.apply(gfx);
+        this.font.apply(gfx);
         
         
         if(b<1&&w.reloaCooldown<=0)txt+=" RELOAD";
