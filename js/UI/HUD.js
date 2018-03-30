@@ -14,6 +14,7 @@ function HUD(){
     };
     this.draw=function(gfx){
         this.drawAmmo(gfx);
+        this.drawHealth(gfx);
     };
     this.drawAmmo=function(gfx){
         const w=scene.player.pawn.weapon;//weapon
@@ -29,7 +30,7 @@ function HUD(){
         if(w.reloadCooldown>0) tx*=w.reloadCooldown/w.reloadCooldownAmt;
         x1+=(tx-x1)*.3;//slide
         
-        gfx.translate(x1,game.height()-18);
+        gfx.translate(x1,game.height()-35);
         gfx.fillStyle="#000";
         
         gfx.fillRect(0,-13,bgw,26);
@@ -45,5 +46,21 @@ function HUD(){
         }
         
         gfx.resetTransform();
-    }
+    };
+    this.drawHealth=function(gfx){
+        
+        const w=200;
+        const h=18;
+        const m=5;
+        let p=scene.player.hp/100;
+        if(p<0)p=0;
+        if(p>100)p=100;
+        gfx.translate(0,game.height()-20);
+        gfx.fillStyle="#000";
+        gfx.fillRect(0,0,w,h);
+        
+        gfx.fillStyle="#FFF";
+        gfx.fillRect(m,m,(w-2*m)*p,h-2*m);
+        gfx.resetTransform();
+    };
 }
