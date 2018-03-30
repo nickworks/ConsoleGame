@@ -93,7 +93,7 @@ function NPC(raw={}){
             }else{
                 this.patrolTimer-=dt;
                 if(this.patrolTimer<=0){
-                    this.pawn.dir*=-1;
+                    this.pawn.dir=1;
                 }
             }
         }
@@ -104,7 +104,7 @@ function NPC(raw={}){
             }else{
                 this.patrolTimer-=dt;
                 if(this.patrolTimer<=0){
-                    this.pawn.dir*=-1;
+                    this.pawn.dir=-1;
                 }
             }
         }

@@ -9,8 +9,8 @@ function Item(raw={}){
     this.serialize=function(){
         return{
             i:id,
-            x:this.pawn.rect.x|0,
-            y:this.pawn.rect.y|0,
+            x:this.rect.x|0,
+            y:this.rect.y|0,
         };
     };
     this.id=function(i){
