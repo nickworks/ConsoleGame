@@ -60,7 +60,7 @@ function Editor(){
         else if(keyboard.isDown([key.n4,key.p4])){//goal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
-            scene.goal=new Goal({x:x,y:y});
+            scene.setGoal(new Goal({x:x,y:y}));
         }
         else if(keyboard.isDown([key.n5,key.p5])){//goal
             const o=new Item({x:m.x, y:m.y});

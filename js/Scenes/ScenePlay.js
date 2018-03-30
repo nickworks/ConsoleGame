@@ -1,15 +1,16 @@
 function ScenePlay(n){
-    this.levelIndex=n;//private
-    this.cam=new Camera();
-    this.player=null;
-    this.goal=null;
-    this.platforms=[];
-    this.npcs=[];
-    this.doors=[];
-    this.bullets=[];
-    this.items=[];
+    var levelIndex=n;//private
+    var cam=new Camera();
+    var player=null;
+    var goal=null;
+    var platforms=[];
+    var npcs=[];
+    var doors=[];
+    var bullets=[];
+    var items=[];
+    var hud=new HUD();
+    
     this.modal=null;
-    this.hud=new HUD();
     
     var alphaOverlay=1;
     var fadeToScene=null;
@@ -20,59 +21,67 @@ function ScenePlay(n){
             else return fadeToScene;
         } else if(alphaOverlay>0)alphaOverlay-=dt*2;
         
-        if(this.player==null)return;
+        this.cam=cam;
+        this.player=player;
+        this.platforms=platforms;
+        this.npcs=npcs;
+        this.doors=doors;
+        this.bullets=bullets;
+        this.items=items;
+        
+        if(player==null)return;
         else if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene&&!fadeToScene)fadeToScene=newScene;
-            else if(this.modal.reloadLevel&&!fadeToScene)fadeToScene=new ScenePlay(this.levelIndex);
+            else if(this.modal.reloadLevel&&!fadeToScene)fadeToScene=new ScenePlay(levelIndex);
             else if(this.modal.remove)this.modal=null;
             else if(mouse.onDown()) this.handleClick();
         } else {
             if(mouse.onDown()) this.handleClick();
-            if(this.player)this.player.update(dt);
-            for(var i in this.items){
-                this.items[i].update(dt);
-                if(this.items[i].rect.overlaps(this.player.pawn.rect))this.items[i].activate();
-                if(this.items[i].dead)this.items.splice(i,1);
+            if(player)player.update(dt);
+            for(var i in items){
+                items[i].update(dt);
+                if(items[i].rect.overlaps(player.pawn.rect))items[i].activate();
+                if(items[i].dead)items.splice(i,1);
             }
-            for(var i in this.npcs){
-                this.npcs[i].update(dt);
-                if(this.npcs[i].dead)this.npcs.splice(i,1);
+            for(var i in npcs){
+                npcs[i].update(dt);
+                if(npcs[i].dead)npcs.splice(i,1);
             }
-            this.platforms.forEach(p=>{
+            platforms.forEach(p=>{
                 p.update(dt);
-                p.block(this.player, dt);
-                p.block(this.npcs, dt);
-                p.block(this.items, dt);
+                p.block(player, dt);
+                p.block(npcs, dt);
+                p.block(items, dt);
             });
-            this.doors.forEach(d=>{
+            doors.forEach(d=>{
                 d.update(dt);
-                d.block(this.player);
-                d.block(this.npcs);
-                d.block(this.items, dt);
+                d.block(player);
+                d.block(npcs);
+                d.block(items, dt);
             });
             
-            if(this.goal&&this.goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
-            for(var i in this.bullets){
-                const b=this.bullets[i];
+            if(goal&&goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(goal.nextLevel()));
+            for(var i in bullets){
+                const b=bullets[i];
                 b.update(dt);
                 const hit=(o)=>{
                     if(o.friend===b.friend)return;
                     b.dead=true;
                     if(o.hurt)o.hurt(b.dmg);
                 };
-                b.rect.groupCheck([this.player], hit);
-                b.rect.groupCheck(this.npcs, hit);
-                b.rect.groupCheck(this.doors, hit);
-                b.rect.groupCheck(this.platforms, hit);
-                if(b.dead)this.bullets.splice(i,1);
+                b.rect.groupCheck([player], hit);
+                b.rect.groupCheck(npcs, hit);
+                b.rect.groupCheck(doors, hit);
+                b.rect.groupCheck(platforms, hit);
+                if(b.dead)bullets.splice(i,1);
             }
             if(keyboard.onDown(key.exit())){
                 this.pause();
             }
         }
-        this.cam.update(dt);
-        this.hud.update(dt);
+        cam.update(dt);
+        hud.update(dt);
     };
     this.pause=function(){
         if(this.modal==null)this.modal=new Pause();
@@ -82,17 +91,17 @@ function ScenePlay(n){
     };
     this.draw=function(gfx){
         game.clear("#888");
-        this.cam.drawStart(gfx);
-        if(this.goal)this.goal.draw(gfx);
-        this.platforms.forEach(p=>p.draw(gfx));
-        this.player.draw(gfx);
-        this.npcs.forEach(n=>n.draw(gfx));
-        this.doors.forEach(d=>d.draw(gfx));
-        this.bullets.forEach(b=>b.draw(gfx));
-        this.items.forEach(i=>i.draw(gfx));
-        this.cam.drawEnd(gfx);
+        cam.drawStart(gfx);
+        if(goal)goal.draw(gfx);
+        platforms.forEach(p=>p.draw(gfx));
+        player.draw(gfx);
+        npcs.forEach(n=>n.draw(gfx));
+        doors.forEach(d=>d.draw(gfx));
+        bullets.forEach(b=>b.draw(gfx));
+        items.forEach(i=>i.draw(gfx));
+        cam.drawEnd(gfx);
         
-        if(this.hud)this.hud.draw(gfx);
+        if(hud)hud.draw(gfx);
         if(this.modal)this.modal.draw(gfx);
         
         gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
@@ -104,18 +113,21 @@ function ScenePlay(n){
     };
     this.handleClick=function(){
         const pre="you clicked on scene.";
-        if(this.player.pawn.rect.mouseOver()) this.log(pre+"player");
+        if(player.pawn.rect.mouseOver()) this.log(pre+"player");
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
                 if(rect.mouseOver())this.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
             }
         };
-        check(this.bullets, "bullets");
-        check(this.platforms, "platforms");
-        check(this.doors, "doors");
-        check(this.npcs, "npcs");
-        check(this.items, "items");
+        check(bullets, "bullets");
+        check(platforms, "platforms");
+        check(doors, "doors");
+        check(npcs, "npcs");
+        check(items, "items");
+    };
+    this.setGoal=function(g){
+        goal=g;
     };
     this.log=function(msg){
         console.log(msg);
@@ -127,7 +139,7 @@ function ScenePlay(n){
         });
     };
     this.all=function(){
-        return [this.player].concat(this.npcs,this.doors,this.platforms,this.items);
+        return [player].concat(npcs,doors,platforms,items);
     };
     this.obj=function(id){ // fetch objects by id
         var res=null;
@@ -152,17 +164,17 @@ function ScenePlay(n){
         return i+1;
     };
     (()=>{ // load:
-        const level=LevelData.level(this.levelIndex);
-        this.player=level.player;
-        this.goal=level.goal;
-        this.platforms=level.platforms;
-        this.npcs=level.npcs;
-        this.doors=level.doors;
-        this.items=level.items;
+        const level=LevelData.level(levelIndex);
+        player=level.player;
+        goal=level.goal;
+        platforms=level.platforms;
+        npcs=level.npcs;
+        doors=level.doors;
+        items=level.items;
         this.modal=null;
-        this.bullets=[];
-        this.cam.target=this.player.pawn;
-        this.cam.updateTargetXY(true);
+        bullets=[];
+        cam.target=player.pawn;
+        cam.updateTargetXY(true);
         this.ids();
     })();
 }
