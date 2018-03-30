@@ -14,6 +14,7 @@
     'js/UI/Pause.js',
     'js/UI/TalkBubble.js',
     'js/UI/Keypad.js',
+    'js/UI/HUD.js',
     'js/GameObjects/Camera.js',
     'js/GameObjects/NPC.js',
     'js/GameObjects/Platform.js',

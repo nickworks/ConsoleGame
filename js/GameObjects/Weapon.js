@@ -2,9 +2,9 @@ function Weapon(raw={}){
     this.jumpCooldown=0;
     this.jumpCooldownAmt=.5;
     this.shootCooldown=0;
-    this.shootCooldownAmt=.5;
+    this.shootCooldownAmt=.25;
     this.reloadCooldown=0;
-    this.reloadCooldownAmt=3;
+    this.reloadCooldownAmt=1;
     this.ammo=100;
     this.ammoAmt=100;
     

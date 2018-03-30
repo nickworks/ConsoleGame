@@ -8,10 +8,12 @@ function ScenePlay(n){
     this.doors=[];
     this.bullets=[];
     this.modal=null;
+    this.hud=new HUD();
+    
     var alphaOverlay=1;
     var fadeToScene=null;
     
-    this.update=function(dt){       
+    this.update=function(dt){
         if(fadeToScene){
             if(alphaOverlay<1)alphaOverlay+=dt*2;
             else return fadeToScene;
@@ -63,6 +65,7 @@ function ScenePlay(n){
             }
         }
         this.cam.update(dt);
+        this.hud.update(dt);
     };
     this.pause=function(){
         if(this.modal==null)this.modal=new Pause();
@@ -81,10 +84,12 @@ function ScenePlay(n){
         this.bullets.forEach(b=>b.draw(gfx));
         this.cam.drawEnd(gfx);
         
+        if(this.hud)this.hud.draw(gfx);
         if(this.modal)this.modal.draw(gfx);
         
         gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
         gfx.fillRect(0,0,game.width(),game.height());
+        
     };
     this.edit=function(){
         this.modal=new Editor();
