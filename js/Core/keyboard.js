@@ -42,6 +42,7 @@ const key = {
     tilde:192,
     ////////////////////////// INPUT MAPPING:
     jump:function(){return this.space},
+    reload:function(){return [this.r]},
     menuChoose:function(){return [this.enter,this.space]},
     activate:function(){return [this.e,this.enter]},
     moveLeft:function(){return [this.left]},

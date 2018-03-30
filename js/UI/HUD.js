@@ -5,7 +5,7 @@ function HUD(){
     
     var x1=0;
     const bw=7;//bullet width
-    const bm=4;//bullet margin
+    const bm=5;//bullet margin
     const bs=bw+bm;//bullet spread
     
     
@@ -20,8 +20,10 @@ function HUD(){
         const b=w.clip;//loaded bullets
         const c=w.clipAmt;//clip size
         
-        const bgw=bs*c+8;
-        const bgx=-(c-b)*bs;
+        var txt=w.ammo.toString();
+        const txtx=bs*c+8;
+        const bgw=txtx+this.font2.measure(gfx,txt).width+7;
+        const bgx=-(c-b)*bs-2;
         
         let tx=bgx;
         if(w.reloadCooldown>0) tx*=w.reloadCooldown/w.reloadCooldownAmt;
@@ -32,13 +34,14 @@ function HUD(){
         
         gfx.fillRect(0,-13,bgw,26);
         this.font2.apply(gfx);
-        var txt=w.ammo.toString();
+        
+        
         if(b<1&&w.reloaCooldown<=0)txt+=" RELOAD";
-        gfx.fillText(txt,bgw+5,1);
+        gfx.fillText(txt,txtx,1);
         
         for(var i=0;i<c;i++){
-            //gfx.fillStyle=(i<b)?"#FFF":"rgba(255,255,255,.25)";
-            if(i>=c-b)gfx.fillRect(5+bs*i,-7,bw,14);
+            gfx.fillStyle=(i>=c-b)?"#FFF":"rgba(255,255,255,.25)";
+            gfx.fillRect(7+bs*i,-7,bw,14);
         }
         
         gfx.resetTransform();

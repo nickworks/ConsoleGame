@@ -14,9 +14,14 @@ function Weapon(raw={}){
     this.update=function(dt){
         if(this.reloadCooldown>0){
             this.reloadCooldown-=dt;
-            if(this.reloadCooldown<=0)this.reload();
+            if(this.reloadCooldown<=0)this.doReload();
         }
         else if(this.shootCooldown>0)this.shootCooldown-=dt;
+        
+        
+        if(keyboard.onDown(key.reload())){
+            this.reload();
+        }        
     };
     this.shoot=function(pos,dir,isFriend){
         if(this.reloadCooldown>0)return;
@@ -35,12 +40,17 @@ function Weapon(raw={}){
             this.ammo--;
             this.clip--;
         } else {
-            this.reloadCooldown=this.reloadCooldownAmt;
+            this.reload();
         }
-        //console.log(this.ammo+" "+this.clip);
     };
     this.reload=function(){
+        if(this.reloadCooldown>0)return;
+        if(this.shootCooldown>0)return;
+        if(this.clip>=this.clipAmt)return;
+        this.reloadCooldown=this.reloadCooldownAmt;
+    };
+    this.doReload=function(){
         this.clip=Math.min(this.ammo,this.clipAmt);
     };
-    this.reload();
+    this.clip=this.clipAmt;
 }
