@@ -21,7 +21,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     
     this.weapon=new Weapon();    
     this.draw=function(gfx){
-        if(this.sight)this.sight.draw(gfx);
+        //if(this.sight)this.sight.draw(gfx);
         this.rect.draw(gfx);
         this.sight=null;//trash this
     };

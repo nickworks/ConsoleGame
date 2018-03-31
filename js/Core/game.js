@@ -58,6 +58,9 @@ function Game(){
         gfx.fillStyle=color;
         gfx.fillRect(0, 0, width, height); // clear screen
     };
+    this.loadLevel=function(n){
+        scene=currentScene=new ScenePlay(n);  
+    };
     this.start=function(id){
         const canvas=document.getElementById(id);
         if(canvas==undefined) return;

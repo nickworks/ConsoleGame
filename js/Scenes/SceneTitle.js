@@ -5,8 +5,8 @@ function SceneTitle(){
     
     this.menu = new Menu(0,100,game.width(),32,[
         {caption:"Play",callback:()=>{fadeToScene=new SceneLoad(new ScenePlay(0));}},
-        {caption:"Tutorial",callback:()=>{}},
-        {caption:"About",callback:()=>{}}
+        {caption:"Tutorial",callback:()=>{consoleObj.log("Coming soon!")}},
+        {caption:"About",callback:()=>{consoleObj.log("Game by Nick Pattison")}}
     ]);
     
     this.update = function(dt){

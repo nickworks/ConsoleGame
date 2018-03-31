@@ -34,7 +34,7 @@ function NPC(raw={}){
         var c=this.callbacks.onData;
         if(a&&a.length>0)data.onSpeak=a;
         if(b&&b.length>0)data.onDeath=b;
-        if(c&&c.length>0)data.onData=b;
+        if(c&&c.length>0)data.onData=c;
         return data;
     };
     this.id=function(i){
