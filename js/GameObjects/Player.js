@@ -3,6 +3,7 @@ function Player(raw={}){
     this.canDoubleJump=true;
     this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
+    this.pawn.agro=true;
     this.hp=100;
     this.hpMax=100;
     this.dead=false;

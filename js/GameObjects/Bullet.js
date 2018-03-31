@@ -1,5 +1,5 @@
 function Bullet(p,v,f,g=false){
-    this.rect=new Rect(p.x,p.y,10,10);
+    this.rect=new Rect(p.x,p.y,15,15);
     this.vx=v.x;
     this.vy=v.y;
     this.g=g?400:0;
@@ -15,6 +15,7 @@ function Bullet(p,v,f,g=false){
         if(this.lifespan<=0)this.dead=true;
     };
     this.draw=function(gfx){
-        this.rect.draw(gfx);
+        
+        gfx.drawImage(sprites.projectile,this.rect.x,this.rect.y)
     };
 }

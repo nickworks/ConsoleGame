@@ -67,6 +67,7 @@ function ScenePlay(n){
                 b.update(dt);
                 const hit=(o)=>{
                     if(o.friend===b.friend)return;
+                    if(o.oneway)return;
                     b.dead=true;
                     if(o.hurt)o.hurt(b.dmg);
                 };

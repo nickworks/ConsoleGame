@@ -22,5 +22,6 @@ const sprites={
         this.item3=this.load("imgs/item_coin.gif");
         this.bullet=this.load("imgs/bullet.gif");
         this.gun=this.load("imgs/gun.gif");
+        this.projectile=this.load("imgs/projectile.gif");
     }
 };

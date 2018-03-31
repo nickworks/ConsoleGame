@@ -126,6 +126,7 @@ function NPC(raw={}){
         }
     };
     this.hurt=function(amt){
+        this.agro=true;
         if(this.dead)return;
         this.hp-=amt;
         

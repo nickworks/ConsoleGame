@@ -1,5 +1,5 @@
 function Pawn(raw,canDoubleJump=()=>{return false;}){
-    this.rect=new Rect(raw.x||0,raw.y||0,25,25);
+    this.rect=new Rect(raw.x||0,raw.y||0,25,45);
     this.sightRange=100;
     this.sight=null;//debug RECT for AI perception
     this.vx=0;
@@ -43,7 +43,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
             this.dir=move;
         }
         this.vx+=this.a*move*dt;
-        const clamp=(this.agro||this.isSliding)?this.maxv*2:this.maxv;
+        const clamp=(this.agro)?this.maxv:this.maxv/2;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
         this.rect.x+=this.vx*dt;
@@ -121,7 +121,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.canSee=function(o,h=20){
         const w=this.sightRange;
         const x=this.rect.x-((this.dir<0)?w:0);
-        const y=this.rect.y-h/2;
+        const y=this.rect.y+h/4;
         this.sight=Rect.from({x:x,y:y,w:w,h:h});
         return this.sight.overlaps(o);
     };
