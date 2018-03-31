@@ -15,6 +15,8 @@ function ScenePlay(n){
     var alphaOverlay=1;
     var fadeToScene=null;
     
+    this.cam=cam;
+    
     this.update=function(dt){
         if(fadeToScene){
             if(alphaOverlay<1)alphaOverlay+=dt*2;

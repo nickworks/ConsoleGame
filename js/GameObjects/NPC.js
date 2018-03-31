@@ -134,6 +134,9 @@ function NPC(raw={}){
             scene.spawnLoot(3,raw);
         }
     };
+    this.changeType=function(){
+        this.friend=!this.friend;  
+    };
     this.seeFar=function(amt=300){
         this.pawn.sightRange=amt;
     };

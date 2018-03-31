@@ -124,6 +124,11 @@ function Door(raw={}){
                 :o.applyFix(fix));
         });
     };
+    this.changeType=function(){
+        if(this.lockCode==null){
+            this.lock();
+        }else this.lockCode=null;
+    };
     this.openIfPlayerHas10Coins=function(){
         if(Player.data.coins>=10)this.forceOpen();  
     };

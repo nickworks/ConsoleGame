@@ -21,6 +21,7 @@ function Editor(){
         if(keyboard.onDown(key.n)){
             var s = new ScenePlay();
             s.modal=this;
+            s.cam.target=null;
             return s;
         }
         this.moveCam(dt);
