@@ -37,7 +37,8 @@ function Player(raw={}){
         if(keyboard.onDown(key.jump())){
             const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
             
-            if(this.pawn.isGrounded)this.pawn.jump(false);
+            if(this.pawn.onOneway&&keyboard.isDown(key.down))this.pawn.drop();
+            else if(this.pawn.isGrounded)this.pawn.jump(false);
             else if(onWall&&this.canWallJump())this.pawn.jump(false,true);
             else if(this.pawn.airJumpsLeft>0)this.pawn.jump(true);
         }

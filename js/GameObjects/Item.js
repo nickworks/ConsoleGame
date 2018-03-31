@@ -7,11 +7,10 @@ function Item(raw={}){
     
     var id=raw.i||0;
     this.type=raw.t||3;
-    this.amt=raw.a||25;
     this.rect=Rect.from(raw);
     this.vx=0;
     this.vy=0;
-    this.isAsleep=false;
+    this.isAsleep=(!!raw.a);
     this.dead=false;
     
     var weapon=null;
@@ -19,13 +18,14 @@ function Item(raw={}){
     var showHint=false;
         
     this.serialize=function(){
-        return{
+        const data={
             i:id,
             x:this.rect.x|0,
             y:this.rect.y|0,
             t:this.type|0,
-            a:this.amt|0,
         };
+        if(this.isAsleep)data.a=1;
+        return data;
     };
     this.id=function(i){
         if(i)id=i;

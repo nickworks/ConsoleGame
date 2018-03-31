@@ -12,8 +12,13 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.isGrounded=false;
     this.isSliding=false;
     this.isJumping=false;
+    this.onOneway=false;
     this.airJumpsLeft=1;
     this.dir=1;
+    
+    var isDropping=false;
+    var dropFrom=0;
+    
     this.weapon=new Weapon();    
     this.draw=function(gfx){
         if(this.sight)this.sight.draw(gfx);
@@ -27,6 +32,8 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.onWallLeft=false;
         this.onWallRight=false;
         this.isSliding=false;
+        this.onOneway=false;
+        if(isDropping&&this.rect.y>dropFrom+20)isDropping=false;
         this.rect.speed();
     };
     this.moveH=function(dt,move=0){
@@ -64,9 +71,9 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.vy+=1200*grav*dt;
         this.rect.y+=this.vy*dt;
     };
-    this.applyFix=function(fix,slippery){
+    this.applyFix=function(fix,oneway){
         this.rect.x+=fix.x;
-        this.rect.y+=fix.y;
+        
         if(fix.x!=0){
             this.vx=0;
             if(fix.x>0){
@@ -75,12 +82,17 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
                 this.onWallRight=true;
             }
         }
-        if(fix.y!=0){
+        if(fix.y>0){
             this.vy=0;
-            if(fix.y<0){
-                this.isSliding=slippery;
+            this.rect.y+=fix.y;
+        }
+        if(fix.y<0){
+            if(!oneway||!isDropping){
+                this.rect.y+=fix.y;
+                this.onOneway=oneway;
                 this.isGrounded=true;
                 this.airJumpsLeft=1;
+                this.vy=0;
             }
         }
         this.rect.cache();
@@ -110,6 +122,12 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.isJumping=true;
         this.jumpCooldown=this.jumpCooldownAmt;
         if(isAirJump)this.airJumpsLeft--;
+    };
+    this.drop=function(){
+        if(!isDropping){
+            dropFrom=this.rect.y;
+            isDropping=true;
+        }
     };
     this.shoot=function(isFriend){
         if(this.weapon){

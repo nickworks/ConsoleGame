@@ -46,8 +46,8 @@ function Platform(raw={}){
                 if(fix.y<-rect.vy*3)return; //if we have to push it up MORE than it could have reasonably moved in the last 3 frames
             }
             (o.pawn
-                ?o.pawn.applyFix(fix,this.slippery)
-                :o.applyFix(fix,this.slippery));
+                ?o.pawn.applyFix(fix,this.oneway)
+                :o.applyFix(fix,this.oneway));
             
         });
     };
