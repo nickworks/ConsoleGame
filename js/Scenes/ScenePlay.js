@@ -132,8 +132,9 @@ function ScenePlay(n){
         check(npcs, "npcs");
         check(items, "items");
     };
-    this.setGoal=function(g){
-        goal=g;
+    this.goal=function(g){
+        if(g)goal=g;
+        return goal;
     };
     this.log=function(msg){
         console.log(msg);

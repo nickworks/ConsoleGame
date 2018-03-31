@@ -60,7 +60,7 @@ function Editor(){
         else if(keyboard.isDown([key.n4,key.p4])){//goal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
-            scene.setGoal(new Goal({x:x,y:y}));
+            scene.goal(new Goal({x:x,y:y}));
         }
         else if(keyboard.isDown([key.n5,key.p5])){//goal
             const o=new Item({x:m.x, y:m.y});
@@ -154,7 +154,10 @@ function Editor(){
             res+="]},";
         };
         f(Player,[scene.player]);
-        if(scene.goal)f(Goal,[scene.goal]);
+        if(scene.goal()){
+            console.log("serializing goal");
+            f(Goal,[scene.goal()]);
+        }
         f(Platform,scene.platforms);
         f(NPC,scene.npcs);
         f(Door,scene.doors);

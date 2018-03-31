@@ -18,7 +18,7 @@ function Dialog(x,y,texts,callbacks={}){
     this.remove=false;
     
     this.callbacks={
-        onDone:(callbacks?callbacks.onDone:null),
+        onSpeak:(callbacks?callbacks.onSpeak:null),
         onData:(callbacks?callbacks.onData:null)
     };
     
@@ -98,7 +98,7 @@ function Dialog(x,y,texts,callbacks={}){
     };
     this.endDialog=function(){
         this.remove=true;
-        scene.call(this.callbacks.onDone);
+        scene.call(this.callbacks.onSpeak);
     };
     this.showNext();
 }

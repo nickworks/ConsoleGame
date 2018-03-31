@@ -17,7 +17,7 @@ function NPC(raw={}){
     this.callbacks={
         onSpeak:(raw.onSpeak||[]),
         onDeath:(raw.onDeath||[]),
-        onData:(raw.onData||[])
+        onData:(raw.onData||[]),
     };  
     this.serialize=function(){
         var data={
