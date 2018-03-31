@@ -74,6 +74,8 @@ function Editor(){
                     if(r.hits(m)){
                         if(keyboard.isDown(key.q)){
                             a.splice(i,1);//destroy
+                        } else if(keyboard.isDown(key.t)){
+                            if(a[i].changeType)a[i].changeType();
                         } else {
                             drag(a[i],keyboard.isDown(key.r));//grab
                         }
@@ -131,6 +133,7 @@ function Editor(){
         gfx.fillText(" +3 : spawn npc", x, 72);
         gfx.fillText(" +4 : spawn goal", x, 84);
         gfx.fillText(" +5 : spawn item", x, 96);
+        gfx.fillText(" +T : change type", x, 108);
     };
     this.serialize=function(){
         let res="[";

@@ -51,4 +51,7 @@ function Platform(raw={}){
             
         });
     };
+    this.changeType=function(){
+        this.oneway=!this.oneway;
+    };
 }

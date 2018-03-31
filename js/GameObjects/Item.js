@@ -75,6 +75,10 @@ function Item(raw={}){
         }
         this.rect.cache();
     };
+    this.changeType=function(){
+        this.type++;
+        if(this.type>3)this.type=1;
+    };
 }
 Item.random=function(raw){
     raw.t=((Math.random()*3)|0)+1;
