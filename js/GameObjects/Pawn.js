@@ -114,8 +114,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.shoot=function(isFriend){
         if(this.weapon){
             let p=this.rect.mid();
-            let d={x:this.dir, y:0};
-            this.weapon.shoot(p, d, isFriend);
+            this.weapon.shoot(p, this.dir, isFriend);
         }
     };
     this.canSee=function(o,h=20){

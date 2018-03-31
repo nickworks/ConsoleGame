@@ -1,16 +1,64 @@
-function Weapon(raw={}){
+function Weapon(raw={}){    
     
+    const TYPE_WEAK=1;
+    const TYPE_PISTOL=2;
+    const TYPE_SHOTGUN=3;
+    const TYPE_SMG=4;
+    
+    var type;
     var shootDelay=0;
     var reloadDelay=0;
     
-    this.shootCooldown=.25;
-    this.reloadCooldown=1;
-    
-    this.ammo=100;
-    this.ammoMax=100;
-    
-    this.clip=0;
-    this.clipMax=5;
+    this.changeType=function(t){
+        
+        switch(t){
+            case TYPE_WEAK:
+                this.shootCooldown=.5;
+                this.reloadCooldown=1;
+                this.ammo=this.ammoMax=100;
+                this.clip=this.clipMax=10;
+                this.dmg=10;
+                this.shootAmt=1;
+                this.angleRand=0;
+                this.title="PEA-SHOOTER";
+                break;
+            case TYPE_PISTOL:
+                this.shootCooldown=.25;
+                this.reloadCooldown=1;
+                this.ammo=this.ammoMax=20;
+                this.clip=this.clipMax=5;
+                this.dmg=25;
+                this.shootAmt=1;
+                this.angleRand=.01;
+                this.title="PISTOL";
+                break;
+            case TYPE_SHOTGUN:
+                this.shootCooldown=.5;
+                this.reloadCooldown=2;
+                this.ammo=this.ammoMax=10;
+                this.clip=this.clipMax=2;
+                this.dmg=25;
+                this.shootAmt=5;
+                this.angleRand=.5;
+                this.title="SHOTGUN";
+                break;
+            case TYPE_SMG:
+                this.shootCooldown=.1;
+                this.reloadCooldown=2;
+                this.ammo=this.ammoMax=90;
+                this.clip=this.clipMax=30;
+                this.dmg=10;
+                this.shootAmt=1;
+                this.angleRand=.1;
+                this.title="SMG";
+                break;
+            default:
+                consoleObj.log("Weapon type not recognized.");
+                return;
+        }
+        type=t;
+    };
+    this.changeType(raw.t||TYPE_WEAK);
     
     this.update=function(dt){
         
@@ -35,11 +83,18 @@ function Weapon(raw={}){
         if(this.clip>0){
             
             let speed=600;
-            dir.x*=speed;
-            dir.y*=speed;
+            let angle=(dir<0)?Math.PI:0;
             
-            const b=new Bullet(pos,dir,isFriend);
-            scene.bullets.push(b);
+            for(var i=0;i<this.shootAmt;i++){
+                
+                var finalAngle=angle+Math.random()*this.angleRand-this.angleRand/2;
+                
+                const dir={};
+                dir.x=Math.cos(finalAngle)*speed
+                dir.y=Math.sin(finalAngle)*speed
+                const b=new Bullet(pos,dir,isFriend,this.dmg);
+                scene.bullets.push(b);
+            }
             shootDelay=this.shootCooldown;
             this.ammo--;
             this.clip--;
@@ -51,6 +106,7 @@ function Weapon(raw={}){
         if(reloadDelay>0)return;
         if(shootDelay>0)return;
         if(this.clip>=this.clipMax)return;
+        if(this.ammo<=0)return;
         reloadDelay=this.reloadCooldown;
     };
     this.doReload=function(){

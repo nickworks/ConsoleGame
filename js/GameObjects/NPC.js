@@ -6,7 +6,7 @@ function NPC(raw={}){
     this.canTalk=false;
     this.friend=(!!raw.f);
     this.dialog=raw.d||[];
-    this.hp=100;
+    this.hp=raw.h||50;
     this.dead=false;
     this.patrolStart=this.pawn.rect.mid().x;
     this.patrolDis=100;
@@ -17,11 +17,6 @@ function NPC(raw={}){
         onDeath:(raw.onDeath||[]),
         onData:(raw.onData||[])
     };  
-    this.jump=function(){
-      //this is testing the event system
-        console.log("JUMP");
-        this.hurt(500);
-    };
     this.serialize=function(){
         var data={
             i:id,
@@ -29,7 +24,8 @@ function NPC(raw={}){
             y:this.pawn.rect.y|0,
             d:this.dialog,
             f:this.friend,
-            a:this.pawn.a
+            a:this.pawn.a,
+            h:this.hp,
         };
         var a=this.callbacks.onSpeak;
         var b=this.callbacks.onDeath;

@@ -24,17 +24,19 @@ function HUD(){
         const bgw=txtx+this.font.measure(gfx,txt).width+7;
         const bgx=-(c-b)*bs-2;
         
+        var y=game.height()-35;
+        
+        gfx.fillStyle="rgba(10,10,20,.25)";
+        gfx.fillRect(-2,y-13,bgw,26);
+        
         let tx=bgx*w.getReloadProgress();
         x1+=(tx-x1)*.3;//slide
         gfx.beginTransform();
-        gfx.translate(x1,game.height()-35);
-        gfx.fillStyle="#000";
+        gfx.translate(x1,y);
+        gfx.fillStyle="rgb(50,50,100)";
         gfx.fillRect(0,-13,bgw,26);
         this.font.apply(gfx);
-        
-        if(b<1&&w.reloadCooldown<=0)txt+=" RELOAD";
         gfx.fillText(txt,txtx,1);
-        
         for(var i=0;i<c;i++){
             gfx.globalAlpha=(i>=c-b)?1:.25;
             gfx.drawImage(sprites.bullet,6+bs*i,-7);
@@ -53,11 +55,11 @@ function HUD(){
         if(p>100)p=100;
         gfx.beginTransform();
         gfx.translate(0,game.height()-20);
-        gfx.fillStyle="#000";
+        gfx.fillStyle="rgba(10,20,10,.25)";
         gfx.fillRect(0,0,w,h);
         
-        gfx.fillStyle="#FFF";
-        gfx.fillRect(m,m,(w-2*m)*p,h-2*m);
+        gfx.fillStyle="rgb(50,100,50)";
+        gfx.fillRect(0,0,w*p,h);
         gfx.endTransform();
     };
 }

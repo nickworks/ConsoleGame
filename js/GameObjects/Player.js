@@ -56,7 +56,7 @@ function Player(raw={}){
         this.pawn.draw(gfx);
     };
     this.hurt=function(amt=10){
-        //this.hp-=amt;
+        this.hp-=amt;
     };
     this.heal=function(amt=10){
         this.hp+=amt;
