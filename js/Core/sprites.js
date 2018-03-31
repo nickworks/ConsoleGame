@@ -23,5 +23,6 @@ const sprites={
         this.bullet=this.load("imgs/bullet.gif");
         this.gun=this.load("imgs/gun.gif");
         this.projectile=this.load("imgs/projectile.gif");
+        this.input=this.load("imgs/input.png");
     }
 };

@@ -28,7 +28,7 @@ function SceneLoad(newScene,speed=1){
             this.delay-=dt;
         } else {
             const rand=(v=1)=>{return Math.random()*v;};
-            this.percent+=rand(speed/100);
+            this.percent+=rand(speed/200);
             if(this.percent>=1){
                 fadeToScene=newScene;
                 this.percent=1;
@@ -37,16 +37,19 @@ function SceneLoad(newScene,speed=1){
         }
     };
     this.draw=function(gfx){
-        game.clear("#000");
+        game.clear("#555");
         
-        var m=50;
-        var w=(game.width()-m*2)*(this.percent>1?1:this.percent);
+        var w=(game.width())*(this.percent>1?1:this.percent);
         gfx.fillStyle="#9AF";
-        gfx.fillRect(m,100,w,10);
+        gfx.fillRect(0,game.height()-10,w,10);
         
         //this.font.color="rgba(255,255,255,"+Math.min(this.alpha, 1)+")";
         this.font.apply(gfx);
-        gfx.fillText(tips[this.tip],game.width()/2,135);
+        gfx.fillText(tips[this.tip],game.width()/2,game.height()-25);
+        
+        var x=(game.width()-sprites.input.width)/2;
+        gfx.drawImage(sprites.input, x, 20);
+        
         
         game.clear("rgba(0,0,0,"+alphaOverlay+")");
     };

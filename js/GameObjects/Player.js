@@ -63,6 +63,13 @@ function Player(raw={}){
         if(this.hp>this.hpMax)this.hp=this.hpMax;
     };
     this.weapon=function(w){
-        this.pawn.weapon=w;  
+        if(!w||w.constructor.name!="Weapon")return;
+        this.pawn.weapon=w;
+        Player.data.weapon=w;
     };
+    this.weapon((Player.data.weapon)?Player.data.weapon:this.pawn.weapon);
 }
+Player.data={
+    weapon:null,
+    coins:0
+};

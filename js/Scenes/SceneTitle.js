@@ -11,7 +11,7 @@ function SceneTitle(){
     
     this.update = function(dt){
         if(fadeToScene){
-            if(alphaOverlay<1)alphaOverlay+=dt;
+            if(alphaOverlay<1)alphaOverlay+=dt*4;
             else return fadeToScene;
         } else if(alphaOverlay>0)alphaOverlay-=dt*2;
         this.menu.update(dt);
@@ -23,4 +23,6 @@ function SceneTitle(){
         gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
         gfx.fillRect(0,0,game.width(),game.height());
     };
+    
+    Player.data={};
 }

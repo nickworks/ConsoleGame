@@ -13,7 +13,7 @@ function Game(){
     this.gfx=function(){return gfx;}
     
     this.settings={
-        skipLoadingScenes:true,
+        skipLoadingScenes:false,
         editModeEnabled:true,
     };
   
