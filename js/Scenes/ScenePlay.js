@@ -38,6 +38,8 @@ function ScenePlay(n){
             else if(this.modal.reloadLevel&&!fadeToScene)fadeToScene=new ScenePlay(levelIndex);
             else if(this.modal.remove)this.modal=null;
             else if(mouse.onDown()) this.handleClick();
+        } else if(player.dead){
+            this.modal=new Death();
         } else {
             if(mouse.onDown()) this.handleClick();
             if(player)player.update(dt);

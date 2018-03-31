@@ -52,6 +52,7 @@ const key = {
     console:function(){return this.tab},
     attack:function(){return this.f},
     sprint:function(){return this.shift},
+    any:function(){return [this.space,this.e,this.f,this.tab,this.escape,this.r,this.left,this.right,this.enter]},
 };
 
 const keyboard = {
