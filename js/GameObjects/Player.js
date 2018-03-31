@@ -62,4 +62,7 @@ function Player(raw={}){
         this.hp+=amt;
         if(this.hp>this.hpMax)this.hp=this.hpMax;
     };
+    this.weapon=function(w){
+        this.pawn.weapon=w;  
+    };
 }

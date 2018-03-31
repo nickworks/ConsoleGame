@@ -41,7 +41,7 @@ function ScenePlay(n){
             if(player)player.update(dt);
             for(var i in items){
                 items[i].update(dt);
-                if(items[i].rect.overlaps(player.pawn.rect))items[i].activate();
+                if(items[i].rect.overlaps(player.pawn.rect))items[i].pickup();
                 if(items[i].dead)items.splice(i,1);
             }
             for(var i in npcs){

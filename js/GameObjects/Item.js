@@ -15,6 +15,8 @@ function Item(raw={}){
     this.dead=false;
     
     var weapon=null;
+    var hint=null;
+    var showHint=false;
         
     this.serialize=function(){
         return{
@@ -47,18 +49,26 @@ function Item(raw={}){
             this.isGrounded=false;
             this.rect.speed();
         }
+        
     };
-    this.activate=function(){
-        this.dead=true;
+    this.pickup=function(){
         switch(this.type){
             case TYPE_HEAL:scene.player.heal(25);break;
             case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
             case TYPE_COIN:break;
             case TYPE_GUN:
-                if(!weapon)weapon=Weapon.random();
-                
-                break;
+                if(!weapon){
+                    weapon=Weapon.random();
+                    hint=new BubbleHint(weapon.title);
+                }
+                showHint=true;
+                if(keyboard.onDown(key.activate())){
+                    scene.player.weapon(weapon);
+                    this.dead=true;
+                }
+                return;
         }
+        this.dead=true;
     };
     this.draw=function(gfx){
         
@@ -70,6 +80,14 @@ function Item(raw={}){
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw(gfx);
+        
+        if(hint&&showHint){
+            hint.x=this.rect.mid().x;
+            hint.y=this.rect.y;
+            hint.draw(gfx);
+            showHint=false;
+        }
+        
     };
     this.applyFix=function(fix){
         this.rect.x+=fix.x;
