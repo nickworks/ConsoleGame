@@ -105,11 +105,22 @@ function Editor(){
             raw.x+=d.x;
             raw.y+=d.y;
         }
+        if(raw.w<0){
+            raw.x+=raw.w;
+            raw.w*=-1;
+        }
+        if(raw.h<0){
+            raw.y+=raw.h;
+            raw.h*=-1;
+        }
         
         raw.x=this.snap(raw.x);
         raw.y=this.snap(raw.y);
         raw.w=this.snap(raw.w);
         raw.h=this.snap(raw.h);
+        
+        if(raw.w==0)raw.w=this.snapSize;
+        if(raw.h==0)raw.h=this.snapSize;
         
         (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw);
         if(!mouse.isDown())this.dragObj=null;
