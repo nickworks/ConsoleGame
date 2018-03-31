@@ -17,5 +17,6 @@ const sprites={
         this.item1=this.load("imgs/item_health.gif");
         this.item2=this.load("imgs/item_ammo.gif");
         this.item3=this.load("imgs/item_coin.gif");
+        this.bullet=this.load("imgs/bullet.gif");
     }
 };
