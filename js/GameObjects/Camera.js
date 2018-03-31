@@ -30,10 +30,11 @@ function Camera(){
     this.drawStart=function(gfx){
         const x=(this.sx-this.x)|0;
         const y=(this.sy-this.y)|0;
+        gfx.beginTransform();
         gfx.translate(x,y);
     };
     this.drawEnd=function(gfx){
-        gfx.resetTransform();
+        gfx.endTransform();
     };
     this.updateScreenOffset=function(){
         this.sx=game.width()/2;

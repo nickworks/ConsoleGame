@@ -14,6 +14,7 @@ function Button(caption,callback,x,y,w,h,align="left"){
         if(this.selected && keyboard.onDown(key.menuChoose())) this.callback();
     };
     this.draw=function(gfx){
+        gfx.beginTransform();
         gfx.translate(this.rect.x, this.rect.y);
         const hover=this.hover||this.selected;
         gfx.fillStyle=hover?this.colorHover:this.colorNormal;
@@ -26,6 +27,6 @@ function Button(caption,callback,x,y,w,h,align="left"){
         this.text.x=x;
         this.text.y=this.rect.h/2;
         this.text.draw(gfx);
-        gfx.resetTransform();
+        gfx.endTransform();
     };
 }

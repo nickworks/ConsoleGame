@@ -1,7 +1,6 @@
 function Platform(raw={}){
     var id=raw.id||0;
     this.rect=Rect.from(raw);
-    this.pattern=sprites.tiles;
     this.oneway=(!!raw.o);
     this.slippery=(!!raw.s);
     this.serialize=function(){
@@ -24,8 +23,13 @@ function Platform(raw={}){
         
     };
     this.draw=function(gfx){
-        gfx.fillStyle=this.pattern;
-        this.rect.draw(gfx);
+        gfx.fillStyle=this.oneway?sprites.tiles2:sprites.tiles;
+        
+        gfx.beginTransform();
+        gfx.translate(this.rect.x,this.rect.y);
+        //this.rect.draw(gfx);
+        gfx.fillRect(0,0,this.rect.w,this.rect.h);
+        gfx.endTransform();
     };
     this.block=function(a, dt){
         if(!Array.isArray(a))a=[a];

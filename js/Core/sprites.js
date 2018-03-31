@@ -13,6 +13,9 @@ const sprites={
         this.load("imgs/tiles.gif",(i)=>{
             this.tiles=pattern(i);
         });
+        this.load("imgs/tiles2.png",(i)=>{
+            this.tiles2=pattern(i);
+        });
         
         this.item1=this.load("imgs/item_health.gif");
         this.item2=this.load("imgs/item_ammo.gif");

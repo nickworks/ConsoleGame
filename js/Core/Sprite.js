@@ -17,6 +17,6 @@ function Sprite(url){
         gfx.rotate(0);
         gfx.scale(this.scale, this.scale);
         gfx.drawImage(this.img, -this.anchor.x, -this.anchor.y);
-        gfx.resetTransform();
+        gfx.endTransform();
     };
 }

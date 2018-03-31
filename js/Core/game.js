@@ -64,6 +64,8 @@ function Game(){
         gfx=canvas.getContext("2d");
         if(gfx==undefined) return;
         
+        createBetterMatrixMath();
+        
         this.size=function(w,h){
             width=canvas.width=w;
             height=canvas.height=h;
@@ -81,4 +83,38 @@ function Game(){
         sprites.init(gfx);
         this.update(0); // begin game loop
     };
+    function createBetterMatrixMath(){
+        //okay, it only does translate...
+        //but it DOES allow me to push/pop transform matrices
+        gfx.matrices=[[0,0]];
+        gfx.getMatrix=function(){
+            return this.matrices[this.matrices.length-1];
+        };
+        gfx.translate=function(x,y){
+            if(this.matrices.length<=1)return;
+            const m=this.getMatrix();
+            m[0]+=x;
+            m[1]+=y;
+            this.applyMatrix();
+        };
+        gfx.applyMatrix=function(){
+            var x=0;
+            var y=0;
+            this.matrices.forEach(m=>{
+                x+=m[0];
+                y+=m[1];
+            });
+            this.setTransform(1, 0, 0, 1, x, y);
+        };
+        gfx.beginTransform=function(){
+            this.matrices.push([0,0]);
+        };
+        gfx.endTransform=function(){
+            if(this.matrices.length>1){
+                this.matrices.pop();
+            }
+            this.applyMatrix();
+        };       
+        
+    }
 }

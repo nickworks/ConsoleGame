@@ -26,7 +26,7 @@ function HUD(){
         
         let tx=bgx*w.getReloadProgress();
         x1+=(tx-x1)*.3;//slide
-        
+        gfx.beginTransform();
         gfx.translate(x1,game.height()-35);
         gfx.fillStyle="#000";
         gfx.fillRect(0,-13,bgw,26);
@@ -41,7 +41,7 @@ function HUD(){
             gfx.globalAlpha=1;
         }
         
-        gfx.resetTransform();
+        gfx.endTransform();
     };
     this.drawHealth=function(gfx){
         
@@ -51,12 +51,13 @@ function HUD(){
         let p=scene.player.hp/100;
         if(p<0)p=0;
         if(p>100)p=100;
+        gfx.beginTransform();
         gfx.translate(0,game.height()-20);
         gfx.fillStyle="#000";
         gfx.fillRect(0,0,w,h);
         
         gfx.fillStyle="#FFF";
         gfx.fillRect(m,m,(w-2*m)*p,h-2*m);
-        gfx.resetTransform();
+        gfx.endTransform();
     };
 }
