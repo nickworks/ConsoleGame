@@ -94,10 +94,10 @@ function ScenePlay(n){
         game.clear("#888");
         cam.drawStart(gfx);
         if(goal)goal.draw(gfx);
+        doors.forEach(d=>d.draw(gfx));
         platforms.forEach(p=>p.draw(gfx));
         player.draw(gfx);
         npcs.forEach(n=>n.draw(gfx));
-        doors.forEach(d=>d.draw(gfx));
         bullets.forEach(b=>b.draw(gfx));
         items.forEach(i=>i.draw(gfx));
         cam.drawEnd(gfx);

@@ -65,6 +65,9 @@ function Door(raw={}){
     };
     this.draw=function(gfx){
         this.rect.draw(gfx);
+        
+        gfx.drawImage(sprites.door,this.rect.x,this.rect.y-(100-this.rect.h));
+        
         if(this.canActivate&&!scene.modal&&!this.animating){
             hint.x=this.rect.mid().x;
             hint.y=this.rect.mid().y;
