@@ -3,9 +3,10 @@ function Item(raw={}){
     const TYPE_HEAL=1;
     const TYPE_AMMO=2;
     const TYPE_COIN=3;
+    const TYPE_GUN=4;
     
     var id=raw.i||0;
-    this.type=raw.t||0;
+    this.type=raw.t||3;
     this.amt=raw.a||25;
     this.rect=Rect.from(raw);
     this.vx=0;
@@ -51,6 +52,7 @@ function Item(raw={}){
             case TYPE_HEAL:scene.player.heal(25);break;
             case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
             case TYPE_COIN:break;
+            case TYPE_GUN:break;
         }
     };
     this.draw=function(gfx){
@@ -59,6 +61,7 @@ function Item(raw={}){
         if(this.type==TYPE_HEAL)img=sprites.item1;
         if(this.type==TYPE_AMMO)img=sprites.item2;
         if(this.type==TYPE_COIN)img=sprites.item3;
+        if(this.type==TYPE_GUN )img=sprites.gun;
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw(gfx);
@@ -81,9 +84,16 @@ function Item(raw={}){
     };
 }
 Item.random=function(raw){
-    raw.t=((Math.random()*3)|0)+1;
+    
+    const r=Math.random();
+    if(r<.1)raw.t=4; //10% chance of gun
+    else if(r<.35)raw.t=1; //25% chance of health
+    else if(r<.60)raw.t=2; //25% chance of ammo
+    else raw.t=3; //40% chance of coin
+    
     const i=new Item(raw);
     i.vx=Math.random()*400-200;
     i.vy=-(Math.random()*200+200);
+    
     return i;
 };

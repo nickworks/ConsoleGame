@@ -2,7 +2,7 @@ function NPC(raw={}){
     var id=raw.i||0;
     this.agro=false;
     this.pawn=new Pawn(raw);
-    this.pawn.a=raw.a||800;
+    this.pawn.a=raw.a||400;
     this.canTalk=false;
     this.friend=(!!raw.f);
     this.dialog=raw.d||[];
@@ -16,8 +16,7 @@ function NPC(raw={}){
         onSpeak:(raw.onSpeak||[]),
         onDeath:(raw.onDeath||[]),
         onData:(raw.onData||[])
-    };
-    
+    };  
     this.jump=function(){
       //this is testing the event system
         console.log("JUMP");
