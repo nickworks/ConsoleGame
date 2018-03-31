@@ -13,7 +13,7 @@ function Keypad(x,y,onDone){
     
     this.onDone=onDone;
     
-    this.bg=new TalkBubble(0,0);
+    this.bg=new BubbleBG(0,0);
     
     this.append=function(txt){
         this.val+=txt;

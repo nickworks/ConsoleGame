@@ -12,6 +12,8 @@ function NPC(raw={}){
     this.patrolDis=100;
     this.patrolTimer=0;
     
+    var hint=new BubbleHint("TALK");
+    
     this.callbacks={
         onSpeak:(raw.onSpeak||[]),
         onDeath:(raw.onDeath||[]),
@@ -113,12 +115,9 @@ function NPC(raw={}){
         gfx.fillStyle=this.friend?"#6A3":"#F43";
         this.pawn.draw(gfx);
         if(this.friend&&this.canTalk&&!scene.modal){
-            const p=this.pawn.rect.mid();
-            gfx.beginPath();
-            gfx.ellipse(p.x,p.y-25,10,10,0,0,Math.PI*2,false);
-            gfx.closePath();
-            gfx.fillStyle="#999";
-            gfx.fill();
+            hint.x=this.pawn.rect.mid().x;
+            hint.y=this.pawn.rect.y;
+            hint.draw(gfx);
         }
     };
     this.hurt=function(amt){

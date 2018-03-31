@@ -14,7 +14,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.isJumping=false;
     this.airJumpsLeft=1;
     this.dir=1;
-    this.weapon=new Weapon();
+    this.weapon=new Weapon();    
     this.draw=function(gfx){
         if(this.sight)this.sight.draw(gfx);
         this.rect.draw(gfx);

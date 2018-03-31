@@ -22,7 +22,7 @@ function Dialog(x,y,texts,callbacks={}){
         onData:(callbacks?callbacks.onData:null)
     };
     
-    this.bg=new TalkBubble(0,0);
+    this.bg=new BubbleBG(0,0);
     
     this.chopUpText=function(text){
         this.lines=[];

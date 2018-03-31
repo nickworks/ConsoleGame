@@ -13,6 +13,8 @@ function Item(raw={}){
     this.vy=0;
     this.isAsleep=false;
     this.dead=false;
+    
+    var weapon=null;
         
     this.serialize=function(){
         return{
@@ -52,7 +54,10 @@ function Item(raw={}){
             case TYPE_HEAL:scene.player.heal(25);break;
             case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
             case TYPE_COIN:break;
-            case TYPE_GUN:break;
+            case TYPE_GUN:
+                if(!weapon)weapon=Weapon.random();
+                
+                break;
         }
     };
     this.draw=function(gfx){

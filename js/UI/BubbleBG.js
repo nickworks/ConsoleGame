@@ -1,4 +1,4 @@
-function TalkBubble(w,h){
+function BubbleBG(w,h){
     
     this.time=0;
     this.transTime=0.25;

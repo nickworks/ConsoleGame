@@ -11,6 +11,7 @@ function Door(raw={}){
     this.canActivate=false;
     
     var isOpen=false;
+    var hint=new BubbleHint("OPEN");
     
     this.callbacks={
         onOpen:(raw.onOpen||[]),
@@ -52,8 +53,11 @@ function Door(raw={}){
     this.activate=function(){
         if(this.canActivate){
             if(this.lockCode){
-                const p=this.rect.mid();
-                scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
+                if(isOpen)this.close();
+                else{
+                    const p=this.rect.mid();
+                    scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
+                }
             }else{
                 isOpen?this.close():this.open();
             }
@@ -61,9 +65,15 @@ function Door(raw={}){
     };
     this.draw=function(gfx){
         this.rect.draw(gfx);
+        if(this.canActivate&&!scene.modal&&!this.animating){
+            hint.x=this.rect.mid().x;
+            hint.y=this.rect.mid().y;
+            hint.draw(gfx);
+        }
     };
     this.lock=function(){
         this.lockCode=parseInt(Math.random()*10000+10000).toString();
+        hint.setText("UNLOCK");
     };
     this.open=function(code){
         if(this.lockCode && this.lockCode != code){
@@ -73,6 +83,7 @@ function Door(raw={}){
         
         this.animate({h:25});
         isOpen=true;
+        hint.setText("CLOSE");
         scene.call(this.callbacks.onOpen);
     };
     this.forceOpen=function(){
@@ -81,6 +92,7 @@ function Door(raw={}){
     this.close=function(){
         this.animate({h:100});
         isOpen=false;
+        hint.setText(this.lockCode?"UNLOCK":"OPEN");
         scene.call(this.callbacks.onClose);
     };
     this.getLockCode=function(){

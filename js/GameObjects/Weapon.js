@@ -10,7 +10,6 @@ function Weapon(raw={}){
     var reloadDelay=0;
     
     this.changeType=function(t){
-        
         switch(t){
             case TYPE_WEAK:
                 this.shootCooldown=.5;
@@ -122,3 +121,7 @@ function Weapon(raw={}){
     };
     this.clip=this.clipMax;
 }
+Weapon.random=function(){
+    const t=((Math.random()*4)|0)+1;
+    return new Weapon({t:t});
+};
