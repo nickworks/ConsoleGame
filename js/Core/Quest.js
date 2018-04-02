@@ -1,8 +1,8 @@
 function Quest(raw={}){
 	this.title=raw.t||"";
 	this.callbacks={
-		onData:raw.onData||[],
-		onComplete:raw.onDone||[],
+		onCheck:Callback.from(raw.onCheck),
+		onComplete:Callback.from(raw.onDone),
 	}; raw.r||[{}];// a callback list (like onData)
 	this.feedback=raw.f||[];
 	this.serialize=function(){
@@ -11,9 +11,6 @@ function Quest(raw={}){
 			r:this.req,
 			f:this.feedback
 		};
-	}
-	this.addReq=function(o){
-		this.req.push();
 	};
 	this.comment=function(text,praise=true){
 		var p=[
@@ -27,16 +24,17 @@ function Quest(raw={}){
 			const i=(Math.random()*p.length)|0;
 			consoleObj.log(p[i]);
 		}
-		consoleObj.log(text);
+        if(!Array.isArray(text))text=[text];
+        text.forEach(t=>consoleObj.log("// "+t));
 	};
 	this.check=function(){
 		var completed=true;
-		//for(var i in this.req){
-		this.callbacks.onData.forEach(c=>{
-			if(!scene.call(c))completed=false;
+		this.callbacks.onCheck.forEach(c=>{
+			if(!Callback.do(c))completed=false;
 		});
 		if(completed){
-			scene.call(this.callbacks.onDone);
+			Callback.do(this.callbacks.onDone);
+            this.comment(this.feedback, true);
 		}
 	};
 }

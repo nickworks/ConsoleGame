@@ -71,5 +71,14 @@ function Player(raw={}){
 }
 Player.data={
     weapon:null,
-    coins:0
+    coins:0,
+    quests:[],
+};
+Player.addQuest=function(q){
+    
+};
+Player.checkQuests=function(){
+    Player.data.quests.forEach((q)=>{
+        //q.onData
+    });
 };

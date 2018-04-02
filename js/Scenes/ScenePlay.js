@@ -157,15 +157,6 @@ function ScenePlay(n){
         this.all().forEach(i=>{if(i.id()==id)res=i;});
         return res;
     };
-    this.call=function(c){ // execute a callback
-        c=c||[];
-        var res=null;
-        c.forEach(d=>{
-            var o=this.obj(d.i); // fetch object by id
-            if(o&&o[d.f])res=o[d.f]();
-        });
-        return res;
-    };
     this.id=function(){ // get new, unused id number
         let i=0;
         this.all().forEach(o=>{

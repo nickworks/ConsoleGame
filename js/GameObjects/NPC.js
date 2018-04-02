@@ -15,9 +15,9 @@ function NPC(raw={}){
     var hint=new BubbleHint("TALK");
     
     this.callbacks={
-        onSpeak:(raw.onSpeak||[]),
-        onDeath:(raw.onDeath||[]),
-        onData:(raw.onData||[]),
+        onSpeak:Callback.from(raw.onSpeak),
+        onDeath:Callback.from(raw.onDeath),
+        onData:Callback.from(raw.onData),
     };  
     this.serialize=function(){
         var data={
@@ -29,9 +29,9 @@ function NPC(raw={}){
             a:this.pawn.a,
             h:this.hp,
         };
-        var a=this.callbacks.onSpeak;
-        var b=this.callbacks.onDeath;
-        var c=this.callbacks.onData;
+        var a=Callback.serialize(this.callbacks.onSpeak);
+        var b=Callback.serialize(this.callbacks.onDeath);
+        var c=Callback.serialize(this.callbacks.onData);
         if(a&&a.length>0)data.onSpeak=a;
         if(b&&b.length>0)data.onDeath=b;
         if(c&&c.length>0)data.onData=c;
@@ -135,7 +135,7 @@ function NPC(raw={}){
         const raw={x:r.x,y:r.y};
         
         if(this.hp<=0){
-            if(this.dead==false)scene.call(this.callbacks.onDeath);
+            if(this.dead==false)Callback.do(this.callbacks.onDeath);
             this.dead=true;
             scene.spawnLoot(3,raw);
         }

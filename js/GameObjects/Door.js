@@ -14,8 +14,8 @@ function Door(raw={}){
     var hint=new BubbleHint("OPEN");
     
     this.callbacks={
-        onOpen:(raw.onOpen||[]),
-        onClose:(raw.onClose||[])
+        onOpen:Callback.from(raw.onOpen),
+        onClose:Callback.from(raw.onClose),
     };
     this.serialize=function(){
         let data={
@@ -24,8 +24,8 @@ function Door(raw={}){
             y:this.rect.y,
             l:this.lockCode?1:0,
         };
-        var a=this.callbacks.onOpen;
-        var b=this.callbacks.onClose;
+        var a=Callback.serialize(this.callbacks.onOpen);
+        var b=Callback.serialize(this.callbacks.onClose);
         if(a&&a.length>0)data.onOpen=a;
         if(b&&b.length>0)data.onClose=b;
         return data;
@@ -87,7 +87,7 @@ function Door(raw={}){
         this.animate({h:25});
         isOpen=true;
         hint.setText("CLOSE");
-        scene.call(this.callbacks.onOpen);
+        Callback.do(this.callbacks.onOpen);
     };
     this.forceOpen=function(){
         this.open(this.lockCode);
@@ -96,7 +96,7 @@ function Door(raw={}){
         this.animate({h:100});
         isOpen=false;
         hint.setText(this.lockCode?"UNLOCK":"OPEN");
-        scene.call(this.callbacks.onClose);
+        Callback.do(this.callbacks.onClose);
     };
     this.getLockCode=function(){
         return this.lockCode;
@@ -129,8 +129,9 @@ function Door(raw={}){
             this.lock();
         }else this.lockCode=null;
     };
-    this.openIfPlayerHas10Coins=function(){
-        if(Player.data.coins>=10)this.forceOpen();  
+    this.openIfPlayerHasEnoughCoins=function(p){
+        const c=p.c||100;
+        if(Player.data.coins>=c)this.forceOpen();  
     };
     if(!!raw.l)this.lock();
 }

@@ -18,8 +18,8 @@ function Dialog(x,y,texts,callbacks={}){
     this.remove=false;
     
     this.callbacks={
-        onSpeak:(callbacks?callbacks.onSpeak:null),
-        onData:(callbacks?callbacks.onData:null)
+        onSpeak:(callbacks?callbacks.onSpeak:[]),
+        onData:(callbacks?callbacks.onData:[])
     };
     
     this.bg=new BubbleBG(0,0);
@@ -82,7 +82,7 @@ function Dialog(x,y,texts,callbacks={}){
             txt=txt.replace(/\$([0-9]+)/g,(s,p)=>{
                 const cb=this.callbacks.onData?this.callbacks.onData[p|0]:null;
                 return cb
-                    ?scene.call([cb]).toString()
+                    ?Callback.do([cb]).toString()
                     :"???";
             });
             
@@ -98,7 +98,7 @@ function Dialog(x,y,texts,callbacks={}){
     };
     this.endDialog=function(){
         this.remove=true;
-        scene.call(this.callbacks.onSpeak);
+        Callback.do(this.callbacks.onSpeak);
     };
     this.showNext();
 }
