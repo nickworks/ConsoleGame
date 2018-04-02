@@ -29,6 +29,7 @@ loadjs([
     'js/GameObjects/Bullet.js',
     'js/GameObjects/Goal.js',
     'js/Core/Quest.js',
+    'js/Core/Fallback.js',
     'js/Core/Rect.js',
     'js/Core/Sprite.js',
     'js/Core/Editor.js',

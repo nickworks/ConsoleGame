@@ -2,7 +2,7 @@ function Quest(raw={}){
 	this.title=raw.t||"";
 	this.callbacks={
 		onData:raw.onData||[],
-		onComplete:raw.onComplete||[],
+		onComplete:raw.onDone||[],
 	}; raw.r||[{}];// a callback list (like onData)
 	this.feedback=raw.f||[];
 	this.serialize=function(){
@@ -29,12 +29,14 @@ function Quest(raw={}){
 		}
 		consoleObj.log(text);
 	};
-	this.checkReq=function(){
+	this.check=function(){
 		var completed=true;
 		//for(var i in this.req){
 		this.callbacks.onData.forEach(c=>{
-			if(!scene.call(this.req[i]))completed=false;
+			if(!scene.call(c))completed=false;
 		});
-		
+		if(completed){
+			scene.call(this.callbacks.onDone);
+		}
 	};
 }
