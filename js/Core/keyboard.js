@@ -89,7 +89,14 @@ const keyboard = {
         
         if(gameInFocus){
             this.keys[e.keyCode] = value;
-            e.preventDefault(); // prevent page-scrolling
+            switch(e.keyCode){
+                case key.space:
+                case key.left:
+                case key.right:
+                case key.down:
+                case key.up:
+                    e.preventDefault(); // prevent page-scrolling
+            }
         } else {
             if(value&&(e.keyCode==key.tab||e.keyCode==key.escape)){
                 //if(scene.unpause)scene.unpause();

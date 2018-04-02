@@ -8,7 +8,8 @@ function SceneLoad(newScene,speed=1){
         "Objects begin and end with curly braces: {value: 42}",
         "You can access a value in an object by using a period:  `scene.player`",
         "Don't like this game's controls? Feel free to change the input mappings in the `key` object",
-        "The most important object is `scene`, but you may be able to find others!"
+        "The most important object is `scene`, but you may be able to find others!",
+        "Press F11 to go fullscreen!"
     ];
     this.tip=(Math.random()*tips.length)|0;
     var fadeToScene=null;

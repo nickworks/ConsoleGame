@@ -118,7 +118,7 @@ function NPC(raw={}){
         const imgL = this.friend ? sprites.playerL : sprites.enemyL;
         const imgR = this.friend ? sprites.playerR : sprites.enemyR;
         
-        this.pawn.draw(gfx,imgL, imgR,{x:4,y:3});
+        this.pawn.draw(gfx,imgL, imgR,{x:4,y:4});
         
         if(this.friend&&this.canTalk&&!scene.modal){
             hint.x=this.pawn.rect.mid().x;
