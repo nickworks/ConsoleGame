@@ -15,14 +15,15 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.onOneway=false;
     this.airJumpsLeft=1;
     this.dir=1;
-    
+    this.img=sprites.player;
     var isDropping=false;
     var dropFrom=0;
     
     this.weapon=new Weapon();    
     this.draw=function(gfx){
         //if(this.sight)this.sight.draw(gfx);
-        this.rect.draw(gfx);
+        //this.rect.draw(gfx);
+        gfx.drawImage(this.img, this.rect.x-4, this.rect.y-3);
         this.sight=null;//trash this
     };
     this.update=function(dt){    
