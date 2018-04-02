@@ -54,6 +54,9 @@ function NPC(raw={}){
         if(this.canTalk && keyboard.onDown(key.activate())){
             this.speak();
         }
+        this.pawn.moveV(dt);
+        this.pawn.moveH(dt,0);
+        this.pawn.update(dt);
     };
     this.aiFoe=function(dt){
         let move=0;
@@ -112,8 +115,11 @@ function NPC(raw={}){
         scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks);
     };
     this.draw=function(gfx){
-        gfx.fillStyle=this.friend?"#6A3":"#F43";
-        this.pawn.draw(gfx);
+        const imgL = this.friend ? sprites.playerL : sprites.enemyL;
+        const imgR = this.friend ? sprites.playerR : sprites.enemyR;
+        
+        this.pawn.draw(gfx,imgL, imgR,{x:4,y:3});
+        
         if(this.friend&&this.canTalk&&!scene.modal){
             hint.x=this.pawn.rect.mid().x;
             hint.y=this.pawn.rect.y;

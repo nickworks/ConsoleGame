@@ -53,8 +53,7 @@ function Player(raw={}){
         this.pawn.update(dt);
     };
     this.draw=function(gfx){
-        gfx.fillStyle="#000";
-        this.pawn.draw(gfx);
+        this.pawn.draw(gfx,sprites.playerL,sprites.playerR,{x:4,y:3});
     };
     this.hurt=function(amt=10){
         this.hp-=amt;

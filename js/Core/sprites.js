@@ -26,6 +26,9 @@ const sprites={
         this.input=this.load("imgs/input.png");
         this.door1=this.load("imgs/door.gif");
         this.door2=this.load("imgs/door-locked.gif");
-        this.player=this.load("imgs/player.gif");
+        this.playerR=this.load("imgs/player.gif");
+        this.playerL=this.load("imgs/player2.gif");
+        this.enemyR=this.load("imgs/enemy.gif");
+        this.enemyL=this.load("imgs/enemy2.gif");
     }
 };

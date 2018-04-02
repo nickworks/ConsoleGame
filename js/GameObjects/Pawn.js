@@ -1,7 +1,6 @@
 function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.rect=new Rect(raw.x||0,raw.y||0,25,45);
     this.sightRange=100;
-    this.sight=null;//debug RECT for AI perception
     this.vx=0;
     this.vy=0;
     this.a=400;
@@ -15,16 +14,14 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.onOneway=false;
     this.airJumpsLeft=1;
     this.dir=1;
-    this.img=sprites.player;
+    
     var isDropping=false;
+    var isAsleep=false;
     var dropFrom=0;
     
     this.weapon=new Weapon();    
-    this.draw=function(gfx){
-        //if(this.sight)this.sight.draw(gfx);
-        //this.rect.draw(gfx);
-        gfx.drawImage(this.img, this.rect.x-4, this.rect.y-3);
-        this.sight=null;//trash this
+    this.draw=function(gfx,imgL, imgR,o){
+        gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     };
     this.update=function(dt){    
         if(this.weapon)this.weapon.update(dt); 
@@ -65,11 +62,13 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         if(this.isJumping&&this.vy<0){
             grav=.4;
         }else{
-            if(this.onWallLeft||this.onWallRight)grav=.2;
+            //if(this.onWallLeft||this.onWallRight)grav=.2;
             this.isJumping=false;
         }
         
         this.vy+=1200*grav*dt;
+        const terminalVelocity=(this.onWallLeft||this.onWallRight)?150:400
+        if(this.vy>terminalVelocity)this.vy=terminalVelocity;
         this.rect.y+=this.vy*dt;
     };
     this.applyFix=function(fix,oneway){
@@ -94,6 +93,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
                 this.isGrounded=true;
                 this.airJumpsLeft=1;
                 this.vy=0;
+                this.isAsleep=true;
             }
         }
         this.rect.cache();
@@ -102,14 +102,14 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         
         if(isWallJump&&!this.isGrounded){
             if(this.onWallLeft){
-                this.vy=-300;
-                this.vx=100;
+                this.vy=-400;
+                this.vx=400;
                 this.isJumping=true;    
                 return;
             }
             if(this.onWallRight){
-                this.vy=-300;
-                this.vx=-100;
+                this.vy=-400;
+                this.vx=-400;
                 this.isJumping=true;    
                 return;
             }
@@ -140,7 +140,6 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         const w=this.sightRange;
         const x=this.rect.x-((this.dir<0)?w:0);
         const y=this.rect.y+h/4;
-        this.sight=Rect.from({x:x,y:y,w:w,h:h});
-        return this.sight.overlaps(o);
+        return Rect.from({x:x,y:y,w:w,h:h}).overlaps(o);
     };
 }
