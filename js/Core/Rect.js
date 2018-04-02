@@ -6,7 +6,26 @@ function Rect(x,y,w,h){
     this.vx=0;
     this.vy=0;
     var prev={};
+    this.fix=function(){
+        if(this.w<0){
+            this.w*=-1;
+            this.x-=this.w;
+        }
+        if(this.h<0){
+            this.h*=-1;
+            this.y-=this.h;
+        }   
+    };
+    this.fix();
+    this.setRaw=function(raw){
+        this.x=raw.x;
+        this.y=raw.y;
+        this.w=raw.w;
+        this.h=raw.h;
+        this.fix();
+    };
     this.speed=function(){
+        // calculate the velocity this rect is mocing
         // IMPORTANT: this velocity is per-second! It has delta-time already applied.
         this.vx=this.x-prev.x;
         this.vy=this.y-prev.y;
@@ -54,12 +73,6 @@ function Rect(x,y,w,h){
     };
     this.toString=function(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
-    };
-    this.setRaw=function(raw){
-        this.x=raw.x;
-        this.y=raw.y;
-        this.w=raw.w;
-        this.h=raw.h;
     };
     this.draw=function(gfx){
         gfx.fillRect(this.x,this.y,this.w,this.h);

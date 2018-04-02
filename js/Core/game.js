@@ -1,6 +1,7 @@
 let scene=null;
 let game=new Game();
 function Game(){
+    
     var timePrev=0;
     var dt=0;
     var currentScene=null;
@@ -12,9 +13,10 @@ function Game(){
     this.height=function(){return height;}
     this.gfx=function(){return gfx;}
     
+    Game.DEVMODE=false;
     this.settings={
-        skipLoadingScenes:true,
-        editModeEnabled:true,
+        skipLoadingScenes:Game.DEVMODE||false,
+        editModeEnabled:Game.DEVMODE||false,
     };
   
     this.calcDeltaTime=function(time){

@@ -1,6 +1,6 @@
 function Player(raw={}){
     var id=raw.i||0;
-    this.canDoubleJump=true;
+    this.canDoubleJump=Game.DEVMODE||false;
     this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
     this.pawn.agro=true;
@@ -8,9 +8,7 @@ function Player(raw={}){
     this.hpMax=100;
     this.dead=false;
     this.friend=true;
-    this.canWallJump=function(){
-        return true;  
-    };
+    this.canWallJump=Game.DEVMODE?function(){return true;}:function(){return false;};
     this.serialize=function(){
         return{
             i:id,
