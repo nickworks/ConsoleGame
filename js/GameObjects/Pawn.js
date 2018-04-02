@@ -4,8 +4,8 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.vx=0;
     this.vy=0;
     this.a=400;
-    this.maxv=200;
-    this.agro=false;
+    this.maxv=raw.maxv||200;
+    this.walking=false;
     this.onWallLeft=false;
     this.onWallRight=false;
     this.isGrounded=false;
@@ -35,23 +35,28 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         this.rect.speed();
     };
     this.moveH=function(dt,move=0){
-        let slowDown=false;
-        if(this.isSliding)move*=2;
-        if(move==0){ // if no input, slowdown
+        let slowDown=false;            
+        if(move==0){ // if no input
             if(this.isGrounded){
                 if(this.vx<0)move+=2;
                 if(this.vx>0)move-=2;
-                if(this.isSliding)move/=4;
                 slowDown=true;
             }
         } else {
             this.dir=move;
+            if(move>0&&this.vx<0)move+=2;
+            if(move<0&&this.vx>0)move-=2;
         }
+        if(!this.isGrounded)move*=.4;//40% air control
+        // Clamp horizontal velocity:
         this.vx+=this.a*move*dt;
-        const clamp=(this.agro)?this.maxv:this.maxv/2;
+        var clamp=(this.walking)?this.maxv/2:this.maxv;
+        if(!this.isGrounded)this.clamp=this.maxv*2;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
+        // Apply velocity:
         this.rect.x+=this.vx*dt;
+        // Prevent ping-ponging:
         if(slowDown){
             if(move<0&&this.vx<0)this.vx=0;
             if(move>0&&this.vx>0)this.vx=0;

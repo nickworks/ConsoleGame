@@ -65,10 +65,13 @@ function Rect(x,y,w,h){
         const res={x:0,y:0};
         res.x=(Math.abs(moveL)<Math.abs(moveR))?moveL:moveR;
         res.y=(Math.abs(moveU)<Math.abs(moveD))?moveU:moveD;
-        if(Math.abs(res.x)<Math.abs(res.y))
-            res.y=0;
-        else
-            res.x=0;
+        
+        if(o.vx>0&&res.x>0)res.x=0;
+        else if(o.vx<0&&res.x<0)res.x=0;
+        else if(o.vy>0&&res.y>0)res.y=0;
+        else if(o.vy<0&&res.y<0)res.y=0;
+        else if(Math.abs(res.x)<Math.abs(res.y))res.y=0;
+        else res.x=0;
         return res;
     };
     this.toString=function(){

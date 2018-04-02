@@ -78,7 +78,7 @@ function NPC(raw={}){
             
             if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
-        this.pawn.agro=this.agro;
+        this.pawn.walking=!this.agro;
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);

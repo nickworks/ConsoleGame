@@ -13,7 +13,7 @@ function Game(){
     this.height=function(){return height;}
     this.gfx=function(){return gfx;}
     
-    Game.DEVMODE=false;
+    Game.DEVMODE=true;
     this.settings={
         skipLoadingScenes:Game.DEVMODE||false,
         editModeEnabled:Game.DEVMODE||false,

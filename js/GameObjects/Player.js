@@ -1,9 +1,9 @@
 function Player(raw={}){
+    raw.maxv=300;
     var id=raw.i||0;
     this.canDoubleJump=Game.DEVMODE||false;
     this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
     this.pawn.jumpCooldownAmt=0;
-    this.pawn.agro=true;
     this.hp=100;
     this.hpMax=100;
     this.dead=false;
@@ -31,7 +31,7 @@ function Player(raw={}){
         
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
-
+        
         if(keyboard.onDown(key.jump())){
             const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
             
