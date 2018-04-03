@@ -37,6 +37,7 @@ loadjs([
     'js/Core/mouse.js',
     'js/Core/console.js',
     'js/Core/sprites.js',
+    'js/Core/Matrix.js',
     'js/Scenes/SceneLoad.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',

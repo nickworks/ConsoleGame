@@ -46,15 +46,15 @@ function Keypad(x,y,onDone){
     };
     this.draw=function(gfx){
         scene.cam.drawStart(gfx);
-        gfx.beginTransform();
-        gfx.translate(this.x,this.y);
+        Matrix.push();
+        Matrix.translate(this.x,this.y);
         this.bg.draw(gfx);
         this.font.apply(gfx);
         const p=this.bg.pos();
         let o=this.txt+this.val;
         if(this.showCursor)o+="_";
         if(this.bg.p>=1)gfx.fillText(o, p.x, p.y);
-        gfx.endTransform();
+        Matrix.pop();
         scene.cam.drawEnd(gfx);
     };
     this.end=function(submit){

@@ -10,13 +10,13 @@ function BubbleHint(text){
     };    
     this.draw=function(gfx){
         
-        gfx.beginTransform();
-        gfx.translate(this.x,this.y);
+        Matrix.push();
+        Matrix.translate(this.x,this.y);
         this.bg.draw(gfx);
         const p=this.bg.pos();
         this.font.apply(gfx);
         gfx.fillText(text, p.x, p.y);
-        gfx.endTransform();
+        Matrix.pop();
         
     };
     this.setText=function(t){

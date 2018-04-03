@@ -4,6 +4,7 @@ function Camera(){
     this.tx=0;
     this.ty=0;
     this.target=null;
+    this.angle=0;
     this.update=function(dt){
         this.updateScreenOffset();
         this.updateTargetXY();
@@ -28,13 +29,13 @@ function Camera(){
         }
     };
     this.drawStart=function(gfx){
-        const x=(this.sx-this.x)|0;
-        const y=(this.sy-this.y)|0;
-        gfx.beginTransform();
-        gfx.translate(x,y);
+        Matrix.push();
+        Matrix.translate(this.sx|0,this.sy|0);
+        if(this.angle!=0)Matrix.rotate(this.angle);
+        Matrix.translate(-this.x|0,-this.y|0);
     };
     this.drawEnd=function(gfx){
-        gfx.endTransform();
+        Matrix.pop();
     };
     this.updateScreenOffset=function(){
         this.sx=game.width()/2;

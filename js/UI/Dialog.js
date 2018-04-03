@@ -54,8 +54,8 @@ function Dialog(x,y,texts,callbacks={}){
     };
     this.draw=function(gfx){
         scene.cam.drawStart(gfx);
-        gfx.beginTransform();
-        gfx.translate(this.x,this.y);
+        Matrix.push();
+        Matrix.translate(this.x,this.y);
         this.bg.draw(gfx);
         const p=this.bg.pos();
         this.font.apply(gfx);
@@ -70,7 +70,7 @@ function Dialog(x,y,texts,callbacks={}){
             }
             gfx.fillText(str, p.x, p.y+n*this.h);
         }
-        gfx.endTransform();
+        Matrix.pop();
         scene.cam.drawEnd(gfx);
     };
     

@@ -25,11 +25,11 @@ function Platform(raw={}){
     this.draw=function(gfx){
         gfx.fillStyle=this.oneway?sprites.tiles2:sprites.tiles;
         
-        gfx.beginTransform();
-        gfx.translate(this.rect.x,this.rect.y);
+        Matrix.push();
+        Matrix.translate(this.rect.x,this.rect.y);
         //this.rect.draw(gfx);
         gfx.fillRect(0,0,this.rect.w,this.rect.h);
-        gfx.endTransform();
+        Matrix.pop();
     };
     this.block=function(a, dt){
         if(!Array.isArray(a))a=[a];
