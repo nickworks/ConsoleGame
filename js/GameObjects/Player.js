@@ -20,7 +20,13 @@ function Player(raw={}){
         if(i)id=i;
         return id;  
     };
-    this.update=function(dt){    
+    this.update=function(dt){
+        
+        if(typeof this.canWallJump!="function"){
+            consoleObj.log("/* Careful there!\n * scene.player.canWallJump() is a function.\n * Changing a function can introduce bugs that CRASH\n * THE GAME. There may not be any coming back from a crashed game...\n * so be careful! Perhaps you should visit the Western guru to\n * learn more about functions.\n */");
+            this.canWallJump=function(){return false};
+        } 
+        
         let move=0;
         let slowDown=false;
         

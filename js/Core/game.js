@@ -9,6 +9,10 @@ function Game(){
     var height=0;
     var gfx=null;
     
+    var targetSize={w:800,h:400};
+    var isFullscreen=false;
+
+    var canvas=null;
     this.width=function(){return width;}
     this.height=function(){return height;}
     this.gfx=function(){return gfx;}
@@ -18,13 +22,20 @@ function Game(){
         skipLoadingScenes:Game.DEVMODE||false,
         editModeEnabled:Game.DEVMODE||false,
     };
-  
+    
     this.calcDeltaTime=function(time){
         if(time === undefined) time = 0;
         dt = (time - timePrev) / 1000;
         timePrev = time;
     };
     this.update=function(time){
+        
+        if(targetSize){
+            console.log("RESIZE FROM LOOP");
+            this.size(targetSize.w,targetSize.h);
+            targetSize=null;
+        }
+        
         this.calcDeltaTime(time);
         
         if(keyboard.onDown(key.console())){
@@ -56,6 +67,22 @@ function Game(){
         requestAnimationFrame((time)=>this.update(time));
     };
     this.isFocus=()=>{return(document.activeElement==document.body)};
+    this.fullscreen=function(fs){
+        isFullscreen=fs||!isFullscreen;
+        if(!isFullscreen){
+            targetSize={w:800,h:400};
+            canvas.style.marginTop="50px";
+        }
+        else {
+            targetSize={w:document.body.clientWidth,h:window.innerHeight-150};
+            canvas.style.marginTop="0";
+        }
+    };
+    this.size=function(w,h){
+        width=canvas.width=w;
+        height=canvas.height=h;
+    };
+    
     this.clear=function(color="#000"){
         gfx.fillStyle=color;
         gfx.fillRect(0, 0, width, height); // clear screen
@@ -64,20 +91,17 @@ function Game(){
         scene=currentScene=new ScenePlay(n);  
     };
     this.start=function(id){
-        const canvas=document.getElementById(id);
+        canvas=document.getElementById(id);
         if(canvas==undefined) return;
         gfx=canvas.getContext("2d");
         if(gfx==undefined) return;
         
-        this.size=function(w,h){
-            width=canvas.width=w;
-            height=canvas.height=h;
-        };
-        this.size(800,400);
-        
         window.addEventListener("blur",()=>{
             if(scene&&scene.pause)scene.pause();
             keyboard.blur();
+        });
+        window.addEventListener("resize",(e)=>{
+            if(isFullscreen)this.fullscreen(true);
         });
         
         keyboard.setup();
