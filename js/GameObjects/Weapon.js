@@ -52,7 +52,7 @@ function Weapon(raw={}){
                 this.title="SMG";
                 break;
             default:
-                consoleObj.log("Weapon type not recognized.");
+                consoleObj.log("\\ Weapon type not recognized.");
                 return;
         }
         type=t;

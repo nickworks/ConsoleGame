@@ -132,11 +132,11 @@ function ScenePlay(n){
     };
     this.handleClick=function(){
         const pre="you clicked on scene.";
-        if(player.pawn.rect.mouseOver()) this.log(pre+"player");
+        if(player.pawn.rect.mouseOver()) consoleObj.log(pre+"player");
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
-                if(rect.mouseOver())this.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
+                if(rect.mouseOver())consoleObj.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
             }
         };
         check(bullets, "bullets");
@@ -148,10 +148,6 @@ function ScenePlay(n){
     this.goal=function(g){
         if(g)goal=g;
         return goal;
-    };
-    this.log=function(msg){
-        console.log(msg);
-        consoleObj.log(msg);
     };
     this.ids=function(){ // assign ids to non-id'd objects
         this.all().forEach(o=>{
