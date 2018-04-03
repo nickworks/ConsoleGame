@@ -67,9 +67,11 @@ function NPC(raw={}){
             if(me.x>p.x+200) move--;
             if(me.x<p.x-200) move++;
             
-            if(me.y>p.y+25){//enemy is below player
+            if(me.y-50>p.y){//enemy is below player
                 this.pawn.jump();
-            } else if(me.y>p.y-25){
+            } else if(me.y+50<p.y){
+                this.pawn.drop();
+            } else {
                 this.pawn.shoot(false);
             }
         } else {
