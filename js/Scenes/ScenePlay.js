@@ -50,6 +50,11 @@ function ScenePlay(n){
             }
             for(var i in npcs){
                 npcs[i].update(dt);
+                if(!npcs[i].friend&&npcs[i].pawn.rect.overlaps(player.pawn.rect)){
+                    const rightOfNPC=npcs[i].pawn.rect.mid().x<player.pawn.rect.mid().x;
+                    player.pawn.vx=rightOfNPC?300:-300;
+                    player.pawn.vy=-250;
+                }
                 if(npcs[i].dead)npcs.splice(i,1);
             }
             platforms.forEach(p=>{
@@ -71,6 +76,10 @@ function ScenePlay(n){
                 b.update(dt);
                 const hit=(o)=>{
                     if(o.friend===b.friend)return;
+                    if(o.pawn){
+                        o.pawn.vx=b.vx>0?200:-200;
+                        o.pawn.vy=-200;
+                    }
                     if(o.oneway)return;
                     b.dead=true;
                     if(o.hurt)o.hurt(b.dmg);

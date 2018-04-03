@@ -19,7 +19,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
     var isAsleep=false;
     var dropFrom=0;
     
-    this.weapon=new Weapon();    
+    this.weapon=new Weapon();
     this.draw=function(gfx,imgL, imgR,o){
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     };
@@ -124,7 +124,7 @@ function Pawn(raw,canDoubleJump=()=>{return false;}){
         if(isAirJump&&this.airJumpsLeft<=0)return;
         if(isAirJump&&!canDoubleJump())return;
         
-        this.vy=-300;
+        this.vy=-350;
         this.isJumping=true;
         this.jumpCooldown=this.jumpCooldownAmt;
         if(isAirJump)this.airJumpsLeft--;
