@@ -68,6 +68,11 @@ function Editor(){
             scene.items.push(o);
             drag(o);
         }
+        else if(keyboard.isDown([key.n6,key.p6])){//goal
+            const o=new Crate({x:m.x, y:m.y});
+            scene.crates.push(o);
+            drag(o);
+        }
         else {
             const check=(a)=>{ //check to see if objects in array a are clicked on...
                 for(var i in a){
@@ -90,6 +95,7 @@ function Editor(){
             check(scene.doors);
             check(scene.enemies);
             check(scene.items);
+            check(scene.crates);
         }
         scene.ids();
     }
@@ -145,7 +151,8 @@ function Editor(){
         gfx.fillText(" +3 : spawn npc", x, 72);
         gfx.fillText(" +4 : spawn goal", x, 84);
         gfx.fillText(" +5 : spawn item", x, 96);
-        gfx.fillText(" +T : change type", x, 108);
+        gfx.fillText(" +6 : spawn crate", x, 108);
+        gfx.fillText(" +T : change type", x, 120);
     };
     this.serialize=function(){
         let res="[";
@@ -174,6 +181,7 @@ function Editor(){
         f(NPC,scene.npcs);
         f(Door,scene.doors);
         f(Item,scene.items);
+        f(Crate,scene.crates);
         res+="]";
         consoleObj.logData(res,"level data:");
     }

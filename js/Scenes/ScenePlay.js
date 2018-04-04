@@ -9,6 +9,7 @@ function ScenePlay(n){
     var bullets=[];
     var items=[];
     var particles=[];
+    var crates=[];
     var hud=new HUD();
     
     this.modal=null;
@@ -31,6 +32,7 @@ function ScenePlay(n){
         this.doors=doors;
         this.bullets=bullets;
         this.items=items;
+        this.crates=crates;
         
         if(player==null)return;
         else if(this.modal){
@@ -70,6 +72,19 @@ function ScenePlay(n){
                 d.block(npcs);
                 d.block(items, dt);
             });
+            for(var i in crates){
+                const c=crates[i];
+                c.block(player);
+                c.block(npcs);
+                c.block(items, dt);
+                if(c.dead){
+                    if(c.hasLoot){
+                        var amt=Math.random()+Math.random()+Math.random();
+                        this.spawnLoot((amt)|0,c.rect.mid());
+                    }
+                    crates.splice(i,1);
+                }
+            }
             
             if(goal&&goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(goal.nextLevel()));
             for(var i in bullets){
@@ -83,6 +98,7 @@ function ScenePlay(n){
                 npcs.forEach(check);
                 doors.forEach(check);
                 platforms.forEach(check);
+                crates.forEach(check);
                 
                 if(b.dead)bullets.splice(i,1);
             }
@@ -114,6 +130,7 @@ function ScenePlay(n){
         bullets.forEach(b=>b.draw(gfx));
         items.forEach(i=>i.draw(gfx));
         particles.forEach(p=>p.draw(gfx));
+        crates.forEach(c=>c.draw(gfx));
         cam.drawEnd(gfx);
         
         if(hud)hud.draw(gfx);
@@ -132,7 +149,7 @@ function ScenePlay(n){
         }
     };
     this.explode=function(x,y,r=200,dmg=0){
-        const objs=[player].concat(items,npcs);
+        const objs=[player].concat(items,npcs,crates);
         
         for(var i=0;i<8;i++){
             particles.push(new Particle(x,y));
@@ -215,6 +232,7 @@ function ScenePlay(n){
         npcs=level.npcs;
         doors=level.doors;
         items=level.items;
+        crates=level.crates;
         this.modal=null;
         bullets=[];
         cam.target=player.pawn;

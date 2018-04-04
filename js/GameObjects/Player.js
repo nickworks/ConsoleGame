@@ -72,7 +72,7 @@ function Player(raw={}){
         Player.data.weapon=w;
     };
     this.weapon((Player.data.weapon)?Player.data.weapon:this.pawn.weapon);
-    if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
+    if(Game.DEVMODE)this.weapon(new Weapon({t:4}));
 }
 Player.data={
     weapon:null,
