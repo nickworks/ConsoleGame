@@ -4,6 +4,7 @@ function Weapon(raw={}){
     const TYPE_PISTOL=2;
     const TYPE_SHOTGUN=3;
     const TYPE_SMG=4;
+    const TYPE_ROCKET=5;
     
     var type;
     var shootDelay=0;
@@ -20,6 +21,7 @@ function Weapon(raw={}){
                 this.shootAmt=1;
                 this.angleRand=0;
                 this.title="PEA-SHOOTER";
+                this.explode=false;
                 break;
             case TYPE_PISTOL:
                 this.shootCooldown=.25;
@@ -30,6 +32,7 @@ function Weapon(raw={}){
                 this.shootAmt=1;
                 this.angleRand=.01;
                 this.title="PISTOL";
+                this.explode=false;
                 break;
             case TYPE_SHOTGUN:
                 this.shootCooldown=.5;
@@ -40,6 +43,7 @@ function Weapon(raw={}){
                 this.shootAmt=5;
                 this.angleRand=.5;
                 this.title="SHOTGUN";
+                this.explode=false;
                 break;
             case TYPE_SMG:
                 this.shootCooldown=.1;
@@ -50,9 +54,21 @@ function Weapon(raw={}){
                 this.shootAmt=1;
                 this.angleRand=.1;
                 this.title="SMG";
+                this.explode=false;
+                break;
+            case TYPE_ROCKET:
+                this.shootCooldown=1;
+                this.reloadCooldown=3;
+                this.ammo=this.ammoMax=12;
+                this.clip=this.clipMax=6;
+                this.dmg=50;
+                this.shootAmt=1;
+                this.angleRand=0;
+                this.title="ROCKET LAUNCHER";
+                this.explode=true;
                 break;
             default:
-                consoleObj.log("\\ Weapon type not recognized.");
+                consoleObj.log("// Weapon type not recognized.");
                 return;
         }
         type=t;
@@ -92,6 +108,7 @@ function Weapon(raw={}){
                 dir.x=Math.cos(finalAngle)*speed
                 dir.y=Math.sin(finalAngle)*speed
                 const b=new Bullet(pos,dir,isFriend,this.dmg);
+                b.explode=this.explode;
                 scene.bullets.push(b);
             }
             shootDelay=this.shootCooldown;
@@ -122,6 +139,6 @@ function Weapon(raw={}){
     this.clip=this.clipMax;
 }
 Weapon.random=function(){
-    const t=((Math.random()*4)|0)+1;
+    const t=((Math.random()*5)|0)+1;
     return new Weapon({t:t});
 };

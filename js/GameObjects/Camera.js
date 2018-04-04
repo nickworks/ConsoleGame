@@ -5,12 +5,14 @@ function Camera(){
     this.ty=0;
     this.target=null;
     this.angle=0;
+    this.shake=0;
     this.update=function(dt){
         this.updateScreenOffset();
         this.updateTargetXY();
         const speed=5;
         this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
         this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
+        if(this.shake>0)this.shake-=dt;
     };
     this.updateTargetXY=function(andSnap=true){
         if(this.target){
@@ -26,6 +28,13 @@ function Camera(){
                 this.x=this.tx;
                 this.y=this.ty;
             }
+        }
+        if(this.shake>0){
+            var shake=this.shake;
+            shake*=shake;
+            shake*=500;
+            this.tx+=Math.random()*shake-shake/2;
+            this.ty+=Math.random()*shake-shake/2;
         }
     };
     this.drawStart=function(gfx){

@@ -18,6 +18,7 @@ loadjs([
     'js/UI/Keypad.js',
     'js/UI/HUD.js',
     'js/UI/Death.js',
+    'js/GameObjects/Particle.js',
     'js/GameObjects/Camera.js',
     'js/GameObjects/Item.js',
     'js/GameObjects/NPC.js',

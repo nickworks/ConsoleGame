@@ -1,6 +1,6 @@
 function Pawn(raw,canDoubleJump=()=>{return false;}){
     this.rect=new Rect(raw.x||0,raw.y||0,25,45);
-    this.sightRange=100;
+    this.sightRange=raw.s||300;
     this.vx=0;
     this.vy=0;
     this.a=400;

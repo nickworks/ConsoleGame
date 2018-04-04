@@ -87,7 +87,6 @@ function Item(raw={}){
             hint.draw(gfx);
             showHint=false;
         }
-        
     };
     this.applyFix=function(fix){
         this.rect.x+=fix.x;

@@ -8,6 +8,7 @@ function ScenePlay(n){
     var doors=[];
     var bullets=[];
     var items=[];
+    var particles=[];
     var hud=new HUD();
     
     this.modal=null;
@@ -74,26 +75,25 @@ function ScenePlay(n){
             for(var i in bullets){
                 const b=bullets[i];
                 b.update(dt);
-                const hit=(o)=>{
-                    if(o.friend===b.friend)return;
-                    if(o.pawn){
-                        o.pawn.vx=b.vx>0?200:-200;
-                        o.pawn.vy=-200;
-                    }
-                    if(o.oneway)return;
-                    b.dead=true;
-                    if(o.hurt)o.hurt(b.dmg);
+                const check=(o)=>{
+                    if(b.rect.overlaps(o.rect||o.pawn.rect))b.hit(o);
                 };
-                b.rect.groupCheck([player], hit);
-                b.rect.groupCheck(npcs, hit);
-                b.rect.groupCheck(doors, hit);
-                b.rect.groupCheck(platforms, hit);
+                
+                check(player);
+                npcs.forEach(check);
+                doors.forEach(check);
+                platforms.forEach(check);
+                
                 if(b.dead)bullets.splice(i,1);
             }
             if(keyboard.onDown(key.exit())){
                 this.pause();
             }
         }
+        for(var i in particles){
+            particles[i].update(dt);
+            if(particles[i].dead)particles.splice(i,1);
+        };
         cam.update(dt);
         hud.update(dt);
     };
@@ -113,6 +113,7 @@ function ScenePlay(n){
         npcs.forEach(n=>n.draw(gfx));
         bullets.forEach(b=>b.draw(gfx));
         items.forEach(i=>i.draw(gfx));
+        particles.forEach(p=>p.draw(gfx));
         cam.drawEnd(gfx);
         
         if(hud)hud.draw(gfx);
@@ -129,6 +130,42 @@ function ScenePlay(n){
         for(var i=0;i<amt;i++){
             items.push(Item.random(raw))
         }
+    };
+    this.explode=function(x,y,r=200,dmg=0){
+        const objs=[player].concat(items,npcs);
+        
+        for(var i=0;i<8;i++){
+            particles.push(new Particle(x,y));
+        }
+        this.cam.shake+=.5;
+        
+        objs.forEach(o=>{
+            const rect=o.rect||o.pawn.rect;
+            const p=rect.mid();
+            const dx=p.x-x;
+            const dy=p.y-y;
+            if(Math.abs(dx)<r&&Math.abs(dy)<r){
+                const d=Math.sqrt(dx*dx+dy*dy);
+                if(d<r){
+                    let s=(r-d)/r;
+                    if(o.hurt)o.hurt(dmg*s)
+                    s*=400;
+                    let vx=s*dx/d;
+                    let vy=s*dy/d;
+                    if(vy>0)vy*=-1;
+                    vx+=Math.random()*200-100;
+                    vy+=Math.random()*200;
+                    if(o.isAsleep)o.isAsleep=false;
+                    if(o.pawn){
+                        o.pawn.vx=vx;
+                        o.pawn.vy=vy;
+                    }else{
+                        o.vx=vx;
+                        o.vy=vy;
+                    }
+                }
+            }
+        });
     };
     this.handleClick=function(){
         const pre="you clicked on scene.";

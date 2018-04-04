@@ -35,6 +35,7 @@ function NPC(raw={}){
         if(a&&a.length>0)data.onSpeak=a;
         if(b&&b.length>0)data.onDeath=b;
         if(c&&c.length>0)data.onData=c;
+        if(this.pawn.sightRange!=300)data.s=this.pawn.sightRange;
         return data;
     };
     this.id=function(i){
@@ -145,7 +146,8 @@ function NPC(raw={}){
     this.changeType=function(){
         this.friend=!this.friend;  
     };
-    this.seeFar=function(amt=300){
-        this.pawn.sightRange=amt;
+    this.setSight=function(p){
+        const s=p?(p.amt?p.amt:p):300;
+        this.pawn.sightRange=s;
     };
 }

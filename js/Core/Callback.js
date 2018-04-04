@@ -1,15 +1,20 @@
 function Callback(id,func,params){
     //console.log("new callback: "+id+" "+func+" "+params);
+    
+    this.id=id;
+    this.func=func;
+    this.params=params;
+    
     this.serialize=function(){
-        const data={i:id,f:func};
-        if(params)data.p=params;
+        const data={i:this.id,f:this.func};
+        if(params)data.p=this.params;
         return data;
     };
     this.call=function(){
         var res=null
         //console.log("call obj("+id+")["+func+"]("+(params||{})+")");
-        const o=scene.obj(id);
-        if(o&&o[func])res=o[func](params||{});
+        const o=scene.obj(this.id);
+        if(o&&o[this.func])res=o[this.func](this.params||{});
         return res;
     };
 }

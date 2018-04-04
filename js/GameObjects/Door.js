@@ -80,7 +80,7 @@ function Door(raw={}){
     };
     this.open=function(code){
         if(this.lockCode && this.lockCode != code){
-            consoleObj.log("\\ Access Denied");
+            consoleObj.log("// Access Denied");
             return;
         }
         
