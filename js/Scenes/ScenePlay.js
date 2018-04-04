@@ -80,7 +80,7 @@ function ScenePlay(n){
                 if(c.dead){
                     if(c.hasLoot){
                         var amt=Math.random()+Math.random()+Math.random();
-                        this.spawnLoot((amt)|0,c.rect.mid());
+                        this.spawnLoot((amt*3)|0,c.rect.mid());
                     }
                     crates.splice(i,1);
                 }

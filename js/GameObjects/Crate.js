@@ -1,7 +1,7 @@
 function Crate(raw={}){
     var id=raw.i||0;
     this.rect=Rect.from(raw);
-    this.hp=50;
+    this.hp=40;
     this.dead=false;
     this.hasLoot=(Math.random()>.5);
     this.serialize=function(){
