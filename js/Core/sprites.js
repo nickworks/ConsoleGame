@@ -30,5 +30,6 @@ const sprites={
         this.playerL=this.load("imgs/player2.gif");
         this.enemyR=this.load("imgs/enemy.gif");
         this.enemyL=this.load("imgs/enemy2.gif");
+        this.crate=this.load("imgs/crate.gif");
     }
 };

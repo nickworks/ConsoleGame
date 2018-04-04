@@ -1,8 +1,6 @@
 function Crate(raw={}){
     var id=raw.i||0;
     this.rect=Rect.from(raw);
-    this.rect.w=50;
-    this.rect.h=50;
     this.hp=50;
     this.dead=false;
     this.hasLoot=(Math.random()>.5);
@@ -26,6 +24,11 @@ function Crate(raw={}){
     this.draw=function(gfx){
         gfx.fillStyle="#000";
         this.rect.draw(gfx);
+        Matrix.push();
+        Matrix.translate(this.rect.x,this.rect.y);
+        Matrix.scale(this.rect.w/100);
+        gfx.drawImage(sprites.crate,0,0);
+        Matrix.pop();
     };
     this.block=function(a, dt){
         if(!Array.isArray(a))a=[a];
