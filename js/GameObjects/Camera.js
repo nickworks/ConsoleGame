@@ -6,6 +6,7 @@ function Camera(){
     this.target=null;
     this.angle=0;
     this.shake=0;
+    this.scale=1;
     this.update=function(dt){
         this.updateScreenOffset();
         this.updateTargetXY();
@@ -13,6 +14,12 @@ function Camera(){
         this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
         this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
         if(this.shake>0)this.shake-=dt;
+        if(scene.modal&&scene.modal.zoom){
+            this.scale+=(2 - this.scale)*dt*5;
+        } else if(this.scale!=1){
+            this.scale+=(1-this.scale)*dt*10;
+        }
+        
     };
     this.updateTargetXY=function(andSnap=true){
         if(this.target){
@@ -40,6 +47,7 @@ function Camera(){
     this.drawStart=function(gfx){
         Matrix.push();
         Matrix.translate(this.sx|0,this.sy|0);
+        if(this.scale!=1)Matrix.scale(this.scale);
         if(this.angle!=0)Matrix.rotate(this.angle);
         Matrix.translate(-this.x|0,-this.y|0);
     };

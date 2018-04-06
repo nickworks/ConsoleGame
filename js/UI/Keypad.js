@@ -4,7 +4,7 @@ function Keypad(x,y,onDone){
     this.txt="CODE: ";
     this.x=x;
     this.y=y;
-    
+    this.zoom=true;
     this.font=new Font({valign:"top"});
     
     this.remove=false;
@@ -13,7 +13,7 @@ function Keypad(x,y,onDone){
     
     this.onDone=onDone;
     
-    this.bg=new BubbleBG(0,0);
+    this.bg=new BubbleBG(0,0,"#FFF");
     
     this.append=function(txt){
         this.val+=txt;
@@ -45,6 +45,8 @@ function Keypad(x,y,onDone){
         if(keyboard.onDown(key.exit())) this.end(false);
     };
     this.draw=function(gfx){
+        gfx.fillStyle="rgba(0,0,0,.5)";
+        gfx.fillRect(0,0,800,400);
         scene.cam.drawStart(gfx);
         Matrix.push();
         Matrix.translate(this.x,this.y);

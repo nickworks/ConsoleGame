@@ -2,6 +2,7 @@ function Dialog(x,y,texts,callbacks={}){
     if(typeof texts == "string") texts=[texts];
     if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
     
+    this.zoom=true;
     this.index=0;
     this.texts=texts;
     this.lines=[];
@@ -22,7 +23,7 @@ function Dialog(x,y,texts,callbacks={}){
         onData:(callbacks?callbacks.onData:[])
     };
     
-    this.bg=new BubbleBG(0,0);
+    this.bg=new BubbleBG(0,0, "#FFF");
     
     this.chopUpText=function(text){
         this.lines=[];
@@ -53,6 +54,9 @@ function Dialog(x,y,texts,callbacks={}){
         }
     };
     this.draw=function(gfx){
+        
+        gfx.fillStyle="rgba(0,0,0,.5)";
+        gfx.fillRect(0,0,800,400);
         scene.cam.drawStart(gfx);
         Matrix.push();
         Matrix.translate(this.x,this.y);

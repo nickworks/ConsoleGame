@@ -1,4 +1,4 @@
-function BubbleBG(w,h){
+function BubbleBG(w,h,c,b){
     
     this.time=0;
     this.transTime=0.25;
@@ -6,6 +6,8 @@ function BubbleBG(w,h){
     this.h={now:0,start:0,target:h};
     this.r={now:0,start:0,target:10};
     this.p=0;
+    this.color=c||"#AAA";
+    this.bg=b;
     
     this.setSize=function(w,h){
         this.w.target=w/2;
@@ -43,10 +45,9 @@ function BubbleBG(w,h){
         const a=5; //arrow size
         const w=this.w.now;
         const h=this.h.now;
-        const r=this.r.now;        
+        const r=this.r.now;
         
         gfx.beginPath();
-        
         gfx.moveTo(0,0);
         gfx.lineTo(-a,-a);
         gfx.ellipse(-w,-a-r,r,r,0,ad,al,false);
@@ -55,7 +56,7 @@ function BubbleBG(w,h){
         gfx.ellipse( w,-a-r,r,r,0,ar,ad,false);
         gfx.lineTo(a,-a);
         gfx.closePath();
-        gfx.fillStyle="#AAA";
+        gfx.fillStyle=this.color;
         gfx.fill();
     };
     this.pos=function(){
