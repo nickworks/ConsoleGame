@@ -148,13 +148,16 @@ function ScenePlay(n){
             items.push(Item.random(raw))
         }
     };
+    this.addParticles=function(x,y,t,n){
+        for(var i=0;i<n;i++){
+            particles.push(new Particle(x,y,t));
+        };
+    };
     this.explode=function(x,y,r=200,dmg=0){
         const objs=[player].concat(items,npcs,crates);
         
-        for(var i=0;i<8;i++){
-            particles.push(new Particle(x,y));
-        }
-        this.cam.shake+=.5;
+        this.addParticles(x,y,1,8);
+        this.cam.shake=.5;
         
         objs.forEach(o=>{
             const rect=o.rect||o.pawn.rect;

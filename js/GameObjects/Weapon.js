@@ -139,6 +139,6 @@ function Weapon(raw={}){
     this.clip=this.clipMax;
 }
 Weapon.random=function(){
-    const t=((Math.random()*5)|0)+1;
+    const t=((Math.random()*4)|0)+2;
     return new Weapon({t:t});
 };

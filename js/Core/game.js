@@ -17,7 +17,7 @@ function Game(){
     this.height=function(){return height;}
     this.gfx=function(){return gfx;}
     
-    Game.DEVMODE=true;
+    Game.DEVMODE=false;
     this.settings={
         skipLoadingScenes:Game.DEVMODE||false,
         editModeEnabled:Game.DEVMODE||false,
@@ -31,7 +31,6 @@ function Game(){
     this.update=function(time){
         
         if(targetSize){
-            console.log("RESIZE FROM LOOP");
             this.size(targetSize.w,targetSize.h);
             targetSize=null;
         }

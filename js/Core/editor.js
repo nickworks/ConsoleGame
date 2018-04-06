@@ -37,6 +37,7 @@ function Editor(){
     this.handleClick=function(){
         
         const m=scene.cam.worldMouse();
+
         const drag=(o,resize=false)=>{
             this.dragModeSize=resize;
             this.dragStart=m;
@@ -104,6 +105,7 @@ function Editor(){
         d.x-=this.dragStart.x;
         d.y-=this.dragStart.y;
         const raw = Object.assign({},this.dragOrig);//make copy
+        
         if(this.dragModeSize){
             raw.w+=d.x;
             raw.h+=d.y;

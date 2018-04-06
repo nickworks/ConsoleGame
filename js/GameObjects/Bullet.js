@@ -27,7 +27,10 @@ function Bullet(p,v,f,d,g=false){
         if(o.oneway)return;
         this.dead=true;
         if(o.hurt)o.hurt(this.dmg);
-        if(this.explode==true)scene.explode(this.rect.mid().x,this.rect.mid().y,200,this.dmg);
         
+        const p=this.rect.mid();
+        
+        if(this.explode==true)scene.explode(p.x,p.y,200,this.dmg);
+        scene.addParticles(p.x,p.y,2,5);
     };
 }

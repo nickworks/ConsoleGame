@@ -8,6 +8,7 @@ function Camera(){
     this.shake=0;
     this.scale=1;
     this.update=function(dt){
+        cachemouse=null
         this.updateScreenOffset();
         this.updateTargetXY();
         const speed=5;
@@ -58,10 +59,17 @@ function Camera(){
         this.sx=game.width()/2;
         this.sy=game.height()/2;  
     };
-    this.worldMouse=function(){
-        return {
-            x:mouse.x-(this.sx-this.x),
-            y:mouse.y-(this.sy-this.y)
-        };
+    
+    var cachemouse=null;
+    this.worldMouse=function(){        
+        if(!cachemouse){
+            const m=new Matrix();
+            m.translate(this.x|0,this.y|0);
+            if(this.angle!=0)m.rotate(-this.angle);
+            if(this.scale!=1)m.scale(1/this.scale);
+            m.translate(-this.sx|0,-this.sy|0);
+            cachemouse=m.vec({x:mouse.x,y:mouse.y});
+        }
+        return {x:cachemouse.x,y:cachemouse.y};
     };
 }
