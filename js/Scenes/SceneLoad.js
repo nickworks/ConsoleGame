@@ -42,7 +42,7 @@ class SceneLoad {
         }
     }
     draw(gfx){
-        game.clear("#555");
+        game.view.clear("#555");
         
         var w=(game.width())*(this.percent>1?1:this.percent);
         gfx.fillStyle="#9AF";
@@ -56,6 +56,6 @@ class SceneLoad {
         gfx.drawImage(sprites.input, x, 20);
         
         
-        game.clear("rgba(0,0,0,"+this.alphaOverlay+")");
+        game.view.clear("rgba(0,0,0,"+this.alphaOverlay+")");
     }
 }

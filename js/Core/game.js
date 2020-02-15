@@ -3,43 +3,69 @@ class Game {
 
 
         Game.DEVMODE=true;
-
-        this.timePrev=0;
-        this.dt=0;
-        this.currentScene=null;
-        this.w=0;
-        this.h=0;
-        this.graphics=null;
-        this.targetSize={w:800,h:400}; // how big the play window should be
-        this.isFullscreen=false;
-        this.canvas=null;
+        this.time={
+            now:0,
+            prev:0,
+            dt:0,
+            tick:(t)=>{
+                if(t === undefined) t = 0;
+                this.time.now = t;
+                this.time.dt = (t - this.time.prev) / 1000;
+                this.time.prev = t;
+                this.update();
+            }
+        }
+        this.view={
+            size:{w:800,h:500},
+            cachedSize:{w:0,h:0},
+            canvas:null,
+            gfx:null,
+            isFullscreen:false,
+            make:function(id){
+                this.canvas=document.getElementById(id);
+                if(this.canvas==undefined) return false;
+                this.gfx=this.canvas.getContext("2d");
+                if(this.gfx==undefined) return false;
+                return true;
+            },
+            clear:function(color="#000"){
+                this.gfx.fillStyle=color;
+                this.gfx.fillRect(0, 0, this.size.w, this.size.h); // clear screen
+            },
+            fullscreen:function(fs){
+                this.isFullscreen=fs||!this.isFullscreen;
+                if(!this.isFullscreen){
+                    this.size={w:800,h:400};
+                    this.canvas.style.marginTop="50px";
+                }
+                else {
+                    this.size={w:document.body.clientWidth,h:window.innerHeight-150};
+                    this.canvas.style.marginTop="0";
+                }
+            },
+            resizeCanvas(){
+                if(this.size.w != this.cachedSize.w || this.size.h != this.cachedSize.h){
+                    this.cachedSize.w=this.canvas.width=this.size.w;
+                    this.cachedSize.h=this.canvas.height=this.size.h;
+                }
+            }
+        }
+        this.scene=null;
 
         this.settings={
             skipLoadingScenes:Game.DEVMODE||false,
             editModeEnabled:Game.DEVMODE||false,
         };
     }
-    calcDeltaTime(time){
-        if(time === undefined) time = 0;
-        this.dt = (time - this.timePrev) / 1000;
-        this.timePrev = time;
-    }
 
-    width(){return this.w;}
-    height(){return this.h;}
-    gfx(){return this.graphics;}
+    width(){return this.view.size.w;}
+    height(){return this.view.size.h;}
+    gfx(){return this.view.gfx;}
 
-    resizeCanvas(){ // if the canvas has a resize queued-up, resize it
-        if(this.targetSize){
-            this.size(this.targetSize.w,this.targetSize.h);
-            this.targetSize=null;
-        }
-    }
-    update(time){
+    
+    update(){
         
-        this.resizeCanvas();
-
-        this.calcDeltaTime(time);
+        this.view.resizeCanvas();
         
         if(keyboard.onDown(key.console())){
             //if(scene.pause)scene.pause();
@@ -48,71 +74,50 @@ class Game {
         }
         
         let nextScene;
-        scene=this.currentScene;
+        scene=this.scene;
         game=this;
         
-        if(this.currentScene){
-            nextScene=this.currentScene.update(this.dt);
-            this.currentScene.draw(this.graphics);
+        if(this.scene){
+            nextScene=this.scene.update(this.time.dt);
+            this.scene.draw(this.view.gfx);
             if(!this.isFocus()){
-                this.graphics.fillStyle="rgba(0,0,0,.5)";
-                this.graphics.fillRect(0,0,this.w,this.h);
+                this.view.gfx.fillStyle="rgba(0,0,0,.5)";
+                this.view.gfx.fillRect(0,0,this.view.size.w,this.view.size.h);
             }
         } else {
             nextScene=new SceneTitle();
         }
         
-        if(nextScene)this.currentScene=nextScene;
+        if(nextScene)this.scene=nextScene;
         
         ///////////////////////////// LATE UPDATE:
         keyboard.update();
         mouse.update();
-        requestAnimationFrame((time)=>this.update(time));
+
+        // queue up the next frame for rendering:
+        requestAnimationFrame((timestamp)=>this.time.tick(timestamp));
     }
     isFocus(){
         return(document.activeElement==document.body);
     }
-    fullscreen(fs){
-        this.isFullscreen=fs||!this.isFullscreen;
-        if(!this.isFullscreen){
-            this.targetSize={w:800,h:400};
-            this.canvas.style.marginTop="50px";
-        }
-        else {
-            this.targetSize={w:document.body.clientWidth,h:window.innerHeight-150};
-            this.canvas.style.marginTop="0";
-        }
-    }
-    size(w,h){
-        this.w=this.canvas.width=w;
-        this.h=this.canvas.height=h;
-    }
-    
-    clear(color="#000"){
-        this.graphics.fillStyle=color;
-        this.graphics.fillRect(0, 0, this.w, this.h); // clear screen
-    }
     loadLevel(n){
-        scene=this.currentScene=new ScenePlay(n);  
+        scene=this.scene=new ScenePlay(n);  
     }
     start(id){
-        this.canvas=document.getElementById(id);
-        if(this.canvas==undefined) return;
-        this.graphics=this.canvas.getContext("2d");
-        if(this.graphics==undefined) return;
+        this.view.make(id);
         
         window.addEventListener("blur",()=>{
             if(scene&&scene.pause)scene.pause();
             keyboard.blur();
         });
         window.addEventListener("resize",(e)=>{
-            if(this.isFullscreen)this.fullscreen(true);
+            if(this.view.isFullscreen)this.view.fullscreen(true);
         });
         
         keyboard.setup();
-        mouse.setup(this.canvas, this);
+        mouse.setup(this.view.canvas, this);
         
-        sprites.init(this.graphics);
+        sprites.init(this.view.gfx);
         this.update(0); // begin game loop
     }
 }

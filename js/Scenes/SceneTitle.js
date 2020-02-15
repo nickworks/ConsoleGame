@@ -20,7 +20,7 @@ class SceneTitle {
         this.menu.update(dt);
     }
     draw(gfx){
-        game.clear("#555");
+        game.view.clear("#555");
         this.title.draw(gfx);
         this.menu.draw(gfx);
         gfx.fillStyle="rgba(0,0,0,"+this.alphaOverlay+")";
