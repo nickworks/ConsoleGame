@@ -39,14 +39,14 @@ class Game {
             gfx:null,
             isFullscreen:false,
             alphaOverlay:1,
-            make:function(id){
+            make(id){
                 this.canvas=document.getElementById(id);
                 if(this.canvas==undefined) return false;
                 this.gfx=this.canvas.getContext("2d");
                 if(this.gfx==undefined) return false;
                 return true;
             },
-            fade:function(isDark){
+            fade(isDark){
 
                 if(Game.DEVMODE) return true;
 
@@ -56,7 +56,7 @@ class Game {
                 if(a<0) a = 0;
                 if(a>1) a = 1;
 
-                this.clear("rgba(0,0,0,"+a+")");
+                this.fill("rgba(0,0,0,"+a+")");
                 this.alphaOverlay = a;
 
                 if(isDark && a == 0) return true;
@@ -64,19 +64,21 @@ class Game {
 
                 return false;
             },
-            clear:function(color="#000"){
+            fill(color="#000"){
                 this.gfx.fillStyle=color;
                 this.gfx.fillRect(0, 0, this.size.w, this.size.h); // clear screen
             },
-            fullscreen:function(fs){
+            fullscreen(fs){
                 this.isFullscreen=fs||!this.isFullscreen;
                 if(!this.isFullscreen){
+                    document.exitFullscreen();
                     this.size={w:800,h:400};
                     this.canvas.style.marginTop="50px";
                 }
                 else {
-                    this.size={w:document.body.clientWidth,h:window.innerHeight-150};
-                    this.canvas.style.marginTop="0";
+                    document.documentElement.requestFullscreen();
+                    this.size={w:document.body.clientWidth-50,h:window.innerHeight-150};
+                    this.canvas.style.marginTop="15px";
                 }
             },
             resizeCanvas(){
@@ -128,7 +130,7 @@ class Game {
         if(this.scene) this.scene.draw(this.view.gfx);
 
         // if focused on console (input is not going to game)
-        if(document.activeElement!=document.body) this.view.clear("rgba(0,0,0,.5)");
+        if(document.activeElement!=document.body) this.view.fill("rgba(0,0,0,.5)");
         
     }
     lateUpdate(){
@@ -167,6 +169,3 @@ class Game {
         this.update(0); // begin game loop
     }
 }
-
-let scene=null;
-let game=new Game();

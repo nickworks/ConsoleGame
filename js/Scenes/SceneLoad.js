@@ -37,7 +37,7 @@ class SceneLoad {
         }
     }
     draw(gfx){
-        game.view.clear("#555");
+        game.view.fill("#555");
         
         var w=(game.width())*(this.percent>1?1:this.percent);
         gfx.fillStyle="#9AF";

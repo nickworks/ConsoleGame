@@ -15,7 +15,7 @@ class SceneTitle {
         return this.fadeToScene;
     }
     draw(gfx){
-        game.view.clear("#555");
+        game.view.fill("#555");
         this.title.draw(gfx);
         this.menu.draw(gfx);
     }    

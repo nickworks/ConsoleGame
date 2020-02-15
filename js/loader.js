@@ -1,4 +1,4 @@
-function loadjs(a,c){
+const loadjs = (a,c)=>{
     let loaded=0;
     a.forEach((u)=>{
         const s=document.createElement('script');
@@ -45,4 +45,11 @@ loadjs([
     'js/Scenes/SceneTitle.js',
     'js/Core/Game.js',
     'js/data/sprites.js',
-],()=>loadjs(['js/data/LevelData.js',],()=>game.start("myCanvas")));
+],()=>loadjs(['js/data/LevelData.js',],()=>{
+
+    
+    window.scene=null;
+    window.game=new Game();
+    window.game.start("myCanvas");
+
+}));

@@ -140,7 +140,7 @@ class ScenePlay {
         this.modal=null;  
     }
     draw(gfx){
-        game.view.clear("#888");
+        game.view.fill("#888");
         this.cam.drawStart(gfx);
         if(this.goal)this.goal.draw(gfx);
         this.doors.forEach(d=>d.draw(gfx));

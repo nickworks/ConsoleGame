@@ -57,7 +57,7 @@ class Dialog {
     }
     draw(gfx){
         
-        game.view.clear("rgba(0,0,0,.5)");
+        game.view.fill("rgba(0,0,0,.5)");
         scene.cam.drawStart(gfx);
         Matrix.push();
         Matrix.translate(this.x,this.y);

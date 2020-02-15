@@ -15,7 +15,7 @@ class Death {
         if(p<0)p=0;
         if(p>1)p=1;
         p*=.9;
-        game.view.clear("rgba(0,0,0,"+p+")");
+        game.view.fill("rgba(0,0,0,"+p+")");
         this.font.color="rgba(255,255,255,"+p+")";
         this.font.apply(gfx);
         gfx.fillText("You are dead, man.", game.width()/2,game.height()/2);
