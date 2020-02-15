@@ -9,10 +9,11 @@ const LevelData={
             items:[],
             crates:[],
         };
-        d.forEach(t=>{
-            t.d.forEach(o=>{
-                const j=new t.t(o);
-                switch(t.t){
+        d.forEach(t=>{ // for each type
+            t.d.forEach(o=>{ // for each object
+                const j=new t.t(o); // spawn the object
+
+                switch(t.t){ // store it in the correct spot
                     case PlayerController:objs.player=j;break;
                     case Platform:objs.platforms.push(j);break;
                     case Door:objs.doors.push(j);break;
@@ -23,7 +24,7 @@ const LevelData={
                     case Goal:objs.goal=j;break;
                     case Crate:objs.crates.push(j);break;
                 }
-            })
+            });
         });
         return objs;
     },
