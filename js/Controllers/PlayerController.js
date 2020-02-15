@@ -1,4 +1,19 @@
 class PlayerController extends Controller {
+
+    static data={
+        weapon:null,
+        coins:0,
+        quests:[],
+    };
+    static addQuest(q){
+        
+    }
+    static checkQuests(){
+        PlayerController.data.quests.forEach((q)=>{
+            //q.onData
+        });
+    }
+
     constructor(raw={}){
         super();
         raw.maxv=300;
@@ -77,16 +92,3 @@ class PlayerController extends Controller {
         PlayerController.data.weapon=w;
     }
 }
-PlayerController.data={
-    weapon:null,
-    coins:0,
-    quests:[],
-};
-PlayerController.addQuest=function(q){
-    
-};
-PlayerController.checkQuests=function(){
-    PlayerController.data.quests.forEach((q)=>{
-        //q.onData
-    });
-};

@@ -1,4 +1,19 @@
 class Rect {
+
+    static grow(r,a){
+        return new Rect(r.x-a/2,r.y-a/2,r.w+a,r.h+a);
+    }
+    static from(raw){
+        return new Rect(raw.x,raw.y,raw.w,raw.h);
+    }
+    static lerp(a,b,t){
+        let x=a.x+(b.x-a.x)*t;
+        let y=a.y+(b.y-a.y)*t;
+        let w=a.w+(b.w-a.w)*t;
+        let h=a.h+(b.h-a.h)*t;
+        return new Rect(x,y,w,h);
+    }
+
     constructor(x,y,w,h){
         this.x=x||0;
         this.y=y||0;
@@ -93,19 +108,3 @@ class Rect {
         return(scene.cam && this.hits(scene.cam.worldMouse()));
     }
 }
-
-// static functions:
-
-Rect.grow=function(r,a){
-    return new Rect(r.x-a/2,r.y-a/2,r.w+a,r.h+a);
-};
-Rect.from=function(raw){
-    return new Rect(raw.x,raw.y,raw.w,raw.h);
-};
-Rect.lerp=function(a,b,t){
-    let x=a.x+(b.x-a.x)*t;
-    let y=a.y+(b.y-a.y)*t;
-    let w=a.w+(b.w-a.w)*t;
-    let h=a.h+(b.h-a.h)*t;
-    return new Rect(x,y,w,h);
-};

@@ -6,6 +6,24 @@ class Item {
         COIN: 3,
         GUN: 4,
     }
+
+
+    static random(raw){
+    
+        const r=Math.random();
+        if(r<.1)raw.t=4; //10% chance of gun
+        else if(r<.35)raw.t=1; //25% chance of health
+        else if(r<.60)raw.t=2; //25% chance of ammo
+        else raw.t=3; //40% chance of coin
+        
+        const i=new Item(raw);
+        i.vx=Math.random()*400-200;
+        i.vy=-(Math.random()*200+200);
+        
+        return i
+    };
+
+
     constructor(raw={}){       
         
         this.oid=raw.i||0;
@@ -29,11 +47,11 @@ class Item {
         };
         if(this.isAsleep)data.a=1;
         return data;
-    };
+    }
     id(i){
         if(i)this.oid=i;
         return this.oid;  
-    };
+    }
     update(dt){
         if(!this.isAsleep){
             if(this.isGrounded){
@@ -53,7 +71,7 @@ class Item {
             this.rect.speed();
         }
         
-    };
+    }
     pickup(){
         switch(this.type){
             case Item.Type.HEAL:scene.player.heal(25);break;
@@ -72,7 +90,7 @@ class Item {
                 return;
         }
         this.dead=true;
-    };
+    }
     draw(gfx){
         
         var img;
@@ -90,7 +108,7 @@ class Item {
             this.hint.draw(gfx);
             this.showHint=false;
         }
-    };
+    }
     applyFix(fix){
         this.rect.x+=fix.x;
         this.rect.y+=fix.y;
@@ -102,23 +120,9 @@ class Item {
             if(Math.abs(this.vy+before)<10) this.vy=0;
         }
         this.rect.cache();
-    };
+    }
     changeType(){
         this.type++;
         if(this.type>3)this.type=1;
-    };
+    }
 }
-Item.random=function(raw){
-    
-    const r=Math.random();
-    if(r<.1)raw.t=4; //10% chance of gun
-    else if(r<.35)raw.t=1; //25% chance of health
-    else if(r<.60)raw.t=2; //25% chance of ammo
-    else raw.t=3; //40% chance of coin
-    
-    const i=new Item(raw);
-    i.vx=Math.random()*400-200;
-    i.vy=-(Math.random()*200+200);
-    
-    return i;
-};

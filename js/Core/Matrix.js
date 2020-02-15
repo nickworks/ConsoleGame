@@ -1,4 +1,56 @@
 class Matrix {
+
+    static stack=[new Matrix({inverse:true})];
+    static push(){
+        Matrix.stack.push(new Matrix({inverse:true}));
+    }
+    static pop() {
+        Matrix.stack.pop();
+        Matrix.apply();
+    }
+    static last() {
+        const s=Matrix.stack.length;
+        return (s<=0)?new Matrix():Matrix.stack[s-1];
+    }
+    static scale(s) {
+        Matrix.last().scale(s);
+        Matrix.apply();
+    }
+    static translate(x,y) {
+        Matrix.last().translate(x,y);
+        Matrix.apply();
+    }
+    static rotate(r) {
+        Matrix.last().rotate(r);
+        Matrix.apply();
+    }
+    static apply() {
+        const res=new Matrix();
+        Matrix.stack.forEach(m=>{
+            res.mult(m);
+        });
+        game.gfx().setTransform(res.a,res.b,res.c,res.d,res.e,res.f);
+    }
+    static inverse() { // we might not need this feature...
+        const res=new Matrix();
+        for(var i=Matrix.stack.length-1;i>=0;i--){
+            const inv=Matrix.stack[i].inverse;
+            if(inv)res.mult(inv);
+        };
+        return res;
+    }
+    static mult(m1,m2) {
+        const raw={};
+        raw.a=m1.a*m2.a+m1.c*m2.b;
+        raw.b=m1.b*m2.a+m1.d*m2.b;
+        raw.c=m1.a*m2.c+m1.c*m2.d;
+        raw.d=m1.b*m2.c+m1.d*m2.d;
+        raw.e=m1.a*m2.e+m1.c*m2.f+m1.e;
+        raw.f=m1.b*m2.e+m1.d*m2.f+m1.f;
+        return raw;
+    }
+
+
     constructor(raw={}){
         this.inverse=raw.inverse?new Matrix():null;
         this.set(raw);
@@ -42,55 +94,3 @@ class Matrix {
         gfx.setTransform(this.a,this.b,this.c,this.d,this.e, this.f);
     }
 }
-
-// static functions:
-
-Matrix.stack=[new Matrix({inverse:true})];
-Matrix.push=function(){
-    Matrix.stack.push(new Matrix({inverse:true}));
-};
-Matrix.pop=()=>{
-    Matrix.stack.pop();
-    Matrix.apply();
-};
-Matrix.last=()=>{
-    const s=Matrix.stack.length;
-    return (s<=0)?new Matrix():Matrix.stack[s-1];
-};
-Matrix.scale=(s)=>{
-    Matrix.last().scale(s);
-    Matrix.apply();
-};
-Matrix.translate=(x,y)=>{
-    Matrix.last().translate(x,y);
-    Matrix.apply();
-};
-Matrix.rotate=(r)=>{
-    Matrix.last().rotate(r);
-    Matrix.apply();
-};
-Matrix.apply=()=>{
-    const res=new Matrix();
-    Matrix.stack.forEach(m=>{
-        res.mult(m);
-    });
-    game.gfx().setTransform(res.a,res.b,res.c,res.d,res.e,res.f);
-};
-Matrix.inverse=()=>{ // we might not need this feature...
-    const res=new Matrix();
-    for(var i=Matrix.stack.length-1;i>=0;i--){
-        const inv=Matrix.stack[i].inverse;
-        if(inv)res.mult(inv);
-    };
-    return res;
-};
-Matrix.mult=(m1,m2)=>{
-    const raw={};
-    raw.a=m1.a*m2.a+m1.c*m2.b;
-    raw.b=m1.b*m2.a+m1.d*m2.b;
-    raw.c=m1.a*m2.c+m1.c*m2.d;
-    raw.d=m1.b*m2.c+m1.d*m2.d;
-    raw.e=m1.a*m2.e+m1.c*m2.f+m1.e;
-    raw.f=m1.b*m2.e+m1.d*m2.f+m1.f;
-    return raw;
-};

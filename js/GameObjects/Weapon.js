@@ -9,6 +9,12 @@ class Weapon {
         ROCKET: 5,
     }
 
+
+    static random(){
+        const t=((Math.random()*4)|0)+2;
+        return new Weapon({t:t});
+    }
+
     constructor(raw={}){
         this.type;
         this.shootDelay=0;
@@ -16,7 +22,8 @@ class Weapon {
         this.changeType(raw.t||Weapon.Type.WEAK);
         this.clip=this.clipMax;
     }
-    
+
+    // TODO: maybe move this into the /data/ folder?
     changeType(t){
         switch(t){
             case Weapon.Type.WEAK:
@@ -144,7 +151,3 @@ class Weapon {
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
     }
 }
-Weapon.random=function(){
-    const t=((Math.random()*4)|0)+2;
-    return new Weapon({t:t});
-};
