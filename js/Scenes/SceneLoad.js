@@ -16,7 +16,6 @@ class SceneLoad {
         this.newScene=newScene;
         this.speed=speed|1;
         this.tip=(Math.random()*this.tips.length)|0;
-        this.fadeToScene=null;
         this.alphaOverlay=1;
         this.percent=0;
         this.delay=0;
@@ -24,10 +23,6 @@ class SceneLoad {
     }
     update(dt){
         if(game.settings.skipLoadingScenes)return this.newScene;
-        if(this.fadeToScene){
-            if(this.alphaOverlay<1)this.alphaOverlay+=4*dt;
-            else return this.newScene;
-        }else if(this.alphaOverlay>0)this.alphaOverlay-=dt;
         
         if(this.delay>0){
             this.delay-=dt;
@@ -35,7 +30,7 @@ class SceneLoad {
             const rand=(v=1)=>{return Math.random()*v;};
             this.percent+=rand(this.speed/200);
             if(this.percent>=1){
-                this.fadeToScene=this.newScene;
+                return this.newScene;
                 this.percent=1;
             }
             if(rand()<.01) this.delay=rand(.2);            
@@ -55,7 +50,5 @@ class SceneLoad {
         var x=(game.width()-sprites.input.width)/2;
         gfx.drawImage(sprites.input, x, 20);
         
-        
-        game.view.clear("rgba(0,0,0,"+this.alphaOverlay+")");
     }
 }

@@ -56,7 +56,7 @@ class Door {
     activate(){
         if(this.canActivate){
             if(this.lockCode){
-                if(isOpen)this.close();
+                if(this.isOpen)this.close();
                 else{
                     const p=this.rect.mid();
                     scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));

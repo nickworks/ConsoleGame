@@ -1,7 +1,7 @@
 class Game {
     constructor(){
 
-        Game.DEVMODE=true;
+        Game.DEVMODE=false;
 
         this.time={
             now:0,
@@ -21,12 +21,31 @@ class Game {
             canvas:null,
             gfx:null,
             isFullscreen:false,
+            alphaOverlay:1,
             make:function(id){
                 this.canvas=document.getElementById(id);
                 if(this.canvas==undefined) return false;
                 this.gfx=this.canvas.getContext("2d");
                 if(this.gfx==undefined) return false;
                 return true;
+            },
+            fade:function(isDark){
+
+                if(Game.DEVMODE) return true;
+
+                const dif = (isDark ? -1 : 1) * game.time.dt;
+                let a = this.alphaOverlay + dif;
+
+                if(a<0) a = 0;
+                if(a>1) a = 1;
+
+                this.clear("rgba(0,0,0,"+a+")");
+                this.alphaOverlay = a;
+
+                if(isDark && a == 0) return true;
+                if(!isDark && a == 1) return true;
+
+                return false;
             },
             clear:function(color="#000"){
                 this.gfx.fillStyle=color;
@@ -51,7 +70,7 @@ class Game {
             }
         }
         this.scene=null;
-
+        this.nextScene=null;
         this.settings={
             skipLoadingScenes:Game.DEVMODE||false,
             editModeEnabled:Game.DEVMODE||false,
@@ -71,9 +90,11 @@ class Game {
         
         this.globals();
 
-        this.updateScene();
-        
-        this.draw();
+        if(!this.scene) this.scene=new SceneTitle(); // if no scene, default to sceneTitle
+
+        this.nextScene = this.scene.update(this.time.dt);
+
+        this.draw(); // draw current scene + overlay(s)
 
         this.lateUpdate();
     }
@@ -85,22 +106,22 @@ class Game {
         scene=this.scene;
         game=this;
     }
-    updateScene(){
-        let nextScene = (this.scene)
-            ? this.scene.update(this.time.dt)
-            : new SceneTitle();
-
-        if(nextScene) this.scene=nextScene;
-    }
     draw(){
         if(this.scene) this.scene.draw(this.view.gfx);
-        const focusedOnConsole = (document.activeElement!=document.body);
-        if(focusedOnConsole){
-            this.view.gfx.fillStyle="rgba(0,0,0,.5)";
-            this.view.gfx.fillRect(0,0,this.view.size.w,this.view.size.h);
-        }
+
+        // if focused on console (input is not going to game)
+        if(document.activeElement!=document.body) this.view.clear("rgba(0,0,0,.5)");
+        
     }
     lateUpdate(){
+
+        const doneFading = this.view.fade(!this.nextScene);
+
+        if(this.nextScene && doneFading) {
+            this.scene = this.nextScene;
+            this.nextScene = null;
+        }
+
         keyboard.update();
         mouse.update();
 

@@ -16,7 +16,6 @@ class ScenePlay {
         this.crates=[];
         this.hud=new HUD();
         this.modal=null;
-        this.alphaOverlay=1;
         this.fadeToScene=null;
         
 
@@ -40,12 +39,9 @@ class ScenePlay {
     }
     
     update(dt){
-        if(this.fadeToScene){
-            if(this.alphaOverlay<1)this.alphaOverlay+=dt*2;
-            else return this.fadeToScene;
-        } else if(this.alphaOverlay>0)this.alphaOverlay-=dt*2;
-        
+        if(this.fadeToScene) return this.fadeToScene;
         if(this.player==null)return;
+
         else if(this.modal){
             const newScene=this.modal.update(dt);
             if(newScene&&!this.fadeToScene)this.fadeToScene=newScene;
@@ -145,11 +141,7 @@ class ScenePlay {
         this.cam.drawEnd(gfx);
         
         if(this.hud)this.hud.draw(gfx);
-        if(this.modal)this.modal.draw(gfx);
-        
-        gfx.fillStyle="rgba(0,0,0,"+this.alphaOverlay+")";
-        gfx.fillRect(0,0,game.width(),game.height());
-        
+        if(this.modal)this.modal.draw(gfx);        
     }
     edit(){
         this.modal=new Editor();
