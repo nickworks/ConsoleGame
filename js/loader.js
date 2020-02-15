@@ -14,7 +14,7 @@ loadjs([
     'js/UI/Dialog.js',
     'js/UI/Pause.js',
     'js/UI/BubbleHint.js',
-    'js/UI/BubbleBG.js',
+    'js/UI/ShapeBubble.js',
     'js/UI/Keypad.js',
     'js/UI/HUD.js',
     'js/UI/Death.js',
@@ -36,13 +36,13 @@ loadjs([
     'js/Core/Rect.js',
     'js/Core/Sprite.js',
     'js/Core/Editor.js',
-    'js/Core/keyboard.js',
-    'js/Core/mouse.js',
-    'js/Core/console.js',
-    'js/Core/sprites.js',
     'js/Core/Matrix.js',
+    'js/Core/console.js',
+    'js/Core/Input/mouse.js',
+    'js/Core/Input/keyboard.js',
     'js/Scenes/SceneLoad.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
-    'js/Core/Game.js'
-],()=>loadjs(['js/Scenes/LevelData.js',],()=>game.start("myCanvas")));
+    'js/Core/Game.js',
+    'js/data/sprites.js',
+],()=>loadjs(['js/data/LevelData.js',],()=>game.start("myCanvas")));
