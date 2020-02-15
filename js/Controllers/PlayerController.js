@@ -1,5 +1,6 @@
-class Player {
+class PlayerController extends Controller {
     constructor(raw={}){
+        super();
         raw.maxv=300;
         this.oid=raw.i||0;
         this.canDoubleJump=Game.DEVMODE||false;
@@ -10,7 +11,7 @@ class Player {
         this.dead=false;
         this.friend=true;
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
-        this.weapon((Player.data.weapon)?Player.data.weapon:this.pawn.weapon);
+        this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
         if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
     }
     serialize(){
@@ -73,19 +74,19 @@ class Player {
     weapon(w){
         if(!w||w.constructor.name!="Weapon")return;
         this.pawn.weapon=w;
-        Player.data.weapon=w;
+        PlayerController.data.weapon=w;
     }
 }
-Player.data={
+PlayerController.data={
     weapon:null,
     coins:0,
     quests:[],
 };
-Player.addQuest=function(q){
+PlayerController.addQuest=function(q){
     
 };
-Player.checkQuests=function(){
-    Player.data.quests.forEach((q)=>{
+PlayerController.checkQuests=function(){
+    PlayerController.data.quests.forEach((q)=>{
         //q.onData
     });
 };

@@ -57,7 +57,7 @@ class Editor {
             drag(o);
         }
         else if(keyboard.isDown([key.n3,key.p3])){//npc
-            const o=new NPC({x:m.x, y:m.y});
+            const o=new AIController({x:m.x, y:m.y});
             scene.npcs.push(o);
             drag(o);
         }
@@ -176,13 +176,13 @@ class Editor {
             });
             res+="]},";
         };
-        f(Player,[scene.player]);
+        f(PlayerController,[scene.player]);
         if(scene.goal()){
             console.log("serializing goal");
             f(Goal,[scene.goal()]);
         }
         f(Platform,scene.platforms);
-        f(NPC,scene.npcs);
+        f(AIController,scene.npcs);
         f(Door,scene.doors);
         f(Item,scene.items);
         f(Crate,scene.crates);

@@ -56,7 +56,7 @@ class Item {
         switch(this.type){
             case TYPE_HEAL:scene.player.heal(25);break;
             case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
-            case TYPE_COIN:Player.data.coins=(Player.data.coins|0)+1;break;
+            case TYPE_COIN:PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
             case TYPE_GUN:
                 if(!this.weapon){
                     this.weapon=Weapon.random();

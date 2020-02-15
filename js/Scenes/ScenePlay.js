@@ -61,8 +61,8 @@ class ScenePlay {
             for(var i in this.npcs){
                 this.npcs[i].update(dt);
                 if(!this.npcs[i].friend&&this.npcs[i].pawn.rect.overlaps(this.player.pawn.rect)){
-                    const rightOfNPC=this.npcs[i].pawn.rect.mid().x<this.player.pawn.rect.mid().x;
-                    this.player.pawn.vx=rightOfNPC?300:-300;
+                    const rightOfAIController=this.npcs[i].pawn.rect.mid().x<this.player.pawn.rect.mid().x;
+                    this.player.pawn.vx=rightOfAIController?300:-300;
                     this.player.pawn.vy=-250;
                 }
                 if(this.npcs[i].dead)this.npcs.splice(i,1);

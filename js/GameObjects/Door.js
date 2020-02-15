@@ -132,9 +132,9 @@ class Door {
             this.lock();
         }else this.lockCode=null;
     }
-    openIfPlayerHasEnoughCoins(p){
+    openIfPlayerControllerHasEnoughCoins(p){
         const c=p.c||100;
-        if(Player.data.coins>=c)this.forceOpen();  
+        if(PlayerController.data.coins>=c)this.forceOpen();  
     }
     
 }

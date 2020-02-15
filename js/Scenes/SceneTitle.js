@@ -8,7 +8,7 @@ class SceneTitle {
                 game.console.log("/*\n * Open Source v0.3\n * A game by Nick Pattison\n * Write code to change the game!\n * Contribute to it here: https://github.com/nickworks/ConsoleGame\n */");
             }}
         ]);
-        Player.data={};
+        PlayerController.data={};
     }
     update(dt){
         this.menu.update(dt);

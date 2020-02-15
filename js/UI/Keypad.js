@@ -48,8 +48,9 @@ class Keypad {
         if(keyboard.onDown(key.exit())) this.end(false);
     }
     draw(gfx){
-        gfx.fillStyle="rgba(0,0,0,.5)";
-        gfx.fillRect(0,0,800,400);
+        //gfx.fillStyle="rgba(0,0,0,.5)";
+        //gfx.fillRect(0,0,800,400);
+        game.view.clear("rgba(0,0,0,.5)");
         scene.cam.drawStart(gfx);
         Matrix.push();
         Matrix.translate(this.x,this.y);

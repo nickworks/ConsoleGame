@@ -1,5 +1,6 @@
-class NPC {
+class AIController extends Controller {
     constructor(raw={}){
+        super();
         this.oid=raw.i||0;
         this.agro=false;
         this.pawn=new Pawn(raw);
