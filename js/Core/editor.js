@@ -187,6 +187,6 @@ class Editor {
         f(Item,scene.items);
         f(Crate,scene.crates);
         res+="]";
-        consoleObj.logData(res,"level data:");
+        game.console.logData(res,"level data:");
     }
 };

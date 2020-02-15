@@ -71,7 +71,7 @@ class Weapon {
                 this.explode=true;
                 break;
             default:
-                consoleObj.log("// Weapon type not recognized.");
+                game.console.log("// Weapon type not recognized.");
                 return;
         }
         this.type=t;

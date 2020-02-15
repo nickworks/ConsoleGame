@@ -69,6 +69,7 @@ class Game {
                 }
             }
         }
+        this.console=new Console();
         this.scene=null;
         this.nextScene=null;
         this.settings={
@@ -100,7 +101,7 @@ class Game {
     }
     focusConsole(){
         keyboard.blur();
-        consoleObj.input.focus();
+        this.console.input.focus();
     }
     globals(){
         scene=this.scene;

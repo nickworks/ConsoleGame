@@ -24,10 +24,10 @@ class Quest {
 		];
 		if(praise){
 			const i=(Math.random()*p.length)|0;
-			consoleObj.log(p[i]);
+			game.console.log(p[i]);
 		}
         if(!Array.isArray(text))text=[text];
-        text.forEach(t=>consoleObj.log("// "+t));
+        text.forEach(t=>game.console.log("// "+t));
 	}
 	check(){
 		var completed=true;

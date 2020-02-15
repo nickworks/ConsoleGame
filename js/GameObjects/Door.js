@@ -83,7 +83,7 @@ class Door {
     }
     open(code){
         if(this.lockCode && this.lockCode != code){
-            consoleObj.log("// Access Denied");
+            game.console.log("// Access Denied");
             return;
         }
         

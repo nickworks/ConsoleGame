@@ -1,11 +1,12 @@
-const consoleObj = {
-    consoleDiv:undefined,
-    output:undefined, // the <div> that contains several <p>
-    inputP:undefined, // the <p> that contains <input>
-    input:undefined, // the <input>
-    settings:{showFunctions:false},
-    history:{s:[],i:0,add:function(c){this.s.push(c);this.i=this.s.length;}},
-    setup:function(){
+class Console {
+    constructor(){
+        this.consoleDiv = undefined;
+        this.output = undefined; // the <div> that contains several <p>
+        this.inputP = undefined; // the <p> that contains <input>
+        this.input = undefined; // the <input>
+        this.settings = {showFunctions:false};
+        this.history = {s:[],i:0,add:function(c){this.s.push(c);this.i=this.s.length;}};
+
         this.consoleDiv = document.getElementById("console");
         this.input = document.getElementById("console-input");
         this.output = document.getElementById("console-output");
@@ -25,8 +26,8 @@ const consoleObj = {
         const bttn=document.getElementById("bttn-clear");
         bttn.addEventListener("focus",()=>bttn.blur());
         bttn.addEventListener("click",()=>this.clear());
-    },
-    handleHistory:function(offset){
+    }
+    handleHistory(offset){
         const h = this.history;
         h.i+=offset;
         if(h.i < 0) h.i = 0;
@@ -38,8 +39,8 @@ const consoleObj = {
         }
         const p = this.input.value.length;
         this.input.setSelectionRange(p, p);
-    },
-    handleInput:function(){
+    }
+    handleInput(){
         var cmd = this.input.value.trim();
         if(cmd.length == 0) return;
         this.history.add(cmd);
@@ -54,8 +55,8 @@ const consoleObj = {
         }
         this.log(result, "> " + this.input.value);
         this.input.value = "";
-    },
-    log:function(msg, msgIn=""){
+    }
+    log(msg, msgIn=""){
         
         const makeP=(txt,clss="")=>{
             var p=document.createElement("p");
@@ -68,8 +69,8 @@ const consoleObj = {
             this.output.prepend(makeP(msgIn,"in"));
         }
         this.scrollToTop();
-    },
-    logData:function(msg,pre=""){
+    }
+    logData(msg,pre=""){
         var i=document.createElement("textarea");
         i.setAttribute("readonly", "true");
         i.addEventListener("click", ()=>i.setSelectionRange(0,i.value.length));
@@ -82,26 +83,26 @@ const consoleObj = {
         p.appendChild(document.createTextNode(pre));
         p.appendChild(d);
         this.output.prepend(p);
-    },
-    scrollToTop:function(){
+    }
+    scrollToTop(){
         this.output.scrollTop = 0;
-    },
-    scrollToBottom:function(){
+    }
+    scrollToBottom(){
         this.output.scrollTop = this.output.scrollHeight;
-    },
-    clear:function(){
+    }
+    clear(){
         while(this.output.firstChild){
             if(this.output.firstChild === this.inputP) break;
             this.output.removeChild(this.output.firstChild);
         }
-    },
-    show:function(){
+    }
+    show(){
         this.consoleDiv.classList.add("viz");
-    },
-    hide:function(){
+    }
+    hide(){
         this.consoleDiv.classList.remove("viz");
-    },
-    stringify:function(obj){
+    }
+    stringify(obj){
         const isArr = (Array.isArray(obj));
         var result=isArr?'[\n':'{\n';
         for(var prop in obj){
@@ -132,4 +133,3 @@ const consoleObj = {
         return result;
     }
 };
-consoleObj.setup();

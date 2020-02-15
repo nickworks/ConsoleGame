@@ -100,7 +100,7 @@ const keyboard = {
         } else {
             if(value&&(e.keyCode==key.tab||e.keyCode==key.escape)){
                 //if(scene.unpause)scene.unpause();
-                consoleObj.input.blur();
+                game.console.input.blur();
                 e.preventDefault();
             }
         }

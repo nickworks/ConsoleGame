@@ -192,11 +192,11 @@ class ScenePlay {
     }
     handleClick(){
         const pre="you clicked on scene.";
-        if(this.player.pawn.rect.mouseOver()) consoleObj.log(pre+"player");
+        if(this.player.pawn.rect.mouseOver()) game.console.log(pre+"player");
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
-                if(rect.mouseOver())consoleObj.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
+                if(rect.mouseOver())game.console.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
             }
         };
         check(this.bullets, "bullets");
