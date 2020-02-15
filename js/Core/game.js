@@ -1,7 +1,23 @@
 class Game {
-    constructor(){
 
-        Game.DEVMODE=false;
+    static DEVMODE = true;
+
+    static Repair(obj){
+
+        const prototype = Object.getPrototypeOf(obj);
+        const funcnames = Object.getOwnPropertyNames(prototype).filter(p => (typeof prototype[p]) === 'function');
+        
+        funcnames.forEach(f => {
+            if((typeof obj[f]) != 'function'){
+                game.console.log("/* Careful there!\n * "+f+"() is a function.\n * Changing a function can introduce bugs that CRASH\n * THE GAME. There may not be any coming back from a crashed game...\n * so be careful! Perhaps you should visit the Western guru to\n * learn more about functions.\n */");
+                obj[f] = prototype[f];
+            } 
+        });
+
+    }
+
+
+    constructor(){
 
         this.time={
             now:0,
@@ -12,6 +28,7 @@ class Game {
                 this.time.now = t;
                 this.time.dt = (t - this.time.prev) / 1000;
                 this.time.prev = t;
+                Game.Repair(this);
                 this.update();
             }
         }
@@ -84,7 +101,7 @@ class Game {
 
     
     update(){
-        
+
         this.view.resizeCanvas();
         
         if(keyboard.onDown(key.console())) this.focusConsole();
