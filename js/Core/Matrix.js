@@ -1,24 +1,25 @@
-function Matrix(raw={}){
-    
-    this.inverse=raw.inverse?new Matrix():null;
-    this.set=function(raw){
+class Matrix {
+    constructor(raw={}){
+        this.inverse=raw.inverse?new Matrix():null;
+        this.set(raw);
+    }
+    set(raw){
         this.a=raw.a||1;
         this.b=raw.b||0;
         this.c=raw.c||0;
         this.d=raw.d||1;
         this.e=raw.e||0;
         this.f=raw.f||0;
-    };
-    this.set(raw);
-    this.scale=function(s){
+    }
+    scale(s){
         this.mult(new Matrix({a:s,d:s}));
         //this.inverse.mult(new Matrix({a:1/s,b:1/s}),true);
-    };
-    this.translate=function(x,y){
+    }
+    translate(x,y){
         this.mult(new Matrix({e:x,f:y}));
         //this.inverse.mult(new Matrix({e:-x,f:-y}),true);
-    };
-    this.rotate=function(a){
+    }
+    rotate(a){
         const rot=(r)=>{
             const cos=Math.cos(r);
             const sin=Math.sin(r);
@@ -26,21 +27,24 @@ function Matrix(raw={}){
         };
         this.mult(rot(a));
         //this.inverse.mult(rot(-a),true);
-    };
-    this.mult=function(m,reverse=false){
+    }
+    mult(m,reverse=false){
         if(reverse) this.set(Matrix.mult(m,this));
         else this.set(Matrix.mult(this,m));
-    };
-    this.vec=function(p){
+    }
+    vec(p){
         const raw={};
         raw.x=this.a*p.x+this.c*p.y+this.e;
         raw.y=this.b*p.x+this.d*p.y+this.f;
         return raw;    
-    };
-    this.apply=function(gfx){
+    }
+    apply(gfx){
         gfx.setTransform(this.a,this.b,this.c,this.d,this.e, this.f);
-    };
-};
+    }
+}
+
+// static functions:
+
 Matrix.stack=[new Matrix({inverse:true})];
 Matrix.push=function(){
     Matrix.stack.push(new Matrix({inverse:true}));

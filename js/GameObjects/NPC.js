@@ -1,27 +1,28 @@
-function NPC(raw={}){
-    var id=raw.i||0;
-    this.agro=false;
-    this.pawn=new Pawn(raw);
-    this.pawn.a=raw.a||400;
-    this.canTalk=false;
-    this.friend=(!!raw.f);
-    this.dialog=raw.d||[];
-    this.hp=raw.h||50;
-    this.dead=false;
-    this.patrolStart=this.pawn.rect.mid().x;
-    this.patrolDis=100;
-    this.patrolTimer=0;
-    
-    var hint=new BubbleHint("TALK");
-    
-    this.callbacks={
-        onSpeak:Callback.from(raw.onSpeak),
-        onDeath:Callback.from(raw.onDeath),
-        onData:Callback.from(raw.onData),
-    };  
-    this.serialize=function(){
+class NPC {
+    constructor(raw={}){
+        this.oid=raw.i||0;
+        this.agro=false;
+        this.pawn=new Pawn(raw);
+        this.pawn.a=raw.a||400;
+        this.canTalk=false;
+        this.friend=(!!raw.f);
+        this.dialog=raw.d||[];
+        this.hp=raw.h||50;
+        this.dead=false;
+        this.patrolStart=this.pawn.rect.mid().x;
+        this.patrolDis=100;
+        this.patrolTimer=0;
+        
+        this.hint=new BubbleHint("TALK");
+        this.callbacks={
+            onSpeak:Callback.from(raw.onSpeak),
+            onDeath:Callback.from(raw.onDeath),
+            onData:Callback.from(raw.onData),
+        };
+    }
+    serialize(){
         var data={
-            i:id,
+            i:this.oid,
             x:this.pawn.rect.x|0,
             y:this.pawn.rect.y|0,
             d:this.dialog,
@@ -37,12 +38,12 @@ function NPC(raw={}){
         if(c&&c.length>0)data.onData=c;
         if(this.pawn.sightRange!=300)data.s=this.pawn.sightRange;
         return data;
-    };
-    this.id=function(i){
-        if(i)id=i;
-        return id;  
-    };
-    this.update=function(dt){
+    }
+    id(i){
+        if(i)this.oid=i;
+        return this.oid;  
+    }
+    update(dt){
         this.canTalk=this.pawn.rect.overlaps(scene.player.pawn.rect);
         
         if(this.friend){
@@ -50,16 +51,16 @@ function NPC(raw={}){
         } else {
             this.aiFoe(dt);
         }
-    };
-    this.aiFriend=function(dt){
+    }
+    aiFriend(dt){
         if(this.canTalk && keyboard.onDown(key.activate())){
             this.speak();
         }
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,0);
         this.pawn.update(dt);
-    };
-    this.aiFoe=function(dt){
+    }
+    aiFoe(dt){
         let move=0;
         if(this.agro){
             const p=scene.player.pawn.rect.mid();
@@ -85,8 +86,8 @@ function NPC(raw={}){
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
-    };
-    this.patrol=function(dt){
+    }
+    patrol(dt){
         let move=0;
         const target=this.patrolStart+this.patrolDis*this.pawn.dir;
         if(this.pawn.dir<0){
@@ -112,24 +113,24 @@ function NPC(raw={}){
             }
         }
         return move;
-    };
-    this.speak=function(){
+    }
+    speak(){
         const p=this.pawn.rect.mid();
         scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks);
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         const imgL = this.friend ? sprites.playerL : sprites.enemyL;
         const imgR = this.friend ? sprites.playerR : sprites.enemyR;
         
         this.pawn.draw(gfx,imgL, imgR,{x:4,y:4});
         
         if(this.friend&&this.canTalk&&!scene.modal){
-            hint.x=this.pawn.rect.mid().x;
-            hint.y=this.pawn.rect.y;
-            hint.draw(gfx);
+            this.hint.x=this.pawn.rect.mid().x;
+            this.hint.y=this.pawn.rect.y;
+            this.hint.draw(gfx);
         }
-    };
-    this.hurt=function(amt){
+    }
+    hurt(amt){
         this.agro=true;
         if(this.dead)return;
         this.hp-=amt;
@@ -142,12 +143,12 @@ function NPC(raw={}){
             this.dead=true;
             scene.spawnLoot(3,raw);
         }
-    };
-    this.changeType=function(){
+    }
+    changeType(){
         this.friend=!this.friend;  
-    };
-    this.setSight=function(p){
+    }
+    setSight(p){
         const s=p?(p.amt?p.amt:p):300;
         this.pawn.sightRange=s;
-    };
+    }
 }

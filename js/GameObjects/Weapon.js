@@ -1,16 +1,19 @@
-function Weapon(raw={}){    
+const TYPE_WEAK=1;
+const TYPE_PISTOL=2;
+const TYPE_SHOTGUN=3;
+const TYPE_SMG=4;
+const TYPE_ROCKET=5;
+
+class Weapon {
+    constructor(raw={}){
+        this.type;
+        this.shootDelay=0;
+        this.reloadDelay=0;
+        this.changeType(raw.t||TYPE_WEAK);
+        this.clip=this.clipMax;
+    }
     
-    const TYPE_WEAK=1;
-    const TYPE_PISTOL=2;
-    const TYPE_SHOTGUN=3;
-    const TYPE_SMG=4;
-    const TYPE_ROCKET=5;
-    
-    var type;
-    var shootDelay=0;
-    var reloadDelay=0;
-    
-    this.changeType=function(t){
+    changeType(t){
         switch(t){
             case TYPE_WEAK:
                 this.shootCooldown=.5;
@@ -71,28 +74,28 @@ function Weapon(raw={}){
                 consoleObj.log("// Weapon type not recognized.");
                 return;
         }
-        type=t;
-    };
-    this.changeType(raw.t||TYPE_WEAK);
+        this.type=t;
+    }
     
-    this.update=function(dt){
+    
+    update(dt){
         
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
         if(this.clip>this.clipMax)this.clip=this.clipMax;
         
-        if(reloadDelay>0){
-            reloadDelay-=dt;
-            if(reloadDelay<=0)this.doReload();
+        if(this.reloadDelay>0){
+            this.reloadDelay-=dt;
+            if(this.reloadDelay<=0)this.doReload();
         }
-        else if(shootDelay>0)shootDelay-=dt;
+        else if(this.shootDelay>0)this.shootDelay-=dt;
         
         if(keyboard.onDown(key.reload())){
             this.reload();
         }        
-    };
-    this.shoot=function(pos,dir,isFriend){
-        if(reloadDelay>0)return;
-        if(shootDelay>0)return;
+    }
+    shoot(pos,dir,isFriend){
+        if(this.reloadDelay>0)return;
+        if(this.shootDelay>0)return;
         if(!scene.bullets)return;
         
         if(this.clip>0){
@@ -111,32 +114,31 @@ function Weapon(raw={}){
                 b.explode=this.explode;
                 scene.bullets.push(b);
             }
-            shootDelay=this.shootCooldown;
+            this.shootDelay=this.shootCooldown;
             this.ammo--;
             this.clip--;
         } else {
             this.reload();
         }
-    };
-    this.reload=function(){
-        if(reloadDelay>0)return;
-        if(shootDelay>0)return;
+    }
+    reload(){
+        if(this.reloadDelay>0)return;
+        if(this.shootDelay>0)return;
         if(this.clip>=this.clipMax)return;
         if(this.ammo<=0)return;
-        reloadDelay=this.reloadCooldown;
-    };
-    this.doReload=function(){
-        this.clip=Math.min(this.ammo,this.clipMax);
-    };
-    this.getReloadProgress=function(){
-        if(reloadDelay<=0)return 1;
-        return reloadDelay/this.reloadCooldown;
+        this.reloadDelay=this.reloadCooldown;
     }
-    this.addAmmo=function(amt=10){
+    doReload(){
+        this.clip=Math.min(this.ammo,this.clipMax);
+    }
+    getReloadProgress(){
+        if(this.reloadDelay<=0)return 1;
+        return this.reloadDelay/this.reloadCooldown;
+    }
+    addAmmo(amt=10){
         this.ammo+=amt;
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
-    };
-    this.clip=this.clipMax;
+    }
 }
 Weapon.random=function(){
     const t=((Math.random()*4)|0)+2;

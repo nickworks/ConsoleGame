@@ -1,11 +1,13 @@
-function Platform(raw={}){
-    var id=raw.id||0;
-    this.rect=Rect.from(raw);
-    this.oneway=(!!raw.o);
-    this.slippery=(!!raw.s);
-    this.serialize=function(){
+class Platform {
+    constructor(raw={}){
+        this.oid=raw.id||0;
+        this.rect=Rect.from(raw);
+        this.oneway=(!!raw.o);
+        this.slippery=(!!raw.s);
+    }
+    serialize(){
         const data={
-            i:id,
+            i:this.oid,
             x:this.rect.x,
             y:this.rect.y,
             w:this.rect.w,
@@ -14,15 +16,16 @@ function Platform(raw={}){
         if(this.oneway)data.o=1;
         if(this.slippery)data.s=1;
         return data;
-    };
-    this.id=function(i){
-        if(i)id=i;
-        return id;  
-    };
-    this.update=function(dt){
+    }
+
+    id(i){
+        if(i)this.oid=i;
+        return this.oid;  
+    }
+    update(dt){
         
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         gfx.fillStyle=this.oneway?sprites.tiles2:sprites.tiles;
         
         Matrix.push();
@@ -30,8 +33,8 @@ function Platform(raw={}){
         //this.rect.draw(gfx);
         gfx.fillRect(0,0,this.rect.w,this.rect.h);
         Matrix.pop();
-    };
-    this.block=function(a, dt){
+    }
+    block(a, dt){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects
@@ -50,8 +53,8 @@ function Platform(raw={}){
                 :o.applyFix(fix,this.oneway));
             
         });
-    };
-    this.changeType=function(){
+    }
+    changeType(){
         this.oneway=!this.oneway;
-    };
+    }
 }

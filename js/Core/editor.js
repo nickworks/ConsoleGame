@@ -1,14 +1,16 @@
-function Editor(){
-    scene.cam.target=null;
-    this.snapSize=25;
-    this.dragObj=null;
-    this.dragOrig=null;//original position of obj
-    this.dragStart=null;//original position of mouse
-    this.dragModeSize=false;
-    this.snap=function(v){
+class Editor {
+    constructor(){
+        scene.cam.target=null;
+        this.snapSize=25;
+        this.dragObj=null;
+        this.dragOrig=null;//original position of obj
+        this.dragStart=null;//original position of mouse
+        this.dragModeSize=false;
+    }
+    snap(v){
         return Math.round(v/this.snapSize)*this.snapSize
     }
-    this.update=function(dt){
+    update(dt){
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(key.escape)){
@@ -25,16 +27,16 @@ function Editor(){
             return s;
         }
         this.moveCam(dt);
-    };
-    this.moveCam=function(dt){
+    }
+    moveCam(dt){
         const c=scene.cam;
         const s=300;
         if(keyboard.isDown(key.w)) c.ty-=s*dt;
         if(keyboard.isDown(key.a)) c.tx-=s*dt;
         if(keyboard.isDown(key.s)) c.ty+=s*dt;
         if(keyboard.isDown(key.d)) c.tx+=s*dt;
-    };
-    this.handleClick=function(){
+    }
+    handleClick(){
         
         const m=scene.cam.worldMouse();
 
@@ -100,7 +102,7 @@ function Editor(){
         }
         scene.ids();
     }
-    this.handleDrag=function(){
+    handleDrag(){
         const d=scene.cam.worldMouse();
         d.x-=this.dragStart.x;
         d.y-=this.dragStart.y;
@@ -132,8 +134,8 @@ function Editor(){
         
         (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw);
         if(!mouse.isDown())this.dragObj=null;
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         gfx.fillStyle="#000";
         gfx.font="8pt Courier";
         gfx.textAlign="left";
@@ -155,8 +157,8 @@ function Editor(){
         gfx.fillText(" +5 : spawn item", x, 96);
         gfx.fillText(" +6 : spawn crate", x, 108);
         gfx.fillText(" +T : change type", x, 120);
-    };
-    this.serialize=function(){
+    }
+    serialize(){
         let res="[";
         const f=(t,a)=>{
             res+="{t:"+t.name+",d:[";

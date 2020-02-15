@@ -1,23 +1,27 @@
-function Callback(id,func,params){
-    //console.log("new callback: "+id+" "+func+" "+params);
-    
-    this.id=id;
-    this.func=func;
-    this.params=params;
-    
-    this.serialize=function(){
+class Callback {
+    constructor(id,func,params){
+        //console.log("new callback: "+id+" "+func+" "+params);
+        
+        this.id=id;
+        this.func=func;
+        this.params=params;
+    }
+    serialize(){
         const data={i:this.id,f:this.func};
         if(params)data.p=this.params;
         return data;
-    };
-    this.call=function(){
+    }
+    call(){
         var res=null
         //console.log("call obj("+id+")["+func+"]("+(params||{})+")");
         const o=scene.obj(this.id);
         if(o&&o[this.func])res=o[this.func](this.params||{});
         return res;
-    };
+    }
 }
+
+// static functions:
+
 Callback.from=function(raw=[]){
     if(!Array.isArray(raw))raw=[raw];
     const res=[];

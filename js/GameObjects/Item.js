@@ -1,25 +1,26 @@
-function Item(raw={}){
-    
-    const TYPE_HEAL=1;
-    const TYPE_AMMO=2;
-    const TYPE_COIN=3;
-    const TYPE_GUN=4;
-    
-    var id=raw.i||0;
-    this.type=raw.t||3;
-    this.rect=Rect.from(raw);
-    this.vx=0;
-    this.vy=0;
-    this.isAsleep=(!!raw.a);
-    this.dead=false;
-    
-    var weapon=null;
-    var hint=null;
-    var showHint=false;
+const TYPE_HEAL=1;
+const TYPE_AMMO=2;
+const TYPE_COIN=3;
+const TYPE_GUN=4;
+
+class Item {
+    constructor(raw={}){       
         
-    this.serialize=function(){
+        this.oid=raw.i||0;
+        this.type=raw.t||3;
+        this.rect=Rect.from(raw);
+        this.vx=0;
+        this.vy=0;
+        this.isAsleep=(!!raw.a);
+        this.dead=false;
+        
+        this.weapon=null;
+        this.hint=null;
+        this.showHint=false;
+    }
+    serialize(){
         const data={
-            i:id,
+            i:this.oid,
             x:this.rect.x|0,
             y:this.rect.y|0,
             t:this.type|0,
@@ -27,11 +28,11 @@ function Item(raw={}){
         if(this.isAsleep)data.a=1;
         return data;
     };
-    this.id=function(i){
-        if(i)id=i;
-        return id;  
+    id(i){
+        if(i)this.oid=i;
+        return this.oid;  
     };
-    this.update=function(dt){
+    update(dt){
         if(!this.isAsleep){
             if(this.isGrounded){
                 var move=0;
@@ -51,26 +52,26 @@ function Item(raw={}){
         }
         
     };
-    this.pickup=function(){
+    pickup(){
         switch(this.type){
             case TYPE_HEAL:scene.player.heal(25);break;
             case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
             case TYPE_COIN:Player.data.coins=(Player.data.coins|0)+1;break;
             case TYPE_GUN:
-                if(!weapon){
-                    weapon=Weapon.random();
-                    hint=new BubbleHint(weapon.title);
+                if(!this.weapon){
+                    this.weapon=Weapon.random();
+                    this.hint=new BubbleHint(this.weapon.title);
                 }
-                showHint=true;
+                this.showHint=true;
                 if(keyboard.onDown(key.activate())){
-                    scene.player.weapon(weapon);
+                    scene.player.weapon(this.weapon);
                     this.dead=true;
                 }
                 return;
         }
         this.dead=true;
     };
-    this.draw=function(gfx){
+    draw(gfx){
         
         var img;
         if(this.type==TYPE_HEAL)img=sprites.item1;
@@ -81,14 +82,14 @@ function Item(raw={}){
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw(gfx);
         
-        if(hint&&showHint){
-            hint.x=this.rect.mid().x;
-            hint.y=this.rect.y;
-            hint.draw(gfx);
-            showHint=false;
+        if(this.hint&&this.showHint){
+            this.hint.x=this.rect.mid().x;
+            this.hint.y=this.rect.y;
+            this.hint.draw(gfx);
+            this.showHint=false;
         }
     };
-    this.applyFix=function(fix){
+    applyFix(fix){
         this.rect.x+=fix.x;
         this.rect.y+=fix.y;
         if(fix.x!=0)this.vx*=-.5;
@@ -100,7 +101,7 @@ function Item(raw={}){
         }
         this.rect.cache();
     };
-    this.changeType=function(){
+    changeType(){
         this.type++;
         if(this.type>3)this.type=1;
     };

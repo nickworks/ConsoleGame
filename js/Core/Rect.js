@@ -1,12 +1,15 @@
-function Rect(x,y,w,h){
-    this.x=x||0;
-    this.y=y||0;
-    this.w=w||25;
-    this.h=h||25;
-    this.vx=0;
-    this.vy=0;
-    var prev={};
-    this.fix=function(){
+class Rect {
+    constructor(x,y,w,h){
+        this.x=x||0;
+        this.y=y||0;
+        this.w=w||25;
+        this.h=h||25;
+        this.vx=0;
+        this.vy=0;
+        this.prev={};
+        this.fix();
+    }
+    fix(){
         if(this.w<0){
             this.w*=-1;
             this.x-=this.w;
@@ -15,45 +18,45 @@ function Rect(x,y,w,h){
             this.h*=-1;
             this.y-=this.h;
         }   
-    };
-    this.fix();
-    this.setRaw=function(raw){
+    }
+    
+    setRaw(raw){
         this.x=raw.x;
         this.y=raw.y;
         this.w=raw.w;
         this.h=raw.h;
         this.fix();
-    };
-    this.speed=function(){
+    }
+    speed(){
         // calculate the velocity this rect is mocing
         // IMPORTANT: this velocity is per-second! It has delta-time already applied.
-        this.vx=this.x-prev.x;
-        this.vy=this.y-prev.y;
+        this.vx=this.x-this.prev.x;
+        this.vy=this.y-this.prev.y;
         this.cache();
-    };
-    this.cache=function(){
-        prev=this.raw();
-    };
-    this.copy=function(){
+    }
+    cache(){
+        this.prev=this.raw();
+    }
+    copy(){
         return new Rect(this.x,this.y,this.w,this.h);
-    };
-    this.hits=function(p){
+    }
+    hits(p){
         return (p.x>this.x&&p.x<this.x+this.w&&p.y>this.y&&p.y<this.y+this.h);
-    };
-    this.overlaps=function(o){
+    }
+    overlaps(o){
         const r=this;
         if(r.x>=o.x+o.w) return false;
         if(r.x+r.w<=o.x) return false;
         if(r.y>=o.y+o.h) return false;
         if(r.y+r.h<=o.y) return false;
         return true;
-    };
-    this.groupCheck=function(g,o){
+    }
+    groupCheck(g,o){
         g.forEach(i=>{
             if(this.overlaps(i.rect||i.pawn.rect)) o(i);
         });
-    };
-    this.findFix=function(o){
+    }
+    findFix(o){
         
         // how far to move o to get it out
         const r=this;
@@ -73,23 +76,26 @@ function Rect(x,y,w,h){
         else if(Math.abs(res.x)<Math.abs(res.y))res.y=0;
         else res.x=0;
         return res;
-    };
-    this.toString=function(){
+    }
+    toString(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         gfx.fillRect(this.x,this.y,this.w,this.h);
-    };
-    this.raw=function(){
+    }
+    raw(){
         return {x:this.x,y:this.y,w:this.w,h:this.h};
-    };
-    this.mid=function(){
+    }
+    mid(){
         return {x:this.x+this.w/2,y:this.y+this.h/2};
-    };
-    this.mouseOver=function(){
+    }
+    mouseOver(){
         return(scene.cam && this.hits(scene.cam.worldMouse()));
-    };
+    }
 }
+
+// static functions:
+
 Rect.grow=function(r,a){
     return new Rect(r.x-a/2,r.y-a/2,r.w+a,r.h+a);
 };

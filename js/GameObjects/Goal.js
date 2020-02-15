@@ -1,21 +1,23 @@
-function Goal(raw={}){
-    var rect=new Rect(raw.x||0,raw.y||0,50,100);
-    var next=raw.n||0;
-    this.update=function(dt){
-        return rect.overlaps(scene.player.pawn.rect);
-    };
-    this.serialize=function(){
+class Goal {
+    constructor(raw={}){
+        this.rect=new Rect(raw.x||0,raw.y||0,50,100);
+        this.next=raw.n||0;
+    }
+    update(dt){
+        return this.rect.overlaps(scene.player.pawn.rect);
+    }
+    serialize(){
         return {
-            x:rect.x,
-            y:rect.y,
-            n:next
+            x:this.rect.x,
+            y:this.rect.y,
+            n:this.next
         };
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         gfx.fillStyle="#39F";
-        rect.draw(gfx);
-    };
-    this.nextLevel=function(){
-        return next;  
-    };
+        this.rect.draw(gfx);
+    }
+    nextLevel(){
+        return this.next;  
+    }
 }

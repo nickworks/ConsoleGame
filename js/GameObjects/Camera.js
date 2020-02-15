@@ -1,14 +1,17 @@
-function Camera(){
-    this.x=0;
-    this.y=0;
-    this.tx=0;
-    this.ty=0;
-    this.target=null;
-    this.angle=0;
-    this.shake=0;
-    this.scale=1;
-    this.update=function(dt){
-        cachemouse=null
+class Camera {
+    constructor(){
+        this.x=0;
+        this.y=0;
+        this.tx=0;
+        this.ty=0;
+        this.target=null;
+        this.angle=0;
+        this.shake=0;
+        this.scale=1;
+        this.cachemouse=null;
+    }
+    update(dt){
+        this.cachemouse=null
         this.updateScreenOffset();
         this.updateTargetXY();
         const speed=5;
@@ -21,8 +24,8 @@ function Camera(){
             this.scale+=(1-this.scale)*dt*10;
         }
         
-    };
-    this.updateTargetXY=function(andSnap=true){
+    }
+    updateTargetXY(andSnap=true){
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();
@@ -44,32 +47,30 @@ function Camera(){
             this.tx+=Math.random()*shake-shake/2;
             this.ty+=Math.random()*shake-shake/2;
         }
-    };
-    this.drawStart=function(gfx){
+    }
+    drawStart(gfx){
         Matrix.push();
         Matrix.translate(this.sx|0,this.sy|0);
         if(this.scale!=1)Matrix.scale(this.scale);
         if(this.angle!=0)Matrix.rotate(this.angle);
         Matrix.translate(-this.x|0,-this.y|0);
-    };
-    this.drawEnd=function(gfx){
+    }
+    drawEnd(gfx){
         Matrix.pop();
-    };
-    this.updateScreenOffset=function(){
+    }
+    updateScreenOffset(){
         this.sx=game.width()/2;
         this.sy=game.height()/2;  
-    };
-    
-    var cachemouse=null;
-    this.worldMouse=function(){        
-        if(!cachemouse){
+    }
+    worldMouse(){        
+        if(!this.cachemouse){
             const m=new Matrix();
             m.translate(this.x|0,this.y|0);
             if(this.angle!=0)m.rotate(-this.angle);
             if(this.scale!=1)m.scale(1/this.scale);
             m.translate(-this.sx|0,-this.sy|0);
-            cachemouse=m.vec({x:mouse.x,y:mouse.y});
+            this.cachemouse=m.vec({x:mouse.x,y:mouse.y});
         }
-        return {x:cachemouse.x,y:cachemouse.y};
+        return {x:this.cachemouse.x,y:this.cachemouse.y};
     };
 }

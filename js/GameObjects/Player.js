@@ -1,30 +1,34 @@
-function Player(raw={}){
-    raw.maxv=300;
-    var id=raw.i||0;
-    this.canDoubleJump=Game.DEVMODE||false;
-    this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
-    this.pawn.jumpCooldownAmt=0;
-    this.hp=100;
-    this.hpMax=100;
-    this.dead=false;
-    this.friend=true;
-    this.canWallJump=Game.DEVMODE?function(){return true;}:function(){return false;};
-    this.serialize=function(){
+class Player {
+    constructor(raw={}){
+        raw.maxv=300;
+        this.oid=raw.i||0;
+        this.canDoubleJump=Game.DEVMODE||false;
+        this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
+        this.pawn.jumpCooldownAmt=0;
+        this.hp=100;
+        this.hpMax=100;
+        this.dead=false;
+        this.friend=true;
+        this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
+        this.weapon((Player.data.weapon)?Player.data.weapon:this.pawn.weapon);
+        if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
+    }
+    serialize(){
         return{
-            i:id,
+            i:this.oid,
             x:this.pawn.rect.x|0,
             y:this.pawn.rect.y|0,
         };
-    };
-    this.id=function(i){
-        if(i)id=i;
-        return id;  
-    };
-    this.update=function(dt){
+    }
+    id(i){
+        if(i)this.oid=i;
+        return this.oid;  
+    }
+    update(dt){
         
         if(typeof this.canWallJump!="function"){
             consoleObj.log("/* Careful there!\n * scene.player.canWallJump() is a function.\n * Changing a function can introduce bugs that CRASH\n * THE GAME. There may not be any coming back from a crashed game...\n * so be careful! Perhaps you should visit the Western guru to\n * learn more about functions.\n */");
-            this.canWallJump=function(){return false};
+            this.canWallJump=()=>{return false};
         } 
         
         let move=0;
@@ -55,24 +59,22 @@ function Player(raw={}){
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,move);
         this.pawn.update(dt);
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         this.pawn.draw(gfx,sprites.playerL,sprites.playerR,{x:4,y:4});
-    };
-    this.hurt=function(amt=10){
+    }
+    hurt(amt=10){
         this.hp-=amt;
-    };
-    this.heal=function(amt=10){
+    }
+    heal(amt=10){
         this.hp+=amt;
         if(this.hp>this.hpMax)this.hp=this.hpMax;
-    };
-    this.weapon=function(w){
+    }
+    weapon(w){
         if(!w||w.constructor.name!="Weapon")return;
         this.pawn.weapon=w;
         Player.data.weapon=w;
-    };
-    this.weapon((Player.data.weapon)?Player.data.weapon:this.pawn.weapon);
-    if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
+    }
 }
 Player.data={
     weapon:null,

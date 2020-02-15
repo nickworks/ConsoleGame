@@ -1,47 +1,50 @@
-function Particle(x,y,t=1){
+const TYPE_BOOM=1;
+const TYPE_HIT=2;
+const TYPE_DUST=3;
+const TYPE_CRATE=4;
+
+class Particle {
+    constructor(x,y,t=1){
+        
+        this.dead=false;
+        this.life=this.lifespan=0;
+        
+        this.rect=new Rect(x,y,100,100);
+        this.v={x:0,y:0};
+        this.a={x:0,y:0};
+        this.drag=0;
+        
+        this.scale=1;
+        this.scalev=0;
+        
+        this.alpha=1;
+        this.fadeOut=true;
+        
+        this.angle=0;
+        this.anglev=0;
+        
+        this.color="#000";
+        this.init(t);
+    }
     
-    const TYPE_BOOM=1;
-    const TYPE_HIT=2;
-    const TYPE_DUST=3;
-    const TYPE_CRATE=4;
-    
-    this.dead=false;
-    this.life=this.lifespan=0;
-    
-    this.rect=new Rect(x,y,100,100);
-    this.v={x:0,y:0};
-    this.a={x:0,y:0};
-    this.drag=0;
-    
-    this.scale=1;
-    this.scalev=0;
-    
-    this.alpha=1;
-    this.fadeOut=true;
-    
-    this.angle=0;
-    this.anglev=0;
-    
-    this.color="#000";
-    
-    const randDir=(s=1)=>{
-        const a=Math.random()*Math.PI*2;
-        return {
-            x:s*Math.cos(a),
-            y:s*Math.sin(a)
+    init(t){
+        this.t = t;
+        const randDir=(s=1)=>{
+            const a=Math.random()*Math.PI*2;
+            return {
+                x:s*Math.cos(a),
+                y:s*Math.sin(a)
+            };
         };
-    };
-    const randBox=(sx=1,sy=1)=>{
-        return {
-            x:Math.random()*sx-sx/2,
-            y:Math.random()*sy-sy/2
+        const randBox=(sx=1,sy=1)=>{
+            return {
+                x:Math.random()*sx-sx/2,
+                y:Math.random()*sy-sy/2
+            };
         };
-    };
-    const rand=(min,max)=>{
-        return Math.random()*(max-min)+min;  
-    };
-    
-    this.init=function(t){
+        const rand=(min,max)=>{
+            return Math.random()*(max-min)+min;  
+        };
         switch(t){
             case TYPE_BOOM:
                 var scale=rand(0,750)+rand(0,750);
@@ -77,9 +80,8 @@ function Particle(x,y,t=1){
                 const lit=rand(45,50)|0;
                 this.color="hsl("+hue+", "+sat+"%, "+lit+"%)";
         }
-    };
-    this.init(t);
-    this.update=function(dt){
+    }
+    update(dt){
         this.life+=dt;
         if(this.life>this.lifespan)this.dead=true;
         this.v.x+=this.a.x*dt;
@@ -90,11 +92,11 @@ function Particle(x,y,t=1){
         this.v.y-=this.v.y*this.drag;
         this.scale+=this.scalev*dt;
         
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         var a=this.alpha;
         if(this.fadeOut)a*=(this.lifespan-this.life)/this.lifespan;
-        switch(t){
+        switch(this.t){
             case TYPE_BOOM:
                 const lum=(this.alpha*255)|0;
                 gfx.fillStyle="rgba("+lum+","+lum+",0,"+a+")";
@@ -118,5 +120,5 @@ function Particle(x,y,t=1){
         if(this.angle!=0)Matrix.rotate(this.angle);
         gfx.fillRect(x,y,w,h);
         Matrix.pop();
-    };
+    }
 }

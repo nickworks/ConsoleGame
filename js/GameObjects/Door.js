@@ -1,25 +1,28 @@
-function Door(raw={}){
-    var id=raw.i||0;
-    this.rect=new Rect(raw.x||0,raw.y||0,25,100);
-    this.animating=false;
-    this.done=false;
-    this.rectA=null;
-    this.rectB=null;
-    this.timer=0;
-    this.timespan=1;
-    this.lockCode=null;
-    this.canActivate=false;
-    
-    var isOpen=false;
-    var hint=new BubbleHint("OPEN");
-    
-    this.callbacks={
-        onOpen:Callback.from(raw.onOpen),
-        onClose:Callback.from(raw.onClose),
-    };
-    this.serialize=function(){
+class Door {
+    constructor(raw={}){
+        this.oid=raw.i||0;
+        this.rect=new Rect(raw.x||0,raw.y||0,25,100);
+        this.animating=false;
+        this.done=false;
+        this.rectA=null;
+        this.rectB=null;
+        this.timer=0;
+        this.timespan=1;
+        this.lockCode=null;
+        this.canActivate=false;
+        
+        this.isOpen=false;
+        this.hint=new BubbleHint("OPEN");
+        
+        this.callbacks={
+            onOpen:Callback.from(raw.onOpen),
+            onClose:Callback.from(raw.onClose),
+        };
+        if(!!raw.l)this.lock();
+    }
+    serialize(){
         let data={
-            i:id,
+            i:this.oid,
             x:this.rect.x,
             y:this.rect.y,
             l:this.lockCode?1:0,
@@ -29,12 +32,12 @@ function Door(raw={}){
         if(a&&a.length>0)data.onOpen=a;
         if(b&&b.length>0)data.onClose=b;
         return data;
-    };
-    this.id=function(i){
-        if(i)id=i;
-        return id;  
-    };
-    this.update=function(dt){
+    }
+    id(i){
+        if(i)this.oid=i;
+        return this.oid;  
+    }
+    update(dt){
         if(this.animating){
             this.timer+=dt;
             var p = this.timer/this.timespan;
@@ -49,8 +52,8 @@ function Door(raw={}){
             this.canActivate=Rect.grow(this.rect, 25).overlaps(scene.player.pawn.rect);
             if(keyboard.onDown(key.activate()))this.activate();
         }
-    };
-    this.activate=function(){
+    }
+    activate(){
         if(this.canActivate){
             if(this.lockCode){
                 if(isOpen)this.close();
@@ -59,49 +62,49 @@ function Door(raw={}){
                     scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
                 }
             }else{
-                isOpen?this.close():this.open();
+                this.isOpen?this.close():this.open();
             }
         }
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         this.rect.draw(gfx);
         
         gfx.drawImage(this.lockCode?sprites.door2:sprites.door1,this.rect.x,this.rect.y-(100-this.rect.h));
         
         if(this.canActivate&&!scene.modal&&!this.animating){
-            hint.x=this.rect.mid().x;
-            hint.y=this.rect.mid().y-10;
-            hint.draw(gfx);
+            this.hint.x=this.rect.mid().x;
+            this.hint.y=this.rect.mid().y-10;
+            this.hint.draw(gfx);
         }
-    };
-    this.lock=function(){
+    }
+    lock(){
         this.lockCode=parseInt(Math.random()*10000+10000).toString();
-        hint.setText("UNLOCK");
-    };
-    this.open=function(code){
+        this.hint.setText("UNLOCK");
+    }
+    open(code){
         if(this.lockCode && this.lockCode != code){
             consoleObj.log("// Access Denied");
             return;
         }
         
         this.animate({h:25});
-        isOpen=true;
-        hint.setText("CLOSE");
+        this.isOpen=true;
+        this.hint.setText("CLOSE");
         Callback.do(this.callbacks.onOpen);
-    };
-    this.forceOpen=function(){
+    }
+    forceOpen(){
         this.open(this.lockCode);
-    };
-    this.close=function(){
+    }
+    close(){
         this.animate({h:100});
-        isOpen=false;
-        hint.setText(this.lockCode?"UNLOCK":"OPEN");
+        this.isOpen=false;
+        this.hint.setText(this.lockCode?"UNLOCK":"OPEN");
         Callback.do(this.callbacks.onClose);
-    };
-    this.getLockCode=function(){
+    }
+    getLockCode(){
         return this.lockCode;
-    };
-    this.animate=function(dif, time=1){
+    }
+    animate(dif, time=1){
         this.animating=true;
         this.timer=0;
         this.timespan=time;
@@ -112,7 +115,7 @@ function Door(raw={}){
         if(dif.w)this.rectB.h=dif.w;
         if(dif.h)this.rectB.h=dif.h;
     }
-    this.block=function(a){
+    block(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects
@@ -123,15 +126,15 @@ function Door(raw={}){
                 ?o.pawn.applyFix(fix)
                 :o.applyFix(fix));
         });
-    };
-    this.changeType=function(){
+    }
+    changeType(){
         if(this.lockCode==null){
             this.lock();
         }else this.lockCode=null;
-    };
-    this.openIfPlayerHasEnoughCoins=function(p){
+    }
+    openIfPlayerHasEnoughCoins(p){
         const c=p.c||100;
         if(Player.data.coins>=c)this.forceOpen();  
-    };
-    if(!!raw.l)this.lock();
+    }
+    
 }
