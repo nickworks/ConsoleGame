@@ -1,160 +1,171 @@
-function ScenePlay(n){
-    var levelIndex=n;//private
-    var cam=new Camera();
-    var player=null;
-    var goal=null;
-    var platforms=[];
-    var npcs=[];
-    var doors=[];
-    var bullets=[];
-    var items=[];
-    var particles=[];
-    var crates=[];
-    var hud=new HUD();
-    
-    this.modal=null;
-    
-    var alphaOverlay=1;
-    var fadeToScene=null;
-    
-    this.cam=cam;
-    
-    this.update=function(dt){
-        if(fadeToScene){
-            if(alphaOverlay<1)alphaOverlay+=dt*2;
-            else return fadeToScene;
-        } else if(alphaOverlay>0)alphaOverlay-=dt*2;
+class ScenePlay {
+    constructor(n){
+
+        // these all used to be private:
+
+        this.levelIndex=n;
+        this.cam=new Camera();
+        this.player=null;
+        this.goal=null;
+        this.platforms=[];
+        this.npcs=[];
+        this.doors=[];
+        this.bullets=[];
+        this.items=[];
+        this.particles=[];
+        this.crates=[];
+        this.hud=new HUD();
+        this.modal=null;
+        this.alphaOverlay=1;
+        this.fadeToScene=null;
         
-        this.cam=cam;
-        this.player=player;
-        this.platforms=platforms;
-        this.npcs=npcs;
-        this.doors=doors;
-        this.bullets=bullets;
-        this.items=items;
-        this.crates=crates;
+
+        // load:
+        (()=>{
+            const level=LevelData.level(this.levelIndex);
+            this.player=level.player;
+            this.goal=level.goal;
+            this.platforms=level.platforms;
+            this.npcs=level.npcs;
+            this.doors=level.doors;
+            this.items=level.items;
+            this.crates=level.crates;
+            this.modal=null;
+            this.bullets=[];
+            this.cam.target=this.player.pawn;
+            this.cam.updateTargetXY(true);
+            this.ids();
+        })();
+
+    }
+    
+    update(dt){
+        if(this.fadeToScene){
+            if(this.alphaOverlay<1)this.alphaOverlay+=dt*2;
+            else return this.fadeToScene;
+        } else if(this.alphaOverlay>0)this.alphaOverlay-=dt*2;
         
-        if(player==null)return;
+        if(this.player==null)return;
         else if(this.modal){
             const newScene=this.modal.update(dt);
-            if(newScene&&!fadeToScene)fadeToScene=newScene;
-            else if(this.modal.reloadLevel&&!fadeToScene)fadeToScene=new ScenePlay(levelIndex);
+            if(newScene&&!this.fadeToScene)this.fadeToScene=newScene;
+            else if(this.modal.reloadLevel&&!this.fadeToScene)this.fadeToScene=new ScenePlay(this.levelIndex);
             else if(this.modal.remove)this.modal=null;
             else if(mouse.onDown()) this.handleClick();
-        } else if(player.dead){
+        } else if(this.player.dead){
             this.modal=new Death();
         } else {
             if(mouse.onDown()) this.handleClick();
-            if(player)player.update(dt);
-            for(var i in items){
-                items[i].update(dt);
-                if(items[i].rect.overlaps(player.pawn.rect))items[i].pickup();
-                if(items[i].dead)items.splice(i,1);
+            if(this.player)this.player.update(dt);
+            for(var i in this.items){
+                this.items[i].update(dt);
+                if(this.items[i].rect.overlaps(this.player.pawn.rect))this.items[i].pickup();
+                if(this.items[i].dead)this.items.splice(i,1);
             }
-            for(var i in npcs){
-                npcs[i].update(dt);
-                if(!npcs[i].friend&&npcs[i].pawn.rect.overlaps(player.pawn.rect)){
-                    const rightOfNPC=npcs[i].pawn.rect.mid().x<player.pawn.rect.mid().x;
-                    player.pawn.vx=rightOfNPC?300:-300;
-                    player.pawn.vy=-250;
+            for(var i in this.npcs){
+                this.npcs[i].update(dt);
+                if(!this.npcs[i].friend&&this.npcs[i].pawn.rect.overlaps(this.player.pawn.rect)){
+                    const rightOfNPC=this.npcs[i].pawn.rect.mid().x<this.player.pawn.rect.mid().x;
+                    this.player.pawn.vx=rightOfNPC?300:-300;
+                    this.player.pawn.vy=-250;
                 }
-                if(npcs[i].dead)npcs.splice(i,1);
+                if(this.npcs[i].dead)this.npcs.splice(i,1);
             }
-            platforms.forEach(p=>{
+            this.platforms.forEach(p=>{
                 p.update(dt);
-                p.block(player, dt);
-                p.block(npcs, dt);
-                p.block(items, dt);
+                p.block(this.player, dt);
+                p.block(this.npcs, dt);
+                p.block(this.items, dt);
             });
-            doors.forEach(d=>{
+            this.doors.forEach(d=>{
                 d.update(dt);
-                d.block(player);
-                d.block(npcs);
-                d.block(items, dt);
+                d.block(this.player);
+                d.block(this.npcs);
+                d.block(this.items, dt);
             });
-            for(var i in crates){
-                const c=crates[i];
-                c.block(player);
-                c.block(npcs);
-                c.block(items, dt);
+            for(var i in this.crates){
+                const c=this.crates[i];
+                c.block(this.player);
+                c.block(this.npcs);
+                c.block(this.items, dt);
                 if(c.dead){
                     if(c.hasLoot){
                         var amt=Math.random()+Math.random()+Math.random();
                         this.spawnLoot((amt*3)|0,c.rect.mid());
                     }
-                    crates.splice(i,1);
+                    this.crates.splice(i,1);
                 }
             }
             
-            if(goal&&goal.update(dt)&&!fadeToScene)fadeToScene=new SceneLoad(new ScenePlay(goal.nextLevel()));
-            for(var i in bullets){
-                const b=bullets[i];
+            if(this.goal&&this.goal.update(dt)&&!this.fadeToScene)this.fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
+            for(var i in this.bullets){
+                const b=this.bullets[i];
                 b.update(dt);
                 const check=(o)=>{
                     if(b.rect.overlaps(o.rect||o.pawn.rect))b.hit(o);
                 };
                 
-                check(player);
-                npcs.forEach(check);
-                doors.forEach(check);
-                platforms.forEach(check);
-                crates.forEach(check);
+                check(this.player);
+                this.npcs.forEach(check);
+                this.doors.forEach(check);
+                this.platforms.forEach(check);
+                this.crates.forEach(check);
                 
-                if(b.dead)bullets.splice(i,1);
+                if(b.dead)this.bullets.splice(i,1);
             }
             if(keyboard.onDown(key.exit())){
                 this.pause();
             }
         }
-        for(var i in particles){
-            particles[i].update(dt);
-            if(particles[i].dead)particles.splice(i,1);
+        for(var i in this.particles){
+            this.particles[i].update(dt);
+            if(this.particles[i].dead)this.particles.splice(i,1);
         };
-        cam.update(dt);
-        hud.update(dt);
-    };
-    this.pause=function(){
+        this.cam.update(dt);
+        this.hud.update(dt);
+    }
+    pause(){
         if(this.modal==null)this.modal=new Pause();
-    };
-    this.unpause=function(){
+    }
+    unpause(){
         this.modal=null;  
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         game.clear("#888");
-        cam.drawStart(gfx);
-        if(goal)goal.draw(gfx);
-        doors.forEach(d=>d.draw(gfx));
-        platforms.forEach(p=>p.draw(gfx));
-        player.draw(gfx);
-        npcs.forEach(n=>n.draw(gfx));
-        bullets.forEach(b=>b.draw(gfx));
-        items.forEach(i=>i.draw(gfx));
-        particles.forEach(p=>p.draw(gfx));
-        crates.forEach(c=>c.draw(gfx));
-        cam.drawEnd(gfx);
+        this.cam.drawStart(gfx);
+        if(this.goal)this.goal.draw(gfx);
+        this.doors.forEach(d=>d.draw(gfx));
+        this.platforms.forEach(p=>p.draw(gfx));
+        this.player.draw(gfx);
+        this.npcs.forEach(n=>n.draw(gfx));
+        this.bullets.forEach(b=>b.draw(gfx));
+        this.items.forEach(i=>i.draw(gfx));
+        this.particles.forEach(p=>p.draw(gfx));
+        this.crates.forEach(c=>c.draw(gfx));
+        this.cam.drawEnd(gfx);
         
-        if(hud)hud.draw(gfx);
+        if(this.hud)this.hud.draw(gfx);
         if(this.modal)this.modal.draw(gfx);
         
-        gfx.fillStyle="rgba(0,0,0,"+alphaOverlay+")";
+        gfx.fillStyle="rgba(0,0,0,"+this.alphaOverlay+")";
         gfx.fillRect(0,0,game.width(),game.height());
         
-    };
-    this.edit=function(){
+    }
+    edit(){
         this.modal=new Editor();
-    };
-    this.spawnLoot=function(amt=1,raw={}){
+    }
+    spawnLoot(amt=1,raw={}){
         for(var i=0;i<amt;i++){
-            items.push(Item.random(raw))
+            this.items.push(Item.random(raw))
         }
-    };
-    this.addParticles=function(x,y,t,n){
+    }
+    addParticles(x,y,t,n){
         for(var i=0;i<n;i++){
-            particles.push(new Particle(x,y,t));
+            this.particles.push(new Particle(x,y,t));
         };
-    };
-    this.explode=function(x,y,r=200,dmg=0){
-        const objs=[player].concat(items,npcs,crates);
+    }
+    explode(x,y,r=200,dmg=0){
+        const objs=[this.player].concat(this.items,this.npcs,this.crates);
         
         this.addParticles(x,y,1,8);
         this.cam.shake=.5;
@@ -186,60 +197,45 @@ function ScenePlay(n){
                 }
             }
         });
-    };
-    this.handleClick=function(){
+    }
+    handleClick(){
         const pre="you clicked on scene.";
-        if(player.pawn.rect.mouseOver()) consoleObj.log(pre+"player");
+        if(this.player.pawn.rect.mouseOver()) consoleObj.log(pre+"player");
         const check=(a,str)=>{
             for(var i in a){
                 const rect=a[i].rect||a[i].pawn.rect;
                 if(rect.mouseOver())consoleObj.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
             }
         };
-        check(bullets, "bullets");
-        check(platforms, "platforms");
-        check(doors, "doors");
-        check(npcs, "npcs");
-        check(items, "items");
-    };
-    this.goal=function(g){
-        if(g)goal=g;
-        return goal;
-    };
-    this.ids=function(){ // assign ids to non-id'd objects
+        check(this.bullets, "bullets");
+        check(this.platforms, "platforms");
+        check(this.doors, "doors");
+        check(this.npcs, "npcs");
+        check(this.items, "items");
+    }
+    goal(g){
+        if(g)this.goal=g;
+        return this.goal;
+    }
+    ids(){ // assign ids to non-id'd objects
         this.all().forEach(o=>{
             if(!o.id())o.id(this.id());
         });
-    };
-    this.all=function(){
-        return [player].concat(npcs,doors,platforms,items);
-    };
-    this.obj=function(id){ // fetch objects by id
+    }
+    all(){
+        return [this.player].concat(this.npcs,this.doors,this.platforms,this.items);
+    }
+    obj(id){ // fetch objects by id
         var res=null;
         this.all().forEach(i=>{if(i.id()==id)res=i;});
         return res;
-    };
-    this.id=function(){ // get new, unused id number
+    }
+    id(){ // get new, unused id number
         let i=0;
         this.all().forEach(o=>{
             const n=o.id()|0;
             if(n>i)i=n;
         });
         return i+1;
-    };
-    (()=>{ // load:
-        const level=LevelData.level(levelIndex);
-        player=level.player;
-        goal=level.goal;
-        platforms=level.platforms;
-        npcs=level.npcs;
-        doors=level.doors;
-        items=level.items;
-        crates=level.crates;
-        this.modal=null;
-        bullets=[];
-        cam.target=player.pawn;
-        cam.updateTargetXY(true);
-        this.ids();
-    })();
+    }
 }

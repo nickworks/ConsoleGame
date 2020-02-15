@@ -1,43 +1,41 @@
-let scene=null;
-let game=new Game();
-function Game(){
-    
-    var timePrev=0;
-    var dt=0;
-    var currentScene=null;
-    var width=0;
-    var height=0;
-    var gfx=null;
-    
-    var targetSize={w:800,h:400}; // how big the play window should be
-    var isFullscreen=false;
+class Game {
+    constructor(){
 
-    var canvas=null;
-    this.width=function(){return width;}
-    this.height=function(){return height;}
-    this.gfx=function(){return gfx;}
-    
-    Game.DEVMODE=true;
 
-    this.settings={
-        skipLoadingScenes:Game.DEVMODE||false,
-        editModeEnabled:Game.DEVMODE||false,
-    };
-    
-    this.calcDeltaTime=function(time){
+        Game.DEVMODE=true;
+
+        this.timePrev=0;
+        this.dt=0;
+        this.currentScene=null;
+        this.w=0;
+        this.h=0;
+        this.graphics=null;
+        this.targetSize={w:800,h:400}; // how big the play window should be
+        this.isFullscreen=false;
+        this.canvas=null;
+
+        this.settings={
+            skipLoadingScenes:Game.DEVMODE||false,
+            editModeEnabled:Game.DEVMODE||false,
+        };
+    }
+    calcDeltaTime(time){
         if(time === undefined) time = 0;
-        dt = (time - timePrev) / 1000;
-        timePrev = time;
-    };
-    // if the canvas has a resize queued-up, resize it
-    this.resizeCanvas=function(){
-        if(targetSize){
-            this.size(targetSize.w,targetSize.h);
-            targetSize=null;
+        this.dt = (time - this.timePrev) / 1000;
+        this.timePrev = time;
+    }
+
+    width(){return this.w;}
+    height(){return this.h;}
+    gfx(){return this.graphics;}
+
+    resizeCanvas(){ // if the canvas has a resize queued-up, resize it
+        if(this.targetSize){
+            this.size(this.targetSize.w,this.targetSize.h);
+            this.targetSize=null;
         }
-    };
-    this.update=function(time){
-        
+    }
+    update(time){
         
         this.resizeCanvas();
 
@@ -50,69 +48,74 @@ function Game(){
         }
         
         let nextScene;
-        scene=currentScene;
+        scene=this.currentScene;
         game=this;
         
-        if(currentScene){
-            nextScene=currentScene.update(dt);
-            currentScene.draw(gfx);
+        if(this.currentScene){
+            nextScene=this.currentScene.update(this.dt);
+            this.currentScene.draw(this.graphics);
             if(!this.isFocus()){
-                gfx.fillStyle="rgba(0,0,0,.5)";
-                gfx.fillRect(0,0,width,height);
+                this.graphics.fillStyle="rgba(0,0,0,.5)";
+                this.graphics.fillRect(0,0,this.w,this.h);
             }
         } else {
             nextScene=new SceneTitle();
         }
         
-        if(nextScene)currentScene=nextScene;
+        if(nextScene)this.currentScene=nextScene;
         
         ///////////////////////////// LATE UPDATE:
         keyboard.update();
         mouse.update();
         requestAnimationFrame((time)=>this.update(time));
-    };
-    this.isFocus=()=>{return(document.activeElement==document.body)};
-    this.fullscreen=function(fs){
-        isFullscreen=fs||!isFullscreen;
-        if(!isFullscreen){
-            targetSize={w:800,h:400};
-            canvas.style.marginTop="50px";
+    }
+    isFocus(){
+        return(document.activeElement==document.body);
+    }
+    fullscreen(fs){
+        this.isFullscreen=fs||!this.isFullscreen;
+        if(!this.isFullscreen){
+            this.targetSize={w:800,h:400};
+            this.canvas.style.marginTop="50px";
         }
         else {
-            targetSize={w:document.body.clientWidth,h:window.innerHeight-150};
-            canvas.style.marginTop="0";
+            this.targetSize={w:document.body.clientWidth,h:window.innerHeight-150};
+            this.canvas.style.marginTop="0";
         }
-    };
-    this.size=function(w,h){
-        width=canvas.width=w;
-        height=canvas.height=h;
-    };
+    }
+    size(w,h){
+        this.w=this.canvas.width=w;
+        this.h=this.canvas.height=h;
+    }
     
-    this.clear=function(color="#000"){
-        gfx.fillStyle=color;
-        gfx.fillRect(0, 0, width, height); // clear screen
-    };
-    this.loadLevel=function(n){
-        scene=currentScene=new ScenePlay(n);  
-    };
-    this.start=function(id){
-        canvas=document.getElementById(id);
-        if(canvas==undefined) return;
-        gfx=canvas.getContext("2d");
-        if(gfx==undefined) return;
+    clear(color="#000"){
+        this.graphics.fillStyle=color;
+        this.graphics.fillRect(0, 0, this.w, this.h); // clear screen
+    }
+    loadLevel(n){
+        scene=this.currentScene=new ScenePlay(n);  
+    }
+    start(id){
+        this.canvas=document.getElementById(id);
+        if(this.canvas==undefined) return;
+        this.graphics=this.canvas.getContext("2d");
+        if(this.graphics==undefined) return;
         
         window.addEventListener("blur",()=>{
             if(scene&&scene.pause)scene.pause();
             keyboard.blur();
         });
         window.addEventListener("resize",(e)=>{
-            if(isFullscreen)this.fullscreen(true);
+            if(this.isFullscreen)this.fullscreen(true);
         });
         
         keyboard.setup();
-        mouse.setup(canvas, this);
+        mouse.setup(this.canvas, this);
         
-        sprites.init(gfx);
+        sprites.init(this.graphics);
         this.update(0); // begin game loop
-    };
+    }
 }
+
+let scene=null;
+let game=new Game();

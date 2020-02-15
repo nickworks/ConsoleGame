@@ -1,5 +1,5 @@
 class Pawn {
-    constructor(raw){
+    constructor(raw,canDoubleJump=()=>{return false;}){
         this.rect=new Rect(raw.x||0,raw.y||0,25,45);
         this.sightRange=raw.s||300;
         this.vx=0;
@@ -21,9 +21,9 @@ class Pawn {
         this.dropFrom=0;
         
         this.weapon=new Weapon();
-    }
-    canDoubleJump(){
-        return false;
+
+        this.canDoubleJump=canDoubleJump;
+
     }
     draw(gfx,imgL, imgR,o){
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
