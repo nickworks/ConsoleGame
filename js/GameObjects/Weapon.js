@@ -1,21 +1,25 @@
-const TYPE_WEAK=1;
-const TYPE_PISTOL=2;
-const TYPE_SHOTGUN=3;
-const TYPE_SMG=4;
-const TYPE_ROCKET=5;
 
 class Weapon {
+
+    static Type = {
+        WEAK: 1,
+        PISTOL: 2,
+        SHOTGUN: 3,
+        SMG: 4,
+        ROCKET: 5,
+    }
+
     constructor(raw={}){
         this.type;
         this.shootDelay=0;
         this.reloadDelay=0;
-        this.changeType(raw.t||TYPE_WEAK);
+        this.changeType(raw.t||Weapon.Type.WEAK);
         this.clip=this.clipMax;
     }
     
     changeType(t){
         switch(t){
-            case TYPE_WEAK:
+            case Weapon.Type.WEAK:
                 this.shootCooldown=.5;
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=100;
@@ -26,7 +30,7 @@ class Weapon {
                 this.title="PEA-SHOOTER";
                 this.explode=false;
                 break;
-            case TYPE_PISTOL:
+            case Weapon.Type.PISTOL:
                 this.shootCooldown=.25;
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=20;
@@ -37,7 +41,7 @@ class Weapon {
                 this.title="PISTOL";
                 this.explode=false;
                 break;
-            case TYPE_SHOTGUN:
+            case Weapon.Type.SHOTGUN:
                 this.shootCooldown=.5;
                 this.reloadCooldown=2;
                 this.ammo=this.ammoMax=10;
@@ -48,7 +52,7 @@ class Weapon {
                 this.title="SHOTGUN";
                 this.explode=false;
                 break;
-            case TYPE_SMG:
+            case Weapon.Type.SMG:
                 this.shootCooldown=.1;
                 this.reloadCooldown=2;
                 this.ammo=this.ammoMax=90;
@@ -59,7 +63,7 @@ class Weapon {
                 this.title="SMG";
                 this.explode=false;
                 break;
-            case TYPE_ROCKET:
+            case Weapon.Type.ROCKET:
                 this.shootCooldown=1;
                 this.reloadCooldown=3;
                 this.ammo=this.ammoMax=12;

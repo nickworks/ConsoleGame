@@ -1,9 +1,11 @@
-const TYPE_HEAL=1;
-const TYPE_AMMO=2;
-const TYPE_COIN=3;
-const TYPE_GUN=4;
-
 class Item {
+
+    static Type = {
+        HEAL: 1,
+        AMMO: 2,
+        COIN: 3,
+        GUN: 4,
+    }
     constructor(raw={}){       
         
         this.oid=raw.i||0;
@@ -54,10 +56,10 @@ class Item {
     };
     pickup(){
         switch(this.type){
-            case TYPE_HEAL:scene.player.heal(25);break;
-            case TYPE_AMMO:scene.player.pawn.weapon.addAmmo(25);break;
-            case TYPE_COIN:PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
-            case TYPE_GUN:
+            case Item.Type.HEAL:scene.player.heal(25);break;
+            case Item.Type.AMMO:scene.player.pawn.weapon.addAmmo(25);break;
+            case Item.Type.COIN:PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
+            case Item.Type.GUN:
                 if(!this.weapon){
                     this.weapon=Weapon.random();
                     this.hint=new BubbleHint(this.weapon.title);
@@ -74,10 +76,10 @@ class Item {
     draw(gfx){
         
         var img;
-        if(this.type==TYPE_HEAL)img=sprites.item1;
-        if(this.type==TYPE_AMMO)img=sprites.item2;
-        if(this.type==TYPE_COIN)img=sprites.item3;
-        if(this.type==TYPE_GUN )img=sprites.gun;
+        if(this.type==Item.Type.HEAL)img=sprites.item1;
+        if(this.type==Item.Type.AMMO)img=sprites.item2;
+        if(this.type==Item.Type.COIN)img=sprites.item3;
+        if(this.type==Item.Type.GUN )img=sprites.gun;
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw(gfx);

@@ -1,9 +1,14 @@
-const TYPE_BOOM=1;
-const TYPE_HIT=2;
-const TYPE_DUST=3;
-const TYPE_CRATE=4;
 
 class Particle {
+
+
+    static Type = {
+        BOOM: 1,
+        HIT: 2,
+        DUST: 3,
+        CRATE: 4,
+    }
+
     constructor(x,y,t=1){
         
         this.dead=false;
@@ -43,10 +48,11 @@ class Particle {
             };
         };
         const rand=(min,max)=>{
-            return Math.random()*(max-min)+min;  
+            return Math.random()*(max-min)+min;
         };
+        // TODO: Maybe move this into /data/ folder?
         switch(t){
-            case TYPE_BOOM:
+            case Particle.Type.BOOM:
                 var scale=rand(0,750)+rand(0,750);
                 this.v=randDir(scale);
                 this.drag=.2;
@@ -54,21 +60,21 @@ class Particle {
                 this.scalev=rand(0,1);
                 this.lifespan=rand(0,.5)+rand(0,.5);
                 break;
-            case TYPE_HIT:
+            case Particle.Type.HIT:
                 this.v={x:rand(-800,800),y:rand(-500,-100)};
                 this.a.y=1600;
                 this.scalev=0;
                 this.rect.w=this.rect.h=rand(5, 15);
                 this.lifespan=rand(.5,1.5);
                 break;
-            case TYPE_DUST:
+            case Particle.Type.DUST:
                 this.v=randDir(rand(0,800));
                 this.drag=.1;
                 this.lifespan=rand(.5,1);
                 this.rect.w=this.rect.h=rand(20,30);
                 this.alpha=.5;
                 break;
-            case TYPE_CRATE:
+            case Particle.Type.CRATE:
                 this.v={x:rand(-400,400),y:rand(-800,-300)};
                 this.lifespan=rand(.5,2);
                 this.rect.w=this.rect.h=rand(20,40);
@@ -97,14 +103,14 @@ class Particle {
         var a=this.alpha;
         if(this.fadeOut)a*=(this.lifespan-this.life)/this.lifespan;
         switch(this.t){
-            case TYPE_BOOM:
+            case Particle.Type.BOOM:
                 const lum=(this.alpha*255)|0;
                 gfx.fillStyle="rgba("+lum+","+lum+",0,"+a+")";
                 break;
-            case TYPE_HIT:
+            case Particle.Type.HIT:
                 gfx.fillStyle="rgba(0,0,0,"+a+")";
                 break;
-            case TYPE_DUST:
+            case Particle.Type.DUST:
                 gfx.fillStyle="rgba(100,50,25,"+a+")";
                 break;
             default:
