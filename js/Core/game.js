@@ -1,8 +1,8 @@
 class Game {
     constructor(){
 
-
         Game.DEVMODE=true;
+
         this.time={
             now:0,
             prev:0,
@@ -67,38 +67,45 @@ class Game {
         
         this.view.resizeCanvas();
         
-        if(keyboard.onDown(key.console())){
-            //if(scene.pause)scene.pause();
-            keyboard.blur();
-            consoleObj.input.focus();
-        }
+        if(keyboard.onDown(key.console())) this.focusConsole();
         
-        let nextScene;
+        this.globals();
+
+        this.updateScene();
+        
+        this.draw();
+
+        this.lateUpdate();
+    }
+    focusConsole(){
+        keyboard.blur();
+        consoleObj.input.focus();
+    }
+    globals(){
         scene=this.scene;
         game=this;
-        
-        if(this.scene){
-            nextScene=this.scene.update(this.time.dt);
-            this.scene.draw(this.view.gfx);
-            if(!this.isFocus()){
-                this.view.gfx.fillStyle="rgba(0,0,0,.5)";
-                this.view.gfx.fillRect(0,0,this.view.size.w,this.view.size.h);
-            }
-        } else {
-            nextScene=new SceneTitle();
+    }
+    updateScene(){
+        let nextScene = (this.scene)
+            ? this.scene.update(this.time.dt)
+            : new SceneTitle();
+
+        if(nextScene) this.scene=nextScene;
+    }
+    draw(){
+        if(this.scene) this.scene.draw(this.view.gfx);
+        const focusedOnConsole = (document.activeElement!=document.body);
+        if(focusedOnConsole){
+            this.view.gfx.fillStyle="rgba(0,0,0,.5)";
+            this.view.gfx.fillRect(0,0,this.view.size.w,this.view.size.h);
         }
-        
-        if(nextScene)this.scene=nextScene;
-        
-        ///////////////////////////// LATE UPDATE:
+    }
+    lateUpdate(){
         keyboard.update();
         mouse.update();
 
         // queue up the next frame for rendering:
         requestAnimationFrame((timestamp)=>this.time.tick(timestamp));
-    }
-    isFocus(){
-        return(document.activeElement==document.body);
     }
     loadLevel(n){
         scene=this.scene=new ScenePlay(n);  
