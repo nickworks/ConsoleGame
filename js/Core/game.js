@@ -9,7 +9,7 @@ function Game(){
     var height=0;
     var gfx=null;
     
-    var targetSize={w:800,h:400};
+    var targetSize={w:800,h:400}; // how big the play window should be
     var isFullscreen=false;
 
     var canvas=null;
@@ -28,13 +28,18 @@ function Game(){
         dt = (time - timePrev) / 1000;
         timePrev = time;
     };
-    this.update=function(time){
-        
+    // if the canvas has a resize queued-up, resize it
+    this.resizeCanvas=function(){
         if(targetSize){
             this.size(targetSize.w,targetSize.h);
             targetSize=null;
         }
+    };
+    this.update=function(time){
         
+        
+        this.resizeCanvas();
+
         this.calcDeltaTime(time);
         
         if(keyboard.onDown(key.console())){

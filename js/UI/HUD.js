@@ -1,20 +1,19 @@
-function HUD(){
-    
-    this.font=new Font({color:"#FFF",size:19,align:"left",valign:"middle"});
-    
-    var x1=0;
-    const bw=7;//bullet width
-    const bm=5;//bullet margin
-    const bs=bw+bm;//bullet spread
-      
-    this.update=function(dt){
+class HUD {
+    constructor(){
+        this.font=new Font({color:"#FFF",size:19,align:"left",valign:"middle"});
+    }
+    update(dt){
         
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         this.drawAmmo(gfx);
         this.drawHealth(gfx);
-    };
-    this.drawAmmo=function(gfx){
+    }
+    drawAmmo(gfx){
+        var x1=0;
+        const bw=7;//bullet width
+        const bm=5;//bullet margin
+        const bs=bw+bm;//bullet spread
         const w=scene.player.pawn.weapon;//weapon
         const b=w.clip;//loaded bullets
         const c=w.clipMax;//clip size
@@ -44,8 +43,8 @@ function HUD(){
         }
         
         Matrix.pop();
-    };
-    this.drawHealth=function(gfx){
+    }
+    drawHealth(gfx){
         
         const w=200;
         const h=18;
@@ -61,5 +60,5 @@ function HUD(){
         gfx.fillStyle="rgb(50,100,50)";
         gfx.fillRect(0,0,w*p,h);
         Matrix.pop();
-    };
+    }
 }

@@ -1,31 +1,33 @@
-function Dialog(x,y,texts,callbacks={}){
-    if(typeof texts == "string") texts=[texts];
-    if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
-    
-    this.zoom=true;
-    this.index=0;
-    this.texts=texts;
-    this.lines=[];
-    this.x=x;
-    this.y=y;
-    this.w=200;//max width
-    this.h=14;
-    
-    this.font=new Font({valign:"top"});
-    
-    this.timer=0;
-    this.charNow=0;
-    this.charMax=0;
-    this.remove=false;
-    
-    this.callbacks={
-        onSpeak:(callbacks?callbacks.onSpeak:[]),
-        onData:(callbacks?callbacks.onData:[])
-    };
-    
-    this.bg=new BubbleBG(0,0, "#FFF");
-    
-    this.chopUpText=function(text){
+class Dialog {
+    constructor(x,y,texts,callbacks={}){
+        if(typeof texts == "string") texts=[texts];
+        if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
+        
+        this.zoom=true;
+        this.index=0;
+        this.texts=texts;
+        this.lines=[];
+        this.x=x;
+        this.y=y;
+        this.w=200;//max width
+        this.h=14;
+        
+        this.font=new Font({valign:"top"});
+        
+        this.timer=0;
+        this.charNow=0;
+        this.charMax=0;
+        this.remove=false;
+        
+        this.callbacks={
+            onSpeak:(callbacks?callbacks.onSpeak:[]),
+            onData:(callbacks?callbacks.onData:[])
+        };
+        
+        this.bg=new BubbleBG(0,0, "#FFF");
+        this.showNext();
+    }
+    chopUpText(text){
         this.lines=[];
         const words = text.split(' ');
         let line='';
@@ -39,8 +41,8 @@ function Dialog(x,y,texts,callbacks={}){
             }
         }
         this.lines.push(line);
-    };
-    this.update=function(dt){
+    }
+    update(dt){
         this.bg.update(dt);
         if(this.bg.p<1)return;
         if(this.charNow < this.charMax){
@@ -52,8 +54,8 @@ function Dialog(x,y,texts,callbacks={}){
         } else {
             if(keyboard.onDown(key.activate())) this.showNext();
         }
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         
         gfx.fillStyle="rgba(0,0,0,.5)";
         gfx.fillRect(0,0,800,400);
@@ -76,9 +78,9 @@ function Dialog(x,y,texts,callbacks={}){
         }
         Matrix.pop();
         scene.cam.drawEnd(gfx);
-    };
+    }
     
-    this.showNext=function(){
+    showNext(){
         if(this.index>=this.texts.length)this.endDialog();
         else {
             let txt=this.texts[this.index++];
@@ -99,10 +101,9 @@ function Dialog(x,y,texts,callbacks={}){
             const h=this.h*this.lines.length;
             this.bg.setSize(w,h);
         }
-    };
-    this.endDialog=function(){
+    }
+    endDialog(){
         this.remove=true;
         Callback.do(this.callbacks.onSpeak);
-    };
-    this.showNext();
+    }
 }

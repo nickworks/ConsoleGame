@@ -1,15 +1,15 @@
-function BubbleBG(w,h,c,b){
-    
-    this.time=0;
-    this.transTime=0.25;
-    this.w={now:0,start:0,target:w};
-    this.h={now:0,start:0,target:h};
-    this.r={now:0,start:0,target:10};
-    this.p=0;
-    this.color=c||"#AAA";
-    this.bg=b;
-    
-    this.setSize=function(w,h){
+class BubbleBG {
+    constructor(w,h,c,b){
+        this.time=0;
+        this.transTime=0.25;
+        this.w={now:0,start:0,target:w};
+        this.h={now:0,start:0,target:h};
+        this.r={now:0,start:0,target:10};
+        this.p=0;
+        this.color=c||"#AAA";
+        this.bg=b;
+    }
+    setSize(w,h){
         this.w.target=w/2;
         this.h.target=h;
         this.w.start=this.w.now;
@@ -17,14 +17,14 @@ function BubbleBG(w,h,c,b){
         this.r.start=this.r.now;
         this.time=0;
         this.p=0;
-    };
-    this.snap=function(){
+    }
+    snap(){
         this.p=1;
         this.w.now=this.w.target;
         this.h.now=this.h.target;
         this.r.now=this.r.target;
-    };
-    this.update=function(dt){
+    }
+    update(dt){
         this.time+=dt;
         if(this.p<1){
             this.p=this.time/this.transTime;
@@ -33,11 +33,11 @@ function BubbleBG(w,h,c,b){
             this.w.now=this.lerp(this.w.start,this.w.target);
             this.h.now=this.lerp(this.h.start,this.h.target);
         }
-    };
-    this.lerp=function(a,b){
+    }
+    lerp(a,b){
         return (b-a)*(this.p*this.p)+a;
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         const al=Math.PI;
         const ad=al/2;
         const ar=0;
@@ -58,8 +58,8 @@ function BubbleBG(w,h,c,b){
         gfx.closePath();
         gfx.fillStyle=this.color;
         gfx.fill();
-    };
-    this.pos=function(){
+    }
+    pos(){
         return{x:-this.w.now,y:-5-this.h.now-this.r.now};  
-    };
+    }
 }

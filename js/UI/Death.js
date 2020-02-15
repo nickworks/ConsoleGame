@@ -1,16 +1,16 @@
-function Death(){
-
-    this.font=new Font({size:12,color:"#FFF",align:"center"});
-
-    this.timer=.5;
-	this.update=function(dt){
+class Death {
+    constructor(){
+        this.font=new Font({size:12,color:"#FFF",align:"center"});
+        this.timer=.5;
+    }
+	update(dt){
         this.timer-=dt;
 
         if(keyboard.onDown(key.any())){
             this.reloadLevel=true;
         }
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         var p=1-(this.timer/.5);
         if(p<0)p=0;
         if(p>1)p=1;
@@ -20,5 +20,5 @@ function Death(){
         this.font.apply(gfx);
         gfx.fillText("You are dead, man.", game.width()/2,game.height()/2);
         gfx.fillText("Press ENTER", game.width()/2,game.height()/2+15);
-    };
+    }
 }

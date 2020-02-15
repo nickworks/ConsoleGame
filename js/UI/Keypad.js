@@ -1,30 +1,33 @@
-function Keypad(x,y,onDone){
-    this.index=0;
-    this.val="";
-    this.txt="CODE: ";
-    this.x=x;
-    this.y=y;
-    this.zoom=true;
-    this.font=new Font({valign:"top"});
+class Keypad {
+    constructor(x,y,onDone){
+        this.index=0;
+        this.val="";
+        this.txt="CODE: ";
+        this.x=x;
+        this.y=y;
+        this.zoom=true;
+        this.font=new Font({valign:"top"});
+        
+        this.remove=false;
+        this.timerBlink=0;
+        this.showCursor=true;
+        
+        this.onDone=onDone;
+        
+        this.bg=new BubbleBG(0,0,"#FFF");
+        this.resizeBG();
+    }
     
-    this.remove=false;
-    this.timerBlink=0;
-    this.showCursor=true;
-    
-    this.onDone=onDone;
-    
-    this.bg=new BubbleBG(0,0,"#FFF");
-    
-    this.append=function(txt){
+    append(txt){
         this.val+=txt;
         this.resizeBG(true);
-    };
-    this.resizeBG=function(snap=false){
+    }
+    resizeBG(snap=false){
         const size=this.font.measure(game.gfx(),this.txt+this.val+"_");
         this.bg.setSize(size.width,14);
         if(snap)this.bg.snap();
-    };
-    this.update=function(dt){
+    }
+    update(dt){
         this.timerBlink-=dt;
         if(this.timerBlink<=0){
             this.showCursor=!this.showCursor;
@@ -43,8 +46,8 @@ function Keypad(x,y,onDone){
         if(keyboard.onDown([key.n9,key.p9])) this.append("9");
         if(keyboard.onDown(key.menuChoose())) this.end(true);
         if(keyboard.onDown(key.exit())) this.end(false);
-    };
-    this.draw=function(gfx){
+    }
+    draw(gfx){
         gfx.fillStyle="rgba(0,0,0,.5)";
         gfx.fillRect(0,0,800,400);
         scene.cam.drawStart(gfx);
@@ -58,10 +61,10 @@ function Keypad(x,y,onDone){
         if(this.bg.p>=1)gfx.fillText(o, p.x, p.y);
         Matrix.pop();
         scene.cam.drawEnd(gfx);
-    };
-    this.end=function(submit){
+    }
+    end(submit){
         this.remove=true;
         if(submit&&this.onDone)this.onDone(this.val);
-    };
-    this.resizeBG();
+    }
+    
 }
