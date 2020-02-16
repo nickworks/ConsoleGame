@@ -11,7 +11,7 @@ class SceneLoad {
             "Don't like this game's controls? Feel free to change the input mappings in the `key` object",
             "The most important object is `scene`, but you may be able to find others!",
             "Press F11 to go fullscreen!",
-            "Try out game.fullscreen()"
+            "Try out game.view.fullscreen()"
         ];
         this.newScene=newScene;
         this.speed=speed|1;

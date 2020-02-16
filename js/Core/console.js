@@ -61,7 +61,8 @@ class Console {
         const makeP=(txt,clss="")=>{
             var p=document.createElement("p");
             if(clss)p.classList.add(clss);
-            p.appendChild(document.createTextNode(txt));
+            p.innerHTML = txt;
+            //p.appendChild(document.createTextNode(txt));
             return p;
         };
         this.output.prepend(makeP(msg));
@@ -70,6 +71,9 @@ class Console {
         }
         this.scrollToTop();
     }
+    
+    // this function outputs large amounts of data into a <textarea>
+    // this is useful for outputting serialized data
     logData(msg,pre=""){
         var i=document.createElement("textarea");
         i.setAttribute("readonly", "true");
@@ -105,31 +109,65 @@ class Console {
     stringify(obj){
         const isArr = (Array.isArray(obj));
         var result=isArr?'[\n':'{\n';
+
+
+        const showAll = (this.settings.showFunctions || Game.DEVMODE);
+
+        if(showAll) result += "\n    // properties:\n\n";
+
+        result += this.listProps(obj);
+
+        if(showAll) {
+            result += "\n    // functions:\n\n";
+            result += this.listFunctions(obj);
+        }
+        
+        
+        result+=isArr?']':'}';    
+        return result;
+    }
+    listProps(obj, listFunctions = false){
+        var result = "";
         for(var prop in obj){
-            if(typeof obj[prop] == "function" && !this.settings.showFunctions) continue;
-            result+='    '+prop+': ';
+            
+            if (!listFunctions && typeof obj[prop] == "function") continue;
+            if (listFunctions && typeof obj[prop] != "function") continue;
+
+            result += '    '+prop+' <dim>:</dim> ';
             switch(typeof(obj[prop])){
                 case "object":
                     if(Array.isArray(obj[prop]))
-                        result+="[Array]";
+                        result+="[array]";//" // "+obj[prop].length+" items";
                     else if(obj[prop]===null)
                         result+="null";
                     else
-                        result+="["+obj[prop].constructor.name+" Object]";
+                        result+="<dim>["+obj[prop].constructor.name+" object]</dim>";
                     break;
                 case "function":
-                    result+="[function]";
+                    result+="<dim>[function]</dim>";
                     break;
                 case "string":
                     result+='"'+obj[prop]+'"';
                     break;
                 default:
-                    result+=obj[prop];
+                    result+="<val>"+obj[prop]+"</val>";
                     break;
             }
-            result+=',\n';
+            result+='<dim>,</dim>\n';
         }
-        result+=isArr?']':'}';    
         return result;
     }
-};
+    listFunctions(obj){
+        var result="";
+        const prototype = Object.getPrototypeOf(obj);
+        const props = Object.getOwnPropertyNames(prototype);
+
+        props.forEach(prop=>{
+            if(typeof prototype[prop] != "function") return;
+            result += '    '+prop+' <dim>: [function],</dim>\n';
+        });
+        result += this.listProps(obj, true);
+
+        return result;
+    }
+}

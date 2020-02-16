@@ -1,6 +1,6 @@
 class Game {
 
-    static DEVMODE = true;
+    static DEVMODE = false;
 
     static Repair(obj){
 

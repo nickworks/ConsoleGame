@@ -218,10 +218,6 @@ class ScenePlay {
         check(this.npcs, "npcs");
         check(this.items, "items");
     }
-    goal(g){
-        if(g)this.goal=g;
-        return this.goal;
-    }
     ids(){ // assign ids to non-id'd objects
         this.all().forEach(o=>{
             if(!o.id())o.id(this.id());

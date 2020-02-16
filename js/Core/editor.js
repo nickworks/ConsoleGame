@@ -177,9 +177,9 @@ class Editor {
             res+="]},";
         };
         f(PlayerController,[scene.player]);
-        if(scene.goal()){
+        if(scene.goal){
             console.log("serializing goal");
-            f(Goal,[scene.goal()]);
+            f(Goal,[scene.goal]);
         }
         f(Platform,scene.platforms);
         f(AIController,scene.npcs);

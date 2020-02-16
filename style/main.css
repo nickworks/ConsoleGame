@@ -29,6 +29,13 @@ body {
     padding:5px;
     margin:0;
 }
+#console dim {
+    color:#777;
+}
+#console val {
+    font-weight:bold;
+    color:#09F;
+}
 #console p:not(.in){
     border-bottom:1px dotted #111;
     margin-bottom:6px;

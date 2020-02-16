@@ -8,7 +8,7 @@ class Callback {
     }
     serialize(){
         const data={i:this.id,f:this.func};
-        if(params)data.p=this.params;
+        if(this.params)data.p=this.params;
         return data;
     }
     call(){
