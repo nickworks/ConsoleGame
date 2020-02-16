@@ -1,6 +1,6 @@
 class Game {
 
-    static DEVMODE = false;
+    static DEVMODE = true;
 
     static Repair(obj){
 
@@ -110,11 +110,13 @@ class Game {
         
         this.globals();
 
-        if(!this.scene) this.scene=new SceneTitle(); // if no scene, default to sceneTitle
-
-        this.nextScene = this.scene.update(this.time.dt);
-
-        this.draw(); // draw current scene + overlay(s)
+        if(this.scene){
+            this.scene.update(this.time.dt);
+            this.draw(); // draw current scene + overlay(s)
+        } else {
+            this.scene=new SceneTitle(); // if no scene, default to sceneTitle
+        }
+        
 
         this.lateUpdate();
     }
@@ -127,14 +129,19 @@ class Game {
         game=this;
     }
     draw(){
-        if(this.scene) this.scene.draw(this.view.gfx);
+        this.scene.draw(this.view.gfx);
 
         // if focused on console (input is not going to game)
         if(document.activeElement!=document.body) this.view.fill("rgba(0,0,0,.5)");
         
     }
+    switchScene(nextScene){
+        this.nextScene = nextScene;
+    }
     lateUpdate(){
 
+        // this draws a fade overtop of everything
+        // which is why it's in lateUpdate()
         const doneFading = this.view.fade(!this.nextScene);
 
         if(this.nextScene && doneFading) {

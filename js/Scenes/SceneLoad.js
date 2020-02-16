@@ -1,5 +1,18 @@
+// this scene is a "loading" scene that simulates a level downloading
+// why bother?
+// 1. this scene is part of the meta game (can be hacked / improved by player)
+// 2. this scene is a valuable way early on to show the player the keyboard controls
+// 3. tips, hints, easter eggs, etc.
+// To disable this scene turn on Game.DEVMODE
 class SceneLoad {
-    constructor(newScene,speed=1){
+
+    // to serve up a game scene do this:
+    // SceneLoad.Load(nextScene)
+    static Level(n,speed=1){
+        return new SceneLoad(new ScenePlay(n), speed|1);
+    }
+
+    constructor(nextScene,speed=1){
         this.tips=[
             "Wanna resize the game? Try calling game.size()",
             "If you're stuck, check out the awful tutorial.",
@@ -13,27 +26,27 @@ class SceneLoad {
             "Press F11 to go fullscreen!",
             "Try out game.view.fullscreen()"
         ];
-        this.newScene=newScene;
-        this.speed=speed|1;
-        this.tip=(Math.random()*this.tips.length)|0;
-        this.alphaOverlay=1;
-        this.percent=0;
-        this.delay=0;
-        this.font=new Font({color:"#FFF",align:"center"});
+        this.nextScene=nextScene; // what scene to display after this "loading" scene
+        this.speed=speed|1; // a multiplier for how fast the progress bar loads
+        this.tip=(Math.random()*this.tips.length)|0; // a random text to display
+        this.percent=0; // the current value of the progress bar
+        this.delay=0; // how long to wait before "loading" another chunk of data
+        this.font=new Font({color:"#FFF",align:"center"}); // what font to use
     }
     update(dt){
-        if(game.settings.skipLoadingScenes)return this.newScene;
+        if(game.settings.skipLoadingScenes || Game.DEVMODE) this.loadNextScene();
         
-        if(this.delay>0){
+        else if(this.delay>0){
+
             this.delay-=dt;
+
         } else {
+
             const rand=(v=1)=>{return Math.random()*v;};
+            if(rand()<.01) this.delay=rand(.2);
             this.percent+=rand(this.speed/200);
-            if(this.percent>=1){
-                return this.newScene;
-                this.percent=1;
-            }
-            if(rand()<.01) this.delay=rand(.2);            
+
+            if(this.percent>=1) this.loadNextScene();
         }
     }
     draw(gfx){
@@ -50,5 +63,8 @@ class SceneLoad {
         var x=(game.width()-sprites.input.width)/2;
         gfx.drawImage(sprites.input, x, 20);
         
+    }
+    loadNextScene(){
+        game.switchScene(this.nextScene);
     }
 }

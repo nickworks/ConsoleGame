@@ -8,8 +8,6 @@ class AIController extends Controller {
         this.canTalk=false;
         this.friend=(!!raw.f);
         this.dialog=raw.d||[];
-        this.hp=raw.h||50;
-        this.dead=false;
         this.patrolStart=this.pawn.rect.mid().x;
         this.patrolDis=100;
         this.patrolTimer=0;
@@ -60,6 +58,9 @@ class AIController extends Controller {
         this.pawn.moveV(dt);
         this.pawn.moveH(dt,0);
         this.pawn.update(dt);
+    }
+    aiAlly(dt){
+
     }
     aiFoe(dt){
         let move=0;
@@ -133,15 +134,15 @@ class AIController extends Controller {
     }
     hurt(amt){
         this.agro=true;
-        if(this.dead)return;
-        this.hp-=amt;
+        if(this.pawn.dead)return; // stop, stop! he's already dead
+        this.pawn.hp-=amt;
         
         const r=this.pawn.rect;
         const raw={x:r.x,y:r.y};
         
-        if(this.hp<=0){
-            if(this.dead==false)Callback.do(this.callbacks.onDeath);
-            this.dead=true;
+        if(this.pawn.hp<=0){
+            if(this.pawn.dead==false)Callback.do(this.callbacks.onDeath);
+            this.pawn.dead=true;
             scene.spawnLoot(3,raw);
         }
     }

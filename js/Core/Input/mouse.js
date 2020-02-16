@@ -3,26 +3,41 @@ const mouse={
     y:0,
     px:0,
     py:0,
-    down:false,
-    prev:false,
+    left:false,
+    left_prev:false,
+    right:false,
+    right_prev:false,
     setup:function(element,game){
         element.addEventListener("mousemove",(e)=>{
             this.x=e.offsetX;
             this.y=e.offsetY;
         });
-        element.addEventListener("mousedown",(e)=>{this.down=true;});
-        document.addEventListener("mouseup",(e)=>{this.down=false;});
+        element.addEventListener("mousedown",(e)=>{
+            if(e.button==0)this.left=true;
+            if(e.button==2)this.right=true;
+        });
+        element.oncontextmenu = (e)=>{ return false; };
+        document.addEventListener("mouseup",(e)=>{
+            if(e.button==0)this.left=false;
+            if(e.button==2)this.right=false;
+        });
     },
     update:function(){
-        this.prev=this.down;
+        this.left_prev=this.left;
         this.px=this.x;
         this.py=this.y;
     },
     isDown:function(){
-        return this.down;
+        return this.left;
+    },
+    isDownRight:function(){
+        return this.right;
     },
     onDown:function(){
-        return(this.down&&!this.prev);
+        return(this.left&&!this.left_prev);
+    },
+    onDownRight:function(){
+        return(this.right&&!this.right_prev);
     },
     pos:function(){
         return{x:this.x,y:this.y};  

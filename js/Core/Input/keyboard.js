@@ -48,6 +48,7 @@ const key = {
     activate:function(){return [this.e,this.enter]},
     moveLeft:function(){return [this.left,this.a]},
     moveRight:function(){return [this.right,this.d]},
+    crouch:function(){return [this.down, this.s]},
     exit:function(){return this.escape},
     console:function(){return this.tab},
     attack:function(){return this.f},

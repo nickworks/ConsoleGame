@@ -64,7 +64,7 @@ class Editor {
         else if(keyboard.isDown([key.n4,key.p4])){//goal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
-            scene.goal(new Goal({x:x,y:y}));
+            scene.goal(new Portal({x:x,y:y}));
         }
         else if(keyboard.isDown([key.n5,key.p5])){//goal
             const o=new Item({x:m.x, y:m.y});
@@ -179,7 +179,7 @@ class Editor {
         f(PlayerController,[scene.player]);
         if(scene.goal){
             console.log("serializing goal");
-            f(Goal,[scene.goal]);
+            f(Portal,[scene.goal]);
         }
         f(Platform,scene.platforms);
         f(AIController,scene.npcs);

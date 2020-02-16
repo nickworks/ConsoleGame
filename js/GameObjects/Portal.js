@@ -1,10 +1,13 @@
-class Goal {
+class Portal {
     constructor(raw={}){
         this.rect=new Rect(raw.x||0,raw.y||0,50,100);
         this.next=raw.n||0;
+        this.active=false;
+        this.spawnpos=raw.p;
     }
     update(dt){
-        return this.rect.overlaps(scene.player.pawn.rect);
+        this.active = this.rect.overlaps(scene.player.pawn.rect);
+        if(this.active && keyboard.isDown(key.activate())) this.use();
     }
     serialize(){
         return {
@@ -17,7 +20,7 @@ class Goal {
         gfx.fillStyle="#39F";
         this.rect.draw(gfx);
     }
-    nextLevel(){
-        return this.next;  
+    use(){
+        game.switchScene( SceneLoad.Level(this.next, this.spawnpos) );
     }
 }

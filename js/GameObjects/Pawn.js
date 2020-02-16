@@ -6,6 +6,7 @@ class Pawn {
         this.vx=0;
         this.vy=0;
         this.a=1200;
+        this.dead=false;
         this.maxv=raw.maxv||200;
         this.walking=false;
         this.onWallLeft=false;
@@ -15,8 +16,9 @@ class Pawn {
         this.isJumping=false;
         this.onOneway=false;
         this.airJumpsLeft=1;
-        this.dir=1;
-        
+        this.dir=1; //-1 is left, 1 is right
+        this.hp=100;
+        this.hpMax=100;
         this.isDropping=false;
         this.isAsleep=false;
         this.dropFrom=0;

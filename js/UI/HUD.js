@@ -2,6 +2,11 @@ class HUD {
     constructor(){
         this.font=new Font({color:"#FFF",size:17,align:"center",valign:"middle"});
     }
+
+    attach(pawn){
+        // attach this HUD to a pawn
+        this.pawn=pawn;
+    }
     update(dt){
         
     }
@@ -15,8 +20,9 @@ class HUD {
         const y=game.height()-35;
 
         // calculate size of ammo txt box:
-        const txt=scene.player.pawn.weapon.ammo.toString(); // text string
-        var width = this.font.measure(gfx,txt).width + 12;
+        let txt="";
+        if(this.pawn)txt=this.pawn.weapon.ammo.toString(); // text string
+        let width = this.font.measure(gfx,txt).width + 12;
         if(width < 35) width = 35;
         const height=26;
         
@@ -32,7 +38,9 @@ class HUD {
 
     }
     drawBullets(gfx, x, y, height){
-        const w=scene.player.pawn.weapon;//weapon
+
+        if(!this.pawn) return;
+        const w=this.pawn.weapon;//weapon
         const bw=7;//bullet width
         const bm=4;//bullet margin
         const sm=4;//side margins
@@ -71,7 +79,7 @@ class HUD {
         const w=200;
         const h=18;
         const m=5;
-        let p=scene.player.hp/100;
+        let p=this.pawn.hp/100;
         if(p<0)p=0;
         if(p>100)p=100;
         Matrix.push();

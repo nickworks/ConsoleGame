@@ -3,6 +3,7 @@ class PlayerController extends Controller {
     static data={
         weapon:null,
         coins:0,
+
         quests:[],
     };
     static addQuest(q){
@@ -21,9 +22,6 @@ class PlayerController extends Controller {
         this.canDoubleJump=Game.DEVMODE||false;
         this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
         this.pawn.jumpCooldownAmt=0;
-        this.hp=100;
-        this.hpMax=100;
-        this.dead=false;
         this.friend=true;
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
         this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
@@ -61,7 +59,7 @@ class PlayerController extends Controller {
         if(keyboard.onDown(key.jump())){
             const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
             
-            if(this.pawn.onOneway&&keyboard.isDown(key.down))this.pawn.drop();
+            if(this.pawn.onOneway&&keyboard.isDown(key.crouch()))this.pawn.drop();
             else if(this.pawn.isGrounded)this.pawn.jump(false);
             else if(onWall&&this.canWallJump())this.pawn.jump(false,true);
             else if(this.pawn.airJumpsLeft>0)this.pawn.jump(true);
@@ -80,11 +78,12 @@ class PlayerController extends Controller {
         this.pawn.draw(gfx,sprites.playerL,sprites.playerR,{x:4,y:4});
     }
     hurt(amt=10){
-        this.hp-=amt;
+        this.pawn.hp-=amt;
+        if(this.pawn.hp<=0)this.pawn.dead=true;
     }
     heal(amt=10){
-        this.hp+=amt;
-        if(this.hp>this.hpMax)this.hp=this.hpMax;
+        this.pawn.hp+=amt;
+        if(this.pawn.hp>this.pawn.hpMax)this.pawn.hp=this.pawn.hpMax;
     }
     weapon(w){
         if(!w||w.constructor.name!="Weapon")return;

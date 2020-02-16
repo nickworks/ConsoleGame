@@ -29,7 +29,7 @@ loadjs([
     'js/GameObjects/Door.js',
     'js/GameObjects/Weapon.js',
     'js/GameObjects/Bullet.js',
-    'js/GameObjects/Goal.js',
+    'js/GameObjects/Portal.js',
     'js/GameObjects/Crate.js',
     'js/Core/Quest.js',
     'js/Core/Callback.js',

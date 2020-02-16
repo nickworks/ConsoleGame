@@ -1,15 +1,12 @@
 class ScenePlay {
-    constructor(n){
+    constructor(n, pos){
 
         // these all used to be private:
 
         this.levelIndex=n;
         this.cam=new Camera();
-        this.hud=new HUD();
         this.modal=null;
-        this.fadeToScene=null;
-
-
+        this.hud=null;
         this.player=null;
         this.goal=null;
         this.platforms=[];
@@ -25,7 +22,9 @@ class ScenePlay {
         (()=>{
             const level=LevelData.level(this.levelIndex);
 
-            this.player=level.player;
+            this.player=new PlayerController();
+            this.hud=new HUD();
+            this.hud.attach(this.player.pawn);
             this.goal=level.goal;
             this.platforms=level.platforms;
             this.npcs=level.npcs;
@@ -43,18 +42,16 @@ class ScenePlay {
     }
     
     update(dt){
-        if(this.fadeToScene) return this.fadeToScene;
         if(this.player==null)return;
 
         else if(this.modal){
             
-            const newScene=this.modal.update(dt);
-            if(newScene&&!this.fadeToScene)this.fadeToScene=newScene;
-            else if(this.modal.reloadLevel&&!this.fadeToScene)this.fadeToScene=new ScenePlay(this.levelIndex);
-            else if(this.modal.remove)this.modal=null;
+            this.modal.update(dt);
+            if(this.modal.remove)this.modal=null;
+
             else if(mouse.onDown()) this.handleClick();
 
-        } else if(this.player.dead){
+        } else if(this.player.pawn.dead){
 
             this.modal=new Death();
 
@@ -88,7 +85,7 @@ class ScenePlay {
                 this.player.pawn.vx=rightOfAIController?300:-300;
                 this.player.pawn.vy=-250;
             }
-            if(this.npcs[i].dead)this.npcs.splice(i,1);
+            if(this.npcs[i].pawn.dead)this.npcs.splice(i,1);
         }
         this.platforms.forEach(p=>{
             p.update(dt);
@@ -116,7 +113,8 @@ class ScenePlay {
             }
         }
         
-        if(this.goal&&this.goal.update(dt)&&!this.fadeToScene)this.fadeToScene=new SceneLoad(new ScenePlay(this.goal.nextLevel()));
+        if(this.goal) this.goal.update(dt);
+
         for(var i in this.bullets){
             const b=this.bullets[i];
             b.update(dt);
