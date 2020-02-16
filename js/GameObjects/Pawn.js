@@ -5,7 +5,7 @@ class Pawn {
         this.sightRange=raw.s||300;
         this.vx=0;
         this.vy=0;
-        this.a=400;
+        this.a=1200;
         this.maxv=raw.maxv||200;
         this.walking=false;
         this.onWallLeft=false;
