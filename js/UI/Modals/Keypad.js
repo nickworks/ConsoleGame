@@ -1,11 +1,12 @@
-class Keypad {
+class Keypad extends Modal {
     constructor(x,y,onDone){
+        super();
+        this.zoom=2;
         this.index=0;
         this.val="";
         this.txt="CODE: ";
         this.x=x;
         this.y=y;
-        this.zoom=true;
         this.font=new Font({valign:"top"});
         
         this.remove=false;

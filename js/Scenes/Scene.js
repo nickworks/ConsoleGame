@@ -76,10 +76,7 @@ class Scene {
 
 
         this.particles=[];
-
-	}
-	init(){
-		this.modal=null;
+		this.modals=[];
 		this.player=new PlayerController();
         this.cam=new Camera();
         this.cam.target=this.player.pawn;
@@ -93,49 +90,73 @@ class Scene {
         this.particles.forEach(p => p.draw(gfx));
         this.cam.drawEnd(gfx);
         
-        if(this.modal)this.modal.draw(gfx);        
+        this.modals.forEach(m => m.draw(gfx));
+    }
+    updateModals(dt){
+
+        const result = {
+            zoom:1,
+            hasPause:false,
+            sceneFrozen:false,
+        };
+
+        for(let i = this.modals.length - 1; i >= 0; i--){
+            const modal = this.modals[i];
+            if(modal.isPause) result.hasPause = true;
+            if(!result.sceneFrozen){
+                modal.update(dt);
+                if(modal.blocksSceneInput) {
+                    result.sceneFrozen = true;
+                    result.zoom = modal.zoom;
+                }
+                if(modal.remove) this.modals.splice(i, 1);
+            }
+        }
+        return result;
     }
 	update(dt){
 
-		if(this.modal){
-            
-            this.modal.update(dt);
-            if(this.modal.remove)this.modal=null;
+        const res = this.updateModals(dt);
 
-            return true;
+        if(!res.sceneFrozen){
+            // update all objects
+            this.objs.all.forEach(o => o.update(dt));
+
+
+            // update particles:
+    		for(var i in this.particles){
+                this.particles[i].update(dt);
+                if(this.particles[i].dead)this.particles.splice(i,1);
+            }
+
+            // do collision detection:
+            this.objs.blocking.forEach(b=>{
+                b.block(this.objs.pawns);
+                b.block(this.objs.physics);
+            });
+            this.objs.bullets.forEach(b=>{
+                b.overlap(this.objs.blocking);
+                b.overlap(this.objs.pawns);
+            });
+            this.objs.physics.forEach(i=>{
+                i.overlap(this.objs.pawns);
+            });
+
+            // remove all objects marked as "DEAD"
+            this.objs.cleanup();
         }
-
-
-
-        // update all objects
-        this.objs.all.forEach(o => o.update(dt));
-
-
-        // update particles:
-		for(var i in this.particles){
-            this.particles[i].update(dt);
-            if(this.particles[i].dead)this.particles.splice(i,1);
-        }
-
-        // do collision detection:
-        this.objs.blocking.forEach(b=>{
-            b.block(this.objs.pawns);
-            b.block(this.objs.physics);
-        });
-        this.objs.bullets.forEach(b=>{
-            b.overlap(this.objs.blocking);
-            b.overlap(this.objs.pawns);
-        });
-        this.objs.physics.forEach(i=>{
-            i.overlap(this.objs.pawns);
-        });
-
         // update camera
-        this.cam.update(dt);
-        
-        // remove all objects marked as "DEAD"
-        this.objs.cleanup();
+        this.cam.update(dt, res.zoom);
 
-        return false;
+        return res;
+    }
+    modal(modal){
+
+    	const types = this.modals.map(m => Object.getPrototypeOf(m));
+    	const typeAlreadyExists = types.includes(Object.getPrototypeOf(modal));
+
+    	if (typeAlreadyExists) return;
+
+    	this.modals.push(modal);
     }
 }

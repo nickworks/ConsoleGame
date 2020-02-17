@@ -1,5 +1,8 @@
-class HUD {
+class HUD extends Modal {
+
     constructor(){
+        super();
+        this.blocksSceneInput = false;
         this.font=new Font({color:"#FFF",size:17,align:"center",valign:"middle"});
     }
 

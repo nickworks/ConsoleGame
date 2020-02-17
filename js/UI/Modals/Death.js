@@ -1,5 +1,6 @@
-class Death {
+class Death extends Modal {
     constructor(){
+        super();
         this.font=new Font({size:12,color:"#FFF",align:"center"});
         this.timer=.5;
     }

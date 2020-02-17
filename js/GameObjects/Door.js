@@ -59,7 +59,7 @@ class Door {
                 if(this.isOpen)this.close();
                 else{
                     const p=this.rect.mid();
-                    scene.modal=new Keypad(p.x,p.y,(v)=>this.open(v));
+                    scene.modal(new Keypad(p.x,p.y,(v)=>this.open(v)));
                 }
             }else{
                 this.isOpen?this.close():this.open();

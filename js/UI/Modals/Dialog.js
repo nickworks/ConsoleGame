@@ -1,9 +1,10 @@
-class Dialog {
+class Dialog extends Modal {
     constructor(x,y,texts,callbacks={}){
+        super();
+        this.zoom=2;
         if(typeof texts == "string") texts=[texts];
         if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
         
-        this.zoom=true;
         this.index=0;
         this.texts=texts;
         this.lines=[];

@@ -1,5 +1,7 @@
-class Pause {
+class Pause extends Modal {
     constructor(){
+        super();
+        this.isPause = true;
         const options=[{
             caption:"Resume",
             callback:()=>{this.remove=true;}
@@ -23,7 +25,7 @@ class Pause {
         this.menu.update(dt);
         if(keyboard.onDown(key.exit()))this.remove=true;
 
-        if(this.launchEditor) scene.modal=new Editor(); // this should replace the Pause modal with the Editor modal
+        if(this.launchEditor) scene.modal(new Editor()); // this should replace the Pause modal with the Editor modal
     }
     draw(gfx){
         gfx.fillStyle="rgba(0,0,0,.75)";

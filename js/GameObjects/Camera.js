@@ -10,7 +10,7 @@ class Camera {
         this.scale=1;
         this.cachemouse=null;
     }
-    update(dt){
+    update(dt, scale){
         this.cachemouse=null
         this.updateScreenOffset();
         this.updateTargetXY();
@@ -18,11 +18,9 @@ class Camera {
         this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
         this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
         if(this.shake>0)this.shake-=dt;
-        if(scene.modal&&scene.modal.zoom){
-            this.scale+=(2 - this.scale)*dt*5;
-        } else if(this.scale!=1){
-            this.scale+=(1-this.scale)*dt*10;
-        }
+
+        scale = scale||1;
+        this.scale+=(scale - this.scale)*dt*5;
         
     }
     updateTargetXY(andSnap=true){

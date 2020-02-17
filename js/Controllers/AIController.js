@@ -118,7 +118,8 @@ class AIController extends Controller {
     }
     speak(){
         const p=this.pawn.rect.mid();
-        scene.modal=new Dialog(p.x,p.y-13,this.dialog,this.callbacks);
+        scene.modal(new Dialog(p.x,p.y-13,this.dialog,this.callbacks));
+        this.canTalk = false;
     }
     draw(gfx){
         const imgL = this.friend ? sprites.playerL : sprites.enemyL;
@@ -126,7 +127,7 @@ class AIController extends Controller {
         
         this.pawn.draw(gfx,imgL, imgR,{x:4,y:4});
         
-        if(this.friend&&this.canTalk&&!scene.modal){
+        if(this.friend&&this.canTalk){
             this.hint.x=this.pawn.rect.mid().x;
             this.hint.y=this.pawn.rect.y;
             this.hint.draw(gfx);

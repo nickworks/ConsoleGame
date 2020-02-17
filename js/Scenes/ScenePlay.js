@@ -1,21 +1,18 @@
 class ScenePlay extends Scene {
     constructor(n, pos){
         super();
+        
+        const hud = new HUD();
+        this.modal(hud);
+        hud.attach(this.player.pawn);
 
         // load:
         (()=>{
             this.levelIndex=n;
             const level=LevelData.level(this.levelIndex);
 
-            this.init(); // spawn playercontroller, camera, etc..
-
-            this.hud=new HUD();
-            this.hud.attach(this.player.pawn);
-            
-
             this.objs.clear();
             LevelData.level(this.levelIndex).concat([this.player]).forEach(o => this.objs.add(o));
-
             
             this.ids(); // assign ID numbers to everything
             
@@ -24,37 +21,26 @@ class ScenePlay extends Scene {
     }
     update(dt){
 
-        const paused = super.update(dt);
+        const res = super.update(dt);
 
-
-        if(paused) return;
-
-        if(this.player && this.player.pawn.dead){
-            this.modal=new Death();
-        } else {
-
-            if(mouse.onDown()) this.handleClick();
-
-            if(keyboard.onDown(key.exit())) this.pause();
+        if(!res.sceneFrozen) {
+            if(this.player && this.player.pawn.dead){
+                this.modal(new Death());
+            } else {
+                if(mouse.onDown()) this.handleClick();
+            }
         }
+        if(!res.hasPause && keyboard.onDown(key.exit())) this.pause();
         
-        this.hud.update(dt);
-
     }
     pause(){
-        if(this.modal==null)this.modal=new Pause();
-    }
-    unpause(){
-        this.modal=null;  
+        this.modal(new Pause());
     }
     draw(gfx){
-
         super.draw(gfx);
-        
-        if(this.hud)this.hud.draw(gfx);      
     }
     edit(){
-        this.modal=new Editor();
+        this.modal(new Editor());
     }
     spawnLoot(amt=1,raw={}){
         for(var i=0;i<amt;i++){
