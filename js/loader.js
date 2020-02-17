@@ -40,6 +40,7 @@ loadjs([
     'js/Core/console.js',
     'js/Core/Input/mouse.js',
     'js/Core/Input/keyboard.js',
+    'js/Scenes/Scene.js',
     'js/Scenes/SceneLoad.js',
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',

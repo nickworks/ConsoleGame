@@ -1,137 +1,45 @@
-class ScenePlay {
+class ScenePlay extends Scene {
     constructor(n, pos){
-
+        super();
 
         // load:
         (()=>{
             this.levelIndex=n;
             const level=LevelData.level(this.levelIndex);
 
-            this.player=new PlayerController();
+            this.init(); // spawn playercontroller, camera, etc..
+
             this.hud=new HUD();
             this.hud.attach(this.player.pawn);
             
-            this.objs={
-                add(obj){
-                    this.all.push(obj);
-                    switch(obj.constructor.name){
-                        case "Platform":
-                        case "Crate":
-                        case "Door":
-                            this.blocking.push(obj);
-                            break;
-                        case "PlayerController":
-                        case "AIController":
-                            this.pawns.push(obj);
-                            break;
-                        case "PlayerController":
-                        case "AIController":
-                        case "Crate":
-                            this.damageable.push(obj);
-                            break;
-                        case "Item":
-                            this.physics.push(obj);
-                            break;
-                        case "Bullet":
-                            this.bullets.push(obj);
-                            break;
-                    }
-                },
-                remove(obj){
-                    this.removeFrom(obj, this.all);
-                    this.removeFrom(obj, this.blocking);
-                    this.removeFrom(obj, this.pawns);
-                    this.removeFrom(obj, this.physics);
-                    this.removeFrom(obj, this.bullets);
-                    this.removeFrom(obj, this.damageable);
-                },
-                removeFrom(obj, arr){
-                    const i = arr.indexOf(obj);
-                    if(i != -1) arr.splice(i, 1); 
-                },
-                cleanup(){
-                    for(let i=this.all.length-1; i>= 0; i--){
-                        const obj = this.all[i];
-                        if(obj.dead || (this.all[i].pawn && this.all[i].pawn.dead)) this.remove(obj);
-                    }
-                },
-                all:[],
-                blocking:[],
-                pawns:[],
-                physics:[],
-                bullets:[],
-                damageable:[],
-            };
 
-            const temp = [this.player].concat(level.goal,level.platforms,level.npcs,level.doors,level.items,level.crates);
-            temp.forEach(o => this.objs.add(o));
+            this.objs.clear();
+            LevelData.level(this.levelIndex).concat([this.player]).forEach(o => this.objs.add(o));
 
-            this.particles=[];
-            this.modal=null;
-
-            this.cam=new Camera();
-            this.cam.target=this.player.pawn;
-            this.cam.updateTargetXY(true);
+            
             this.ids(); // assign ID numbers to everything
-
             
         })();
 
     }
-    getObjsByType(){
-
-    }
     update(dt){
-        if(this.player==null)return;
 
-        else if(this.modal){
-            
-            this.modal.update(dt);
-            if(this.modal.remove)this.modal=null;
+        const paused = super.update(dt);
 
-            else if(mouse.onDown()) this.handleClick();
 
-        } else if(this.player.pawn.dead){
+        if(paused) return;
 
+        if(this.player && this.player.pawn.dead){
             this.modal=new Death();
-
         } else {
+
             if(mouse.onDown()) this.handleClick();
 
-            this.updateGameObjects(dt);
-
-            if(keyboard.onDown(key.exit())){
-                this.pause();
-            }
+            if(keyboard.onDown(key.exit())) this.pause();
         }
-        for(var i in this.particles){
-            this.particles[i].update(dt);
-            if(this.particles[i].dead)this.particles.splice(i,1);
-        };
-        this.cam.update(dt);
-        this.hud.update(dt);
-    }
-    updateGameObjects(dt){
-
-        // update all objects
-        this.objs.all.forEach(o => o.update(dt));
-
-
-        // do collision detection:
-        this.objs.blocking.forEach(b=>{
-            b.block(this.objs.pawns);
-            b.block(this.objs.physics);
-        });
-        this.objs.bullets.forEach(b=>{
-            b.overlap(this.objs.blocking);
-            b.overlap(this.objs.pawns);
-        });
-        this.objs.physics.forEach(i=>{
-            i.overlap(this.objs.pawns);
-        });
         
-        // remove all objects marked as "DEAD"
-        this.objs.cleanup();
+        this.hud.update(dt);
+
     }
     pause(){
         if(this.modal==null)this.modal=new Pause();
@@ -140,15 +48,10 @@ class ScenePlay {
         this.modal=null;  
     }
     draw(gfx){
-        game.view.fill("#888");
 
-        this.cam.drawStart(gfx);
-        this.objs.all.forEach(o => o.draw(gfx));
-        this.particles.forEach(p => p.draw(gfx));
-        this.cam.drawEnd(gfx);
+        super.draw(gfx);
         
-        if(this.hud)this.hud.draw(gfx);
-        if(this.modal)this.modal.draw(gfx);        
+        if(this.hud)this.hud.draw(gfx);      
     }
     edit(){
         this.modal=new Editor();
@@ -197,36 +100,31 @@ class ScenePlay {
         });
     }
     handleClick(){
-        const pre="you clicked on scene.";
-        if(this.player.pawn.rect.mouseOver()) game.console.log(pre+"player");
-        const check=(a,str)=>{
-            for(var i in a){
-                const rect=a[i].rect||a[i].pawn.rect;
-                if(rect.mouseOver())game.console.log(pre+str+"["+i+"] (object id #"+a[i].id()+")");
-            }
-        };
-        check(this.bullets, "bullets");
-        check(this.platforms, "platforms");
-        check(this.doors, "doors");
-        check(this.npcs, "npcs");
-        check(this.items, "items");
+
+        if(this.player.pawn.rect.mouseOver()) game.console.log("you clicked on scene.player");
+
+        const o = this.objs.getUnderMouse();
+        if(o){
+            const index = this.objs.indexOf(o);
+            const oid = o.oid;
+            game.console.log("you clicked on scene.objs.get("+index+")");
+        }
+
+
     }
     ids(){ // assign ids to non-id'd objects
-        this.all().forEach(o=>{
+        this.objs.all.forEach(o=>{
             if(!o.oid)o.oid = this.id();
         });
     }
-    all(){
-        return [this.player].concat(this.objs);
-    }
     obj(id){ // fetch objects by id
         var res=null;
-        this.all().forEach(i=>{if(i.oid==id)res=i;});
+        this.objs.all.forEach(i=>{if(i.oid==id)res=i;});
         return res;
     }
     id(){ // get new, unused id number
         let i=0;
-        this.all().forEach(o=>{
+        this.objs.all.forEach(o=>{
             const n=o.oid|0;
             if(n>i)i=n;
         });

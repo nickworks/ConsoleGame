@@ -1,29 +1,10 @@
 const LevelData={
     deserialize:function(d){
-        const objs={
-            player:null,
-            goal:null,
-            platforms:[],
-            npcs:[],
-            doors:[],
-            items:[],
-            crates:[],
-        };
+        const objs=[];
         d.forEach(t=>{ // for each type
             t.d.forEach(o=>{ // for each object
                 const j=new t.t(o); // spawn the object
-
-                switch(t.t){ // store it in the correct spot
-                    case PlayerController:objs.player=j;break;
-                    case Platform:objs.platforms.push(j);break;
-                    case Door:objs.doors.push(j);break;
-                    case AIController:objs.npcs.push(j);break;
-                    case Item:
-                        j.isAsleep=true;
-                        objs.items.push(j);break;
-                    case Portal:objs.goal=j;break;
-                    case Crate:objs.crates.push(j);break;
-                }
+                objs.push(j);
             });
         });
         return objs;
