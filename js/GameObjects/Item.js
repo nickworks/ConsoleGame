@@ -72,12 +72,26 @@ class Item {
         }
         
     }
-    pickup(){
+    overlap(a, dt){
+        if(!Array.isArray(a))a=[a];
+        a.forEach(o=>{
+            
+            const rect=(o.pawn?o.pawn.rect:o.rect);
+            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
+            this.pickup(o);
+        });
+    }
+    pickup(o){
+
+        if(!o.pawn) return;
+        if(!o.friend) return;
+
         switch(this.type){
-            case Item.Type.HEAL:scene.player.heal(25);break;
-            case Item.Type.AMMO:scene.player.pawn.weapon.addAmmo(25);break;
-            case Item.Type.COIN:PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
+            case Item.Type.HEAL:o.heal(25);break;
+            case Item.Type.AMMO:o.pawn.weapon.addAmmo(25);break;
+            case Item.Type.COIN:o.coins++;break; //PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
             case Item.Type.GUN:
+                if(o != scene.player) break;
                 if(!this.weapon){
                     this.weapon=Weapon.random();
                     this.hint=new BubbleHint(this.weapon.title);

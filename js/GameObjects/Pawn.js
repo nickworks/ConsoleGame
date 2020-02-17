@@ -19,9 +19,13 @@ class Pawn {
         this.dir=1; //-1 is left, 1 is right
         this.hp=100;
         this.hpMax=100;
+        this.coins=0;
         this.isDropping=false;
         this.isAsleep=false;
         this.dropFrom=0;
+
+
+        this.mind = null;
         
         this.weapon=new Weapon();
 
@@ -31,7 +35,8 @@ class Pawn {
     draw(gfx,imgL, imgR,o){
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
-    update(dt){    
+    update(dt){
+
         if(this.weapon)this.weapon.update(dt); 
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
         this.isGrounded=false;

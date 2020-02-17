@@ -107,7 +107,7 @@ class Weapon {
     shoot(pos,dir,isFriend){
         if(this.reloadDelay>0)return;
         if(this.shootDelay>0)return;
-        if(!scene.bullets)return;
+        if(!scene.objs)return;
         
         if(this.clip>0){
             
@@ -123,7 +123,7 @@ class Weapon {
                 dir.y=Math.sin(finalAngle)*speed
                 const b=new Bullet(pos,dir,isFriend,this.dmg);
                 b.explode=this.explode;
-                scene.bullets.push(b);
+                scene.objs.add(b);
             }
             this.shootDelay=this.shootCooldown;
             this.ammo--;

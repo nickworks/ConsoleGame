@@ -1,46 +1,86 @@
 class ScenePlay {
     constructor(n, pos){
 
-        // these all used to be private:
-
-        this.levelIndex=n;
-        this.cam=new Camera();
-        this.modal=null;
-        this.hud=null;
-        this.player=null;
-        this.goal=null;
-        this.platforms=[];
-        this.npcs=[];
-        this.doors=[];
-        this.bullets=[];
-        this.items=[];
-        this.particles=[];
-        this.crates=[];
-
 
         // load:
         (()=>{
+            this.levelIndex=n;
             const level=LevelData.level(this.levelIndex);
 
             this.player=new PlayerController();
             this.hud=new HUD();
             this.hud.attach(this.player.pawn);
-            this.goal=level.goal;
-            this.platforms=level.platforms;
-            this.npcs=level.npcs;
-            this.doors=level.doors;
-            this.items=level.items;
-            this.crates=level.crates;
+            
+            this.objs={
+                add(obj){
+                    this.all.push(obj);
+                    switch(obj.constructor.name){
+                        case "Platform":
+                        case "Crate":
+                        case "Door":
+                            this.blocking.push(obj);
+                            break;
+                        case "PlayerController":
+                        case "AIController":
+                            this.pawns.push(obj);
+                            break;
+                        case "PlayerController":
+                        case "AIController":
+                        case "Crate":
+                            this.damageable.push(obj);
+                            break;
+                        case "Item":
+                            this.physics.push(obj);
+                            break;
+                        case "Bullet":
+                            this.bullets.push(obj);
+                            break;
+                    }
+                },
+                remove(obj){
+                    this.removeFrom(obj, this.all);
+                    this.removeFrom(obj, this.blocking);
+                    this.removeFrom(obj, this.pawns);
+                    this.removeFrom(obj, this.physics);
+                    this.removeFrom(obj, this.bullets);
+                    this.removeFrom(obj, this.damageable);
+                },
+                removeFrom(obj, arr){
+                    const i = arr.indexOf(obj);
+                    if(i != -1) arr.splice(i, 1); 
+                },
+                cleanup(){
+                    for(let i=this.all.length-1; i>= 0; i--){
+                        const obj = this.all[i];
+                        if(obj.dead || (this.all[i].pawn && this.all[i].pawn.dead)) this.remove(obj);
+                    }
+                },
+                all:[],
+                blocking:[],
+                pawns:[],
+                physics:[],
+                bullets:[],
+                damageable:[],
+            };
 
+            const temp = [this.player].concat(level.goal,level.platforms,level.npcs,level.doors,level.items,level.crates);
+            temp.forEach(o => this.objs.add(o));
+
+            this.particles=[];
             this.modal=null;
-            this.bullets=[];
+
+            this.cam=new Camera();
             this.cam.target=this.player.pawn;
             this.cam.updateTargetXY(true);
-            this.ids();
+            this.ids(); // assign ID numbers to everything
+
+            
         })();
 
     }
-    
+    getObjsByType(){
+
+    }
     update(dt){
         if(this.player==null)return;
 
@@ -72,64 +112,26 @@ class ScenePlay {
         this.hud.update(dt);
     }
     updateGameObjects(dt){
-        if(this.player)this.player.update(dt);
-        for(var i in this.items){
-            this.items[i].update(dt);
-            if(this.items[i].rect.overlaps(this.player.pawn.rect))this.items[i].pickup();
-            if(this.items[i].dead)this.items.splice(i,1);
-        }
-        for(var i in this.npcs){
-            this.npcs[i].update(dt);
-            if(!this.npcs[i].friend&&this.npcs[i].pawn.rect.overlaps(this.player.pawn.rect)){
-                const rightOfAIController=this.npcs[i].pawn.rect.mid().x<this.player.pawn.rect.mid().x;
-                this.player.pawn.vx=rightOfAIController?300:-300;
-                this.player.pawn.vy=-250;
-            }
-            if(this.npcs[i].pawn.dead)this.npcs.splice(i,1);
-        }
-        this.platforms.forEach(p=>{
-            p.update(dt);
-            p.block(this.player, dt);
-            p.block(this.npcs, dt);
-            p.block(this.items, dt);
-        });
-        this.doors.forEach(d=>{
-            d.update(dt);
-            d.block(this.player);
-            d.block(this.npcs);
-            d.block(this.items, dt);
-        });
-        for(var i in this.crates){
-            const c=this.crates[i];
-            c.block(this.player);
-            c.block(this.npcs);
-            c.block(this.items, dt);
-            if(c.dead){
-                if(c.hasLoot){
-                    var amt=Math.random()+Math.random()+Math.random();
-                    this.spawnLoot((amt*3)|0,c.rect.mid());
-                }
-                this.crates.splice(i,1);
-            }
-        }
-        
-        if(this.goal) this.goal.update(dt);
 
-        for(var i in this.bullets){
-            const b=this.bullets[i];
-            b.update(dt);
-            const check=(o)=>{
-                if(b.rect.overlaps(o.rect||o.pawn.rect))b.hit(o);
-            };
-            
-            check(this.player);
-            this.npcs.forEach(check);
-            this.doors.forEach(check);
-            this.platforms.forEach(check);
-            this.crates.forEach(check);
-            
-            if(b.dead)this.bullets.splice(i,1);
-        }
+        // update all objects
+        this.objs.all.forEach(o => o.update(dt));
+
+
+        // do collision detection:
+        this.objs.blocking.forEach(b=>{
+            b.block(this.objs.pawns);
+            b.block(this.objs.physics);
+        });
+        this.objs.bullets.forEach(b=>{
+            b.overlap(this.objs.blocking);
+            b.overlap(this.objs.pawns);
+        });
+        this.objs.physics.forEach(i=>{
+            i.overlap(this.objs.pawns);
+        });
+        
+        // remove all objects marked as "DEAD"
+        this.objs.cleanup();
     }
     pause(){
         if(this.modal==null)this.modal=new Pause();
@@ -139,16 +141,10 @@ class ScenePlay {
     }
     draw(gfx){
         game.view.fill("#888");
+
         this.cam.drawStart(gfx);
-        if(this.goal)this.goal.draw(gfx);
-        this.doors.forEach(d=>d.draw(gfx));
-        this.platforms.forEach(p=>p.draw(gfx));
-        this.player.draw(gfx);
-        this.npcs.forEach(n=>n.draw(gfx));
-        this.bullets.forEach(b=>b.draw(gfx));
-        this.items.forEach(i=>i.draw(gfx));
-        this.particles.forEach(p=>p.draw(gfx));
-        this.crates.forEach(c=>c.draw(gfx));
+        this.objs.all.forEach(o => o.draw(gfx));
+        this.particles.forEach(p => p.draw(gfx));
         this.cam.drawEnd(gfx);
         
         if(this.hud)this.hud.draw(gfx);
@@ -159,7 +155,7 @@ class ScenePlay {
     }
     spawnLoot(amt=1,raw={}){
         for(var i=0;i<amt;i++){
-            this.items.push(Item.random(raw))
+            this.objs.add(Item.random(raw))
         }
     }
     addParticles(x,y,t,n){
@@ -168,12 +164,11 @@ class ScenePlay {
         };
     }
     explode(x,y,r=200,dmg=0){
-        const objs=[this.player].concat(this.items,this.npcs,this.crates);
-        
+
         this.addParticles(x,y,1,8);
         this.cam.shake=.5;
         
-        objs.forEach(o=>{
+        this.objs.damageable.forEach(o=>{
             const rect=o.rect||o.pawn.rect;
             const p=rect.mid();
             const dx=p.x-x;
@@ -218,21 +213,21 @@ class ScenePlay {
     }
     ids(){ // assign ids to non-id'd objects
         this.all().forEach(o=>{
-            if(!o.id())o.id(this.id());
+            if(!o.oid)o.oid = this.id();
         });
     }
     all(){
-        return [this.player].concat(this.npcs,this.doors,this.platforms,this.items);
+        return [this.player].concat(this.objs);
     }
     obj(id){ // fetch objects by id
         var res=null;
-        this.all().forEach(i=>{if(i.id()==id)res=i;});
+        this.all().forEach(i=>{if(i.oid==id)res=i;});
         return res;
     }
     id(){ // get new, unused id number
         let i=0;
         this.all().forEach(o=>{
-            const n=o.id()|0;
+            const n=o.oid|0;
             if(n>i)i=n;
         });
         return i+1;

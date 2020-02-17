@@ -51,6 +51,10 @@ class Crate {
             this.dead=true;
             const p=this.rect.mid();
             scene.addParticles(p.x,p.y,4,5);
+            if(this.hasLoot){
+                const amt=Math.random()+Math.random()+Math.random();
+                scene.spawnLoot((amt*3)|0,this.rect.mid());
+            }
         }
     }
 }

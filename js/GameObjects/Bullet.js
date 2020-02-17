@@ -11,6 +11,7 @@ class Bullet {
         this.explode=false;
     }
     update(dt){
+
         this.vy+=this.g*dt;
         this.rect.x+=this.vx*dt;
         this.rect.y+=this.vy*dt;
@@ -20,18 +21,29 @@ class Bullet {
     draw(gfx){
         gfx.drawImage(sprites.projectile,this.rect.x,this.rect.y)
     }
+    overlap(a, dt){
+        if(!Array.isArray(a))a=[a];
+        a.forEach(o=>{
+            
+            const rect=(o.pawn?o.pawn.rect:o.rect);
+            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
+
+            this.hit(o);            
+        });
+    }
+
     hit(o){
-        if(o.friend===this.friend)return;
+        if(o.oneway)return; // ignore oneway platforms
+        if(o.friend===this.friend)return; // ignore same allegiance
         if(o.pawn){
             o.pawn.vx=this.vx>0?200:-200;
             o.pawn.vy=-200;
         }
-        if(o.oneway)return;
-        this.dead=true;
-        if(o.hurt)o.hurt(this.dmg);
+        if(o.hurt)o.hurt(this.dmg); // if the thing has a hurt() function, call it
+
+        this.dead=true; // bullet is dead
         
-        const p=this.rect.mid();
-        
+        const p=this.rect.mid(); // position of bullet        
         if(this.explode==true)scene.explode(p.x,p.y,200,this.dmg);
         scene.addParticles(p.x,p.y,2,5);
     }
