@@ -1,7 +1,7 @@
 class ScenePlay extends Scene {
     // n - what level to load
     // pos - where to spawn the player
-    constructor(n, pos){
+    constructor(n, pos={x:0,y:0}){
         super();
         
         // spawn a HUD
@@ -21,6 +21,8 @@ class ScenePlay extends Scene {
         
         this.ids(); // assign ID numbers to everything
 
+        this.player.pawn.rect.x = pos.x;
+        this.player.pawn.rect.y = pos.y;
     }
     update(dt){
 

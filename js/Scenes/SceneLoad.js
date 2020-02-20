@@ -8,12 +8,12 @@ class SceneLoad {
 
     // to serve up a game scene do this:
     // SceneLoad.Load(nextScene)
-    static Level(n, pos, speed=1){
-
+    static Level(n, pos={x:0,y:0}, speed=1){
+        
         speed = +speed;
         
 
-        return new SceneLoad(new ScenePlay(n), speed|1);
+        return new SceneLoad(new ScenePlay(n, pos), speed|1);
     }
 
 
