@@ -32,7 +32,6 @@ class Item {
         this.vx=0;
         this.vy=0;
         this.isAsleep=(!!raw.a);
-        this.dead=false;
         
         this.weapon=null;
         this.hint=null;

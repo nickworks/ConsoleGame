@@ -1,4 +1,3 @@
-
 class Particle {
 
 
@@ -11,7 +10,6 @@ class Particle {
 
     constructor(x,y,t=1){
         
-        this.dead=false;
         this.life=this.lifespan=0;
         
         this.rect=new Rect(x,y,100,100);

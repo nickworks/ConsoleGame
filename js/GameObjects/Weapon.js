@@ -9,7 +9,6 @@ class Weapon {
         ROCKET: 5,
     }
 
-
     static random(){
         const t=((Math.random()*4)|0)+2;
         return new Weapon({t:t});

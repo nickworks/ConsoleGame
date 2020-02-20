@@ -8,9 +8,14 @@ class SceneLoad {
 
     // to serve up a game scene do this:
     // SceneLoad.Load(nextScene)
-    static Level(n,speed=1){
+    static Level(n, pos, speed=1){
+
+        speed = +speed;
+        
+
         return new SceneLoad(new ScenePlay(n), speed|1);
     }
+
 
     constructor(nextScene,speed=1){
         this.tips=[

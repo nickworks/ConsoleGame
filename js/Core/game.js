@@ -32,6 +32,10 @@ class Game {
                 this.update();
             }
         }
+        // game.view
+        // This section controls the size of the viewport,
+        // and it has refences to the canvas element
+        // and to the graphics renderer
         this.view={
             size:{w:800,h:500},
             cachedSize:{w:0,h:0},
@@ -39,6 +43,7 @@ class Game {
             gfx:null,
             isFullscreen:false,
             alphaOverlay:1,
+            // get the canvas and drawing context by using a provided id
             make(id){
                 this.canvas=document.getElementById(id);
                 if(this.canvas==undefined) return false;
@@ -46,6 +51,7 @@ class Game {
                 if(this.gfx==undefined) return false;
                 return true;
             },
+            // fade in or out, returns true when done
             fade(isDark){
 
                 if(Game.DEVMODE) return true;
@@ -64,10 +70,12 @@ class Game {
 
                 return false;
             },
+            // fills the screen with a specified color
             fill(color="#000"){
                 this.gfx.fillStyle=color;
                 this.gfx.fillRect(0, 0, this.size.w, this.size.h); // clear screen
             },
+            // toggles fullscreen, optional parameter
             fullscreen(fs){
                 this.isFullscreen=fs||!this.isFullscreen;
                 if(!this.isFullscreen){
@@ -88,26 +96,38 @@ class Game {
                 }
             }
         }
+        // reference to the console
         this.console=new Console();
+        // reference to the current scene
         this.scene=null;
+        // reference to the next scene (so we can fade between the two scenes)
         this.nextScene=null;
+
+        // meta-game stuff here:
         this.settings={
             skipLoadingScenes:Game.DEVMODE||false,
             editModeEnabled:Game.DEVMODE||false,
         };
     }
 
+    // returns the width of the viewport
     width(){return this.view.size.w;}
+
+    // returns the height of the viewport
     height(){return this.view.size.h;}
+
+    // returns view.gfx
     gfx(){return this.view.gfx;}
 
     
     update(){
 
-        this.view.resizeCanvas();
+        this.view.resizeCanvas(); // if the canvas needs resizing, do it
         
+        // if the console button is pressed, switch focus to console mode:
         if(keyboard.onDown(key.console())) this.focusConsole();
         
+        // update global values:
         this.globals();
 
         if(this.scene){
@@ -124,9 +144,13 @@ class Game {
         keyboard.blur();
         this.console.input.focus();
     }
+    // for convenience and to protect the player early on, make global references:
     globals(){
-        scene=this.scene;
-        game=this;
+        window.scene=this.scene;
+        window.obj = (i) => {return scene.objs.get(i);};
+        window.player=(this.scene==undefined)?null:this.scene.player;
+        window.game=this;
+
     }
     draw(){
         this.scene.draw(this.view.gfx);

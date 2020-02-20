@@ -3,7 +3,6 @@ class Crate {
         this.oid=raw.i||0;
         this.rect=Rect.from(raw);
         this.hp=40;
-        this.dead=false;
         this.hasLoot=(Math.random()>.5);
     }
     serialize(){

@@ -1,22 +1,25 @@
 class ScenePlay extends Scene {
+    // n - what level to load
+    // pos - where to spawn the player
     constructor(n, pos){
         super();
         
+        // spawn a HUD
         const hud = new HUD();
+
+        // show the HUD by adding it to the modal stack:
         this.modal(hud);
+
+        // attach the hud to the player's body
         hud.attach(this.player.pawn);
 
-        // load:
-        (()=>{
-            this.levelIndex=n;
-            const level=LevelData.level(this.levelIndex);
+        this.levelIndex=n;
+        const level=LevelData.level(this.levelIndex);
 
-            this.objs.clear();
-            LevelData.level(this.levelIndex).concat([this.player]).forEach(o => this.objs.add(o));
-            
-            this.ids(); // assign ID numbers to everything
-            
-        })();
+        this.objs.clear();
+        LevelData.level(this.levelIndex).concat([this.player]).forEach(o => this.objs.add(o));
+        
+        this.ids(); // assign ID numbers to everything
 
     }
     update(dt){
@@ -87,13 +90,13 @@ class ScenePlay extends Scene {
     }
     handleClick(){
 
-        if(this.player.pawn.rect.mouseOver()) game.console.log("you clicked on scene.player");
+        if(this.player.pawn.rect.mouseOver()) game.console.log("<dim>you clicked on</dim> player");
 
         const o = this.objs.getUnderMouse();
         if(o){
             const index = this.objs.indexOf(o);
             const oid = o.oid;
-            game.console.log("you clicked on scene.objs.get("+index+")");
+            game.console.log("<dim>you clicked on object <val>"+index+"</val>. You can access it by typing </dim>obj(<val>"+index+"</val>)");
         }
 
 
