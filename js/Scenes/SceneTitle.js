@@ -5,7 +5,7 @@ class SceneTitle {
             {caption:"Play",callback:()=>{game.switchScene(SceneLoad.Level(0, {x:-1250, y:230}));}},
             {caption:"Tutorial",callback:()=>{game.console.log("// Tutorial coming soon!")}},
             {caption:"About",callback:()=>{
-                game.console.log("/*\n * Open Source v0.3\n * A game by Nick Pattison\n * Write code to change the game!\n * Contribute to it here: https://github.com/nickworks/ConsoleGame\n */");
+                game.console.log("/*\n * Open Source v0.4\n * A game by Nick Pattison\n * Write code to change the game!\n * Contribute to it here: <a href='https://github.com/nickworks/ConsoleGame' target='_blank'>https://github.com/nickworks/ConsoleGame</a>\n */");
             }}
         ]);
         PlayerController.data={};

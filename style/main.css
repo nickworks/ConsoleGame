@@ -25,6 +25,9 @@ body {
 #console.viz {
     display:block;
 }
+#console a {
+    color:#09F;
+}
 #console p {
     padding:5px;
     margin:0;
