@@ -8,7 +8,7 @@ class Menu {
             ty+=h;
         });
     }
-    update(dt){
+    update(){
         
         const b = this.buttons;
         
@@ -18,7 +18,7 @@ class Menu {
         if(this.index < 0) this.index = 0;
         if(this.index >= b.length) this.index = b.length-1;
         
-        for(var i in b)b[i].update(dt,(i==this.index));
+        for(var i in b)b[i].update((i==this.index));
     }
     draw(gfx){
         this.buttons.forEach( b => b.draw(gfx) );

@@ -37,9 +37,9 @@ class Door {
         if(i)this.oid=i;
         return this.oid;  
     }
-    update(dt){
+    update(){
         if(this.animating){
-            this.timer+=dt;
+            this.timer+=game.time.dt;
             var p = this.timer/this.timespan;
             if(p>1){
                 p=1;

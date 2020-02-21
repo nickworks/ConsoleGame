@@ -131,7 +131,7 @@ class Game {
         this.globals();
 
         if(this.scene){
-            this.scene.update(this.time.dt);
+            this.scene.update();
             this.draw(); // draw current scene + overlay(s)
         } else {
             this.scene=new SceneTitle(); // if no scene, default to sceneTitle

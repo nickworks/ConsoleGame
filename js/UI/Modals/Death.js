@@ -4,8 +4,8 @@ class Death extends Modal {
         this.font=new Font({size:12,color:"#FFF",align:"center"});
         this.timer=.5;
     }
-	update(dt){
-        this.timer-=dt;
+	update(){
+        this.timer-=game.time.dt;
 
         if(keyboard.onDown(key.any())){
             this.reloadLevel=true;

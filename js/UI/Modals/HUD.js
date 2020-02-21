@@ -10,7 +10,7 @@ class HUD extends Modal {
         // attach this HUD to a pawn
         this.pawn=pawn;
     }
-    update(dt){
+    update(){
         
     }
     draw(gfx){

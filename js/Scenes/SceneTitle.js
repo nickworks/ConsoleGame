@@ -10,8 +10,8 @@ class SceneTitle {
         ]);
         PlayerController.data={};
     }
-    update(dt){
-        this.menu.update(dt);
+    update(){
+        this.menu.update();
     }
     draw(gfx){
         game.view.fill("#555");

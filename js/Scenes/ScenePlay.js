@@ -24,9 +24,9 @@ class ScenePlay extends Scene {
         this.player.pawn.rect.x = pos.x;
         this.player.pawn.rect.y = pos.y;
     }
-    update(dt){
+    update(){
 
-        const res = super.update(dt);
+        const res = super.update();
 
         if(!res.sceneFrozen) {
             if(this.player && this.player.pawn.dead){

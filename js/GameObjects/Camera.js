@@ -10,17 +10,17 @@ class Camera {
         this.scale=1;
         this.cachemouse=null;
     }
-    update(dt, scale){
+    update( scale){
         this.cachemouse=null
         this.updateScreenOffset();
         this.updateTargetXY();
         const speed=5;
-        this.x=(this.x+(this.tx-this.x)*dt*speed)|0;
-        this.y=(this.y+(this.ty-this.y)*dt*speed)|0;
-        if(this.shake>0)this.shake-=dt;
+        this.x=(this.x+(this.tx-this.x)*game.time.dt*speed)|0;
+        this.y=(this.y+(this.ty-this.y)*game.time.dt*speed)|0;
+        if(this.shake>0)this.shake-=game.time.dt;
 
         scale = scale||1;
-        this.scale+=(scale - this.scale)*dt*5;
+        this.scale+=(scale - this.scale)*game.time.dt*5;
         
     }
     updateTargetXY(andSnap=true){

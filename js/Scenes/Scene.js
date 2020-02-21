@@ -92,7 +92,7 @@ class Scene {
         
         this.modals.forEach(m => m.draw(gfx));
     }
-    updateModals(dt){
+    updateModals(){
 
         const result = {
             zoom:1,
@@ -104,7 +104,7 @@ class Scene {
             const modal = this.modals[i];
             if(modal.isPause) result.hasPause = true;
             if(!result.sceneFrozen){
-                modal.update(dt);
+                modal.update();
                 if(modal.blocksSceneInput) {
                     result.sceneFrozen = true;
                     result.zoom = modal.zoom;
@@ -114,18 +114,18 @@ class Scene {
         }
         return result;
     }
-	update(dt){
+	update(){
 
-        const res = this.updateModals(dt);
+        const res = this.updateModals();
 
         if(!res.sceneFrozen){
             // update all objects
-            this.objs.all.forEach(o => o.update(dt));
+            this.objs.all.forEach(o => o.update());
 
 
             // update particles:
     		for(var i in this.particles){
-                this.particles[i].update(dt);
+                this.particles[i].update();
                 if(this.particles[i].dead)this.particles.splice(i,1);
             }
 
@@ -146,7 +146,7 @@ class Scene {
             this.objs.cleanup();
         }
         // update camera
-        this.cam.update(dt, res.zoom);
+        this.cam.update( res.zoom);
 
         return res;
     }

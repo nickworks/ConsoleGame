@@ -43,11 +43,11 @@ class Dialog extends Modal {
         }
         this.lines.push(line);
     }
-    update(dt){
-        this.bg.update(dt);
+    update(){
+        this.bg.update();
         if(this.bg.p<1)return;
         if(this.charNow < this.charMax){
-            this.timer-=dt;
+            this.timer-=game.time.dt;
             if(this.timer<0){
                 this.charNow+=(keyboard.isDown(key.activate()))?4:1;
                 this.timer=.04;

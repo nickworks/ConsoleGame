@@ -22,7 +22,7 @@ class Platform {
         if(i)this.oid=i;
         return this.oid;  
     }
-    update(dt){
+    update(){
         
     }
     draw(gfx){
@@ -34,7 +34,7 @@ class Platform {
         gfx.fillRect(0,0,this.rect.w,this.rect.h);
         Matrix.pop();
     }
-    block(a, dt){
+    block(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects

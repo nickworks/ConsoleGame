@@ -51,27 +51,28 @@ class Item {
         if(i)this.oid=i;
         return this.oid;  
     }
-    update(dt){
+    update(){
         if(!this.isAsleep){
             if(this.isGrounded){
                 var move=0;
                 if(this.vx<0)move+=2;
                 if(this.vx>0)move-=2;
-                this.vx+=move*400*dt;
+                this.vx+=move*400*game.time.dt;
                 if(move<0&&this.vx<0)this.vx=0;
                 if(move>0&&this.vx>0)this.vx=0;
                 if(this.vx==0&&this.vy==0)this.isAsleep=true;
             }            
             
-            this.vy+=800*dt;
-            this.rect.x+=this.vx*dt;
-            this.rect.y+=this.vy*dt;
+            this.vy+=800*game.time.dt;
+            this.rect.x+=this.vx*game.time.dt;
+            this.rect.y+=this.vy*game.time.dt;
             this.isGrounded=false;
             this.rect.speed();
         }
         
     }
-    overlap(a, dt){
+    // checks if this object overlaps one or more other objects
+    overlap(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             

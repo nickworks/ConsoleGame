@@ -35,10 +35,10 @@ class Pawn {
     draw(gfx,imgL, imgR,o){
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
-    update(dt){
+    update(){
 
-        if(this.weapon)this.weapon.update(dt); 
-        if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=dt;
+        if(this.weapon)this.weapon.update(); 
+        if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=game.time.dt;
         this.isGrounded=false;
         this.onWallLeft=false;
         this.onWallRight=false;
@@ -47,7 +47,7 @@ class Pawn {
         if(this.isDropping&&this.rect.y>this.dropFrom+20)this.isDropping=false;
         this.rect.speed();
     }
-    moveH(dt,move=0){
+    moveH(move=0){
         let slowDown=false;            
         if(move==0){ // if no input
             if(this.isGrounded){
@@ -62,20 +62,20 @@ class Pawn {
         }
         if(!this.isGrounded)move*=.4;//40% air control
         // Clamp horizontal velocity:
-        this.vx+=this.a*move*dt;
+        this.vx+=this.a*move*game.time.dt;
         var clamp=(this.walking)?this.maxv/2:this.maxv;
         if(!this.isGrounded)this.clamp=this.maxv*2;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
         // Apply velocity:
-        this.rect.x+=this.vx*dt;
+        this.rect.x+=this.vx*game.time.dt;
         // Prevent ping-ponging:
         if(slowDown){
             if(move<0&&this.vx<0)this.vx=0;
             if(move>0&&this.vx>0)this.vx=0;
         }
     }
-    moveV(dt){
+    moveV(){
         let grav=1;
         if(this.isJumping&&this.vy<0){
             grav=.4;
@@ -84,10 +84,10 @@ class Pawn {
             this.isJumping=false;
         }
         
-        this.vy+=1200*grav*dt;
+        this.vy+=1200*grav*game.time.dt;
         const terminalVelocity=(this.onWallLeft||this.onWallRight)?150:400
         if(this.vy>terminalVelocity)this.vy=terminalVelocity;
-        this.rect.y+=this.vy*dt;
+        this.rect.y+=this.vy*game.time.dt;
     }
     applyFix(fix,oneway){
         this.rect.x+=fix.x;

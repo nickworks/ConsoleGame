@@ -19,7 +19,7 @@ class Crate {
         if(i)this.oid=i;
         return this.oid;
     }
-    update(dt){
+    update(){
         
     }
     draw(gfx){
@@ -31,7 +31,7 @@ class Crate {
         gfx.drawImage(sprites.crate,0,0);
         Matrix.pop();
     }
-    block(a, dt){
+    block(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects

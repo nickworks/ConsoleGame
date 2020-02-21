@@ -88,16 +88,16 @@ class Weapon {
     }
     
     
-    update(dt){
+    update(){
         
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
         if(this.clip>this.clipMax)this.clip=this.clipMax;
         
         if(this.reloadDelay>0){
-            this.reloadDelay-=dt;
+            this.reloadDelay-=game.time.dt;
             if(this.reloadDelay<=0)this.doReload();
         }
-        else if(this.shootDelay>0)this.shootDelay-=dt;
+        else if(this.shootDelay>0)this.shootDelay-=game.time.dt;
         
         if(keyboard.onDown(key.reload())){
             this.reload();

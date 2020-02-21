@@ -24,8 +24,8 @@ class BubbleBG {
         this.h.now=this.h.target;
         this.r.now=this.r.target;
     }
-    update(dt){
-        this.time+=dt;
+    update(){
+        this.time+=game.time.dt;
         if(this.p<1){
             this.p=this.time/this.transTime;
             if(this.p>1)this.p=1;

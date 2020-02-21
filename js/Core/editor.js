@@ -10,7 +10,7 @@ class Editor {
     snap(v){
         return Math.round(v/this.snapSize)*this.snapSize
     }
-    update(dt){
+    update(){
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(key.escape)){
@@ -26,15 +26,15 @@ class Editor {
             s.cam.target=null;
             return s;
         }
-        this.moveCam(dt);
+        this.moveCam();
     }
-    moveCam(dt){
+    moveCam(){
         const c=scene.cam;
         const s=300;
-        if(keyboard.isDown(key.w)) c.ty-=s*dt;
-        if(keyboard.isDown(key.a)) c.tx-=s*dt;
-        if(keyboard.isDown(key.s)) c.ty+=s*dt;
-        if(keyboard.isDown(key.d)) c.tx+=s*dt;
+        if(keyboard.isDown(key.w)) c.ty-=s*game.time.dt;
+        if(keyboard.isDown(key.a)) c.tx-=s*game.time.dt;
+        if(keyboard.isDown(key.s)) c.ty+=s*game.time.dt;
+        if(keyboard.isDown(key.d)) c.tx+=s*game.time.dt;
     }
     handleClick(){
         

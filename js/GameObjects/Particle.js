@@ -85,16 +85,16 @@ class Particle {
                 this.color="hsl("+hue+", "+sat+"%, "+lit+"%)";
         }
     }
-    update(dt){
-        this.life+=dt;
+    update(){
+        this.life+=game.time.dt;
         if(this.life>this.lifespan)this.dead=true;
-        this.v.x+=this.a.x*dt;
-        this.v.y+=this.a.y*dt;
-        this.rect.x+=this.v.x*dt;
-        this.rect.y+=this.v.y*dt;
+        this.v.x+=this.a.x*game.time.dt;
+        this.v.y+=this.a.y*game.time.dt;
+        this.rect.x+=this.v.x*game.time.dt;
+        this.rect.y+=this.v.y*game.time.dt;
         this.v.x-=this.v.x*this.drag;
         this.v.y-=this.v.y*this.drag;
-        this.scale+=this.scalev*dt;
+        this.scale+=this.scalev*game.time.dt;
         
     }
     draw(gfx){

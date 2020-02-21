@@ -10,7 +10,7 @@ class Button {
         this.selected=false;
         this.align=align;
     }
-    update(dt, selected){
+    update( selected){
         this.hover=this.rect.hits(mouse.pos());
         this.selected=selected;
         if(this.hover && mouse.onDown()) this.callback();

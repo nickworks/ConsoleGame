@@ -42,27 +42,27 @@ class AIController extends Controller {
         if(i)this.oid=i;
         return this.oid;  
     }
-    update(dt){
+    update(){
         this.canTalk=this.pawn.rect.overlaps(scene.player.pawn.rect);
         
         if(this.friend){
-            this.aiFriend(dt);
+            this.aiFriend();
         } else {
-            this.aiFoe(dt);
+            this.aiFoe();
         }
     }
-    aiFriend(dt){
+    aiFriend(){
         if(this.canTalk && keyboard.onDown(key.activate())){
             this.speak();
         }
-        this.pawn.moveV(dt);
-        this.pawn.moveH(dt,0);
-        this.pawn.update(dt);
+        this.pawn.moveV();
+        this.pawn.moveH(0);
+        this.pawn.update();
     }
-    aiAlly(dt){
+    aiAlly(){
 
     }
-    aiFoe(dt){
+    aiFoe(){
         let move=0;
         if(this.agro){
             const p=scene.player.pawn.rect.mid();
@@ -80,16 +80,16 @@ class AIController extends Controller {
             }
         } else {
             
-            move=this.patrol(dt);
+            move=this.patrol();
             
             if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
         this.pawn.walking=!this.agro;
-        this.pawn.moveV(dt);
-        this.pawn.moveH(dt,move);
-        this.pawn.update(dt);
+        this.pawn.moveV();
+        this.pawn.moveH(move);
+        this.pawn.update();
     }
-    patrol(dt){
+    patrol(){
         let move=0;
         const target=this.patrolStart+this.patrolDis*this.pawn.dir;
         if(this.pawn.dir<0){
@@ -97,7 +97,7 @@ class AIController extends Controller {
                 move=-1;
                 this.patrolTimer=1;
             }else{
-                this.patrolTimer-=dt;
+                this.patrolTimer-=game.time.dt;
                 if(this.patrolTimer<=0){
                     this.pawn.dir=1;
                 }
@@ -108,7 +108,7 @@ class AIController extends Controller {
                 move=1;
                 this.patrolTimer=1;
             }else{
-                this.patrolTimer-=dt;
+                this.patrolTimer-=game.time.dt;
                 if(this.patrolTimer<=0){
                     this.pawn.dir=-1;
                 }

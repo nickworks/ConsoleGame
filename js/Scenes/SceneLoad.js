@@ -38,12 +38,12 @@ class SceneLoad {
         this.delay=0; // how long to wait before "loading" another chunk of data
         this.font=new Font({color:"#FFF",align:"center"}); // what font to use
     }
-    update(dt){
+    update(){
         if(game.settings.skipLoadingScenes || Game.DEVMODE) this.loadNextScene();
         
         else if(this.delay>0){
 
-            this.delay-=dt;
+            this.delay-=game.time.dt;
 
         } else {
 

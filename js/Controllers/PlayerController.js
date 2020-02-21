@@ -3,7 +3,6 @@ class PlayerController extends Controller {
     static data={
         weapon:null,
         coins:0,
-
         quests:[],
     };
     static addQuest(q){
@@ -38,7 +37,7 @@ class PlayerController extends Controller {
         if(i)this.oid=i;
         return this.oid;  
     }
-    update(dt){
+    update(){
         
         if(typeof this.canWallJump!="function"){
             game.console.log("/* Careful there!\n * scene.player.canWallJump() is a function.\n * Changing a function can introduce bugs that CRASH\n * THE GAME. There may not be any coming back from a crashed game...\n * so be careful! Perhaps you should visit the Western guru to\n * learn more about functions.\n */");
@@ -70,9 +69,9 @@ class PlayerController extends Controller {
         
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         
-        this.pawn.moveV(dt);
-        this.pawn.moveH(dt,move);
-        this.pawn.update(dt);
+        this.pawn.moveV();
+        this.pawn.moveH(move);
+        this.pawn.update();
     }
     draw(gfx){
         this.pawn.draw(gfx,sprites.playerL,sprites.playerR,{x:4,y:4});

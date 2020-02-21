@@ -28,13 +28,13 @@ class Keypad extends Modal {
         this.bg.setSize(size.width,14);
         if(snap)this.bg.snap();
     }
-    update(dt){
-        this.timerBlink-=dt;
+    update(){
+        this.timerBlink-=game.time.dt;
         if(this.timerBlink<=0){
             this.showCursor=!this.showCursor;
             this.timerBlink=.5;
         }
-        this.bg.update(dt); 
+        this.bg.update(); 
         if(keyboard.onDown([key.n0,key.p0])) this.append("0");
         if(keyboard.onDown([key.n1,key.p1])) this.append("1");
         if(keyboard.onDown([key.n2,key.p2])) this.append("2");

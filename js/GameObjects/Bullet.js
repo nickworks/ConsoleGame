@@ -10,18 +10,19 @@ class Bullet {
         this.dmg=d;
         this.explode=false;
     }
-    update(dt){
+    update(){
 
-        this.vy+=this.g*dt;
-        this.rect.x+=this.vx*dt;
-        this.rect.y+=this.vy*dt;
-        this.lifespan-=dt;
+        this.vy+=this.g*game.time.dt;
+        this.rect.x+=this.vx*game.time.dt;
+        this.rect.y+=this.vy*game.time.dt;
+        this.lifespan-=game.time.dt;
         if(this.lifespan<=0)this.dead=true;
     }
     draw(gfx){
         gfx.drawImage(sprites.projectile,this.rect.x,this.rect.y)
     }
-    overlap(a, dt){
+    // check if this bullet is overlapping one or more other objects
+    overlap(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             

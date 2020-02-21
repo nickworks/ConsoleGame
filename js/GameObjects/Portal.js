@@ -5,7 +5,7 @@ class Portal {
         this.active=false;
         this.spawnpos=raw.p;
     }
-    update(dt){
+    update(){
         this.active = this.rect.overlaps(scene.player.pawn.rect);
         if(this.active && keyboard.isDown(key.activate())) this.use();
     }

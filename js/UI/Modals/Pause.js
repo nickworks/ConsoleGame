@@ -21,8 +21,8 @@ class Pause extends Modal {
         });
         this.menu=new Menu(0,100,game.width(),32,options);
     }
-    update(dt){
-        this.menu.update(dt);
+    update(){
+        this.menu.update();
         if(keyboard.onDown(key.exit()))this.remove=true;
 
         if(this.launchEditor) scene.modal(new Editor()); // this should replace the Pause modal with the Editor modal
