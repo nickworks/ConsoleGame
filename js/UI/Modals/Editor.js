@@ -1,5 +1,6 @@
-class Editor {
+class Editor extends Modal {
     constructor(){
+        super();
         scene.cam.target=null;
         this.snapSize=25;
         this.dragObj=null;
@@ -14,7 +15,7 @@ class Editor {
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(key.escape)){
-            this.remove=true;
+            scene.guis.editor = null;
             scene.cam.target=scene.player.pawn;
         }
         if(keyboard.onDown(key.enter)){

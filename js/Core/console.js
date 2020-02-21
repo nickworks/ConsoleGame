@@ -44,11 +44,12 @@ class Console {
         var cmd = this.input.value.trim();
         if(cmd.length == 0) return;
         this.history.add(cmd);
+
         var result = "";
         try{
             result = window.eval(cmd);
             if(typeof(result) == "string") result = '"'+result+'"';
-            if(typeof(result) == "function" && (this.settings.showFunctionBodies || false) == false) result = '[function]'; // comment this out to see function bodies
+            if(typeof(result) == "function" && (this.settings.showFunctionBodies || Game.DEVMODE) == false) result = '[function]'; // comment this out to see function bodies
             if(typeof(result) == "object") result = this.stringify(result);
         } catch(e){
             result = e.message;

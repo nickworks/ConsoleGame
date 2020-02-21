@@ -73,15 +73,27 @@ class Scene {
             bullets:[],
             damageable:[],
         };
-
-
+        this.guis={
+            overlays:[],
+            modals:[],
+            editor:null,
+            pause:null,
+        };
         this.particles=[];
-		this.modals=[];
+		
 		this.player=new PlayerController();
+
         this.cam=new Camera();
         this.cam.target=this.player.pawn;
         this.cam.updateTargetXY(true);
 	}
+    pause(){
+        if(this.guis.editor) return;
+        this.guis.pause = new Pause();
+    }
+    unpause(){
+        this.guis.pause = null;
+    }
 	draw(gfx){
         game.view.fill("#888");
 
@@ -90,73 +102,67 @@ class Scene {
         this.particles.forEach(p => p.draw(gfx));
         this.cam.drawEnd(gfx);
         
-        this.modals.forEach(m => m.draw(gfx));
-    }
-    updateModals(){
 
-        const result = {
-            zoom:1,
-            hasPause:false,
-            sceneFrozen:false,
-        };
-
-        for(let i = this.modals.length - 1; i >= 0; i--){
-            const modal = this.modals[i];
-            if(modal.isPause) result.hasPause = true;
-            if(!result.sceneFrozen){
-                modal.update();
-                if(modal.blocksSceneInput) {
-                    result.sceneFrozen = true;
-                    result.zoom = modal.zoom;
-                }
-                if(modal.remove) this.modals.splice(i, 1);
-            }
-        }
-        return result;
+        // GUI OVERLAYS:
+        this.guis.overlays.forEach(m => m.draw(gfx));
+        this.guis.modals.forEach(m => m.draw(gfx));
+        if(this.guis.pause) this.guis.pause.draw(gfx);
+        if(this.guis.editor) this.guis.editor.draw(gfx);
     }
 	update(){
 
-        const res = this.updateModals();
-
-        if(!res.sceneFrozen){
-            // update all objects
-            this.objs.all.forEach(o => o.update());
-
-
-            // update particles:
-    		for(var i in this.particles){
-                this.particles[i].update();
-                if(this.particles[i].dead)this.particles.splice(i,1);
-            }
-
-            // do collision detection:
-            this.objs.blocking.forEach(b=>{
-                b.block(this.objs.pawns);
-                b.block(this.objs.physics);
-            });
-            this.objs.bullets.forEach(b=>{
-                b.overlap(this.objs.blocking);
-                b.overlap(this.objs.pawns);
-            });
-            this.objs.physics.forEach(i=>{
-                i.overlap(this.objs.pawns);
-            });
-
-            // remove all objects marked as "DEAD"
-            this.objs.cleanup();
+        if(this.guis.editor) {
+            this.guis.editor.update();
+            return true;
         }
-        // update camera
-        this.cam.update( res.zoom);
 
-        return res;
+        if(this.guis.pause) {
+            this.guis.pause.update();
+            return true;
+        }
+        
+        // update all objects
+        this.objs.all.forEach(o => o.update());
+
+        this.doCollisionDetection();
+
+        // update particles:
+		for(var i in this.particles){
+            this.particles[i].update();
+            if(this.particles[i].dead)this.particles.splice(i,1);
+        }
+
+        // remove all objects marked as "DEAD"
+        this.objs.cleanup();
+        
+        this.guis.overlays.forEach(g => g.update());
+        this.guis.modals.forEach(g => g.update());
+
+        // update camera
+        this.cam.update(1);
+        return false;
+    }
+    doCollisionDetection(){
+        // do collision detection:
+        this.objs.blocking.forEach(b=>{ // allow blocking volumes to push out:
+            b.block(this.objs.pawns);
+            b.block(this.objs.physics);
+        });
+        this.objs.bullets.forEach(b=>{ // check if bullets overlap with:
+            b.overlap(this.objs.blocking);
+            b.overlap(this.objs.pawns) 
+        });
+        this.objs.physics.forEach(i=>{ // check if physics objects overlap with:
+            i.overlap(this.objs.pawns);
+        });
     }
     modal(modal){
 
-    	const types = this.modals.map(m => Object.getPrototypeOf(m));
+    	const types = this.guis.modals.map(m => Object.getPrototypeOf(m));
     	const typeAlreadyExists = types.includes(Object.getPrototypeOf(modal));
 
     	if (typeAlreadyExists) return;
 
-    	this.modals.push(modal);
+    	this.guis.modals.push(modal);
     }
 }

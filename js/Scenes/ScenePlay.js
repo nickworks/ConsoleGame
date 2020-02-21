@@ -26,20 +26,18 @@ class ScenePlay extends Scene {
     }
     update(){
 
-        const res = super.update();
 
-        if(!res.sceneFrozen) {
-            if(this.player && this.player.pawn.dead){
-                this.modal(new Death());
-            } else {
-                if(mouse.onDown()) this.handleClick();
-            }
+        const isPaused = super.update();
+        if(isPaused) return;
+
+        if(this.player && this.player.pawn.dead){
+            this.modal(new Death());
+        } else {
+            if(mouse.onDown()) this.handleClick();
         }
-        if(!res.hasPause && keyboard.onDown(key.exit())) this.pause();
         
-    }
-    pause(){
-        this.modal(new Pause());
+        if(keyboard.onDown(key.exit())) this.pause();
+        
     }
     draw(gfx){
         super.draw(gfx);

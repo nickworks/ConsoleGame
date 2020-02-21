@@ -21,6 +21,7 @@ loadjs([
     'js/UI/Modals/Pause.js',
     'js/UI/Modals/HUD.js',
     'js/UI/Modals/Death.js',
+    'js/UI/Modals/Editor.js',
 
     'js/Controllers/Controller.js',
     'js/Controllers/AIController.js',
@@ -41,7 +42,6 @@ loadjs([
     'js/Core/Callback.js',
     'js/Core/Rect.js',
     'js/Core/Sprite.js',
-    'js/Core/Editor.js',
     'js/Core/Matrix.js',
     'js/Core/console.js',
     'js/Core/Input/mouse.js',

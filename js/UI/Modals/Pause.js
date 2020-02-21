@@ -4,16 +4,14 @@ class Pause extends Modal {
         this.isPause = true;
         const options=[{
             caption:"Resume",
-            callback:()=>{this.remove=true;}
+            callback:()=>{ game.scene.unpause(); }
         },{
             caption:"Reset Level",
             callback:()=>{ game.switchScene(new ScenePlay(game.scene.levelIndex)); }
         }];
         if(game.settings.editModeEnabled)options.push({
             caption:"Editor",
-            callback:()=>{
-                this.launchEditor=true;
-            }
+            callback:()=>{ scene.guis.editor = new Editor(); game.scene.unpause(); }
         });
         options.push({
             caption:"Quit",
@@ -23,9 +21,7 @@ class Pause extends Modal {
     }
     update(){
         this.menu.update();
-        if(keyboard.onDown(key.exit()))this.remove=true;
-
-        if(this.launchEditor) scene.modal(new Editor()); // this should replace the Pause modal with the Editor modal
+        if(keyboard.onDown(key.exit())) game.scene.unpause();
     }
     draw(gfx){
         gfx.fillStyle="rgba(0,0,0,.75)";
