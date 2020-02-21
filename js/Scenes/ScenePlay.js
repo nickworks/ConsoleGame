@@ -1,28 +1,30 @@
 class ScenePlay extends Scene {
+
     // n - what level to load
     // pos - where to spawn the player
     constructor(n, pos={x:0,y:0}){
         super();
         
-        // spawn a HUD
-        const hud = new HUD();
+        this.level={
+            index:n,
+            pos:pos,
+            data:LevelData.level(n),
+        }
+        this.startLevel();
 
-        // show the HUD by adding it to the modal stack:
-        this.modal(hud);
-
-        // attach the hud to the player's body
-        hud.attach(this.player.pawn);
-
-        this.levelIndex=n;
-        const level=LevelData.level(this.levelIndex);
-
+        const hud = new HUD();          // spawn a HUD
+        this.guis.overlays.push(hud);     // add the HUD to the gui stack
+        hud.attach(this.player.pawn);   // attach the hud to the player's body
+        
+    }
+    startLevel(){
         this.objs.clear();
-        LevelData.level(this.levelIndex).concat([this.player]).forEach(o => this.objs.add(o));
+        this.level.data.concat([this.player]).forEach(o => this.objs.add(o));
         
         this.ids(); // assign ID numbers to everything
 
-        this.player.pawn.rect.x = pos.x;
-        this.player.pawn.rect.y = pos.y;
+        this.player.pawn.rect.x = this.level.pos.x;
+        this.player.pawn.rect.y = this.level.pos.y;
     }
     update(){
 
@@ -43,7 +45,7 @@ class ScenePlay extends Scene {
         super.draw(gfx);
     }
     edit(){
-        this.modal(new Editor());
+        this.guis.editor = new Editor();
     }
     spawnLoot(amt=1,raw={}){
         for(var i=0;i<amt;i++){

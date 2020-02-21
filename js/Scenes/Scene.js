@@ -121,26 +121,44 @@ class Scene {
             return true;
         }
         
-        // update all objects
-        this.objs.all.forEach(o => o.update());
+        var zoom = 1;
+        
+        if(this.guis.modals.length == 0){
+            // update all objects
+            this.objs.all.forEach(o => o.update());
 
-        this.doCollisionDetection();
+            this.doCollisionDetection();
 
-        // update particles:
-		for(var i in this.particles){
-            this.particles[i].update();
-            if(this.particles[i].dead)this.particles.splice(i,1);
+            // remove all objects marked as "DEAD"
+            this.objs.cleanup();
+
+
+            // update particles:
+            this.reverseIterate(this.particles, (o, i) =>{
+                o.update();
+                if(o.dead) this.particles.splice(i,1);
+            });
+            this.reverseIterate(this.guis.overlays, (o, i)=>{
+                o.update();
+                if(o.zoom) zoom = o.zoom;
+                if(o.dead) this.guis.overlays.splice(i,1);
+            });
+        } else {
+            this.reverseIterate(this.guis.modals, (o, i)=>{
+                o.update();
+                if(o.zoom) zoom = o.zoom;
+                if(o.dead) this.guis.modals.splice(i,1);
+            });
         }
 
-        // remove all objects marked as "DEAD"
-        this.objs.cleanup();
-        
-        this.guis.overlays.forEach(g => g.update());
-        this.guis.modals.forEach(g => g.update());
-
         // update camera
-        this.cam.update(1);
+        this.cam.update(zoom);
         return false;
+    }
+    reverseIterate(arr, f){
+        for(var i = arr.length - 1; i >= 0; i--){
+            f(arr[i], i);
+        }
     }
     doCollisionDetection(){
         // do collision detection:
@@ -164,5 +182,10 @@ class Scene {
     	if (typeAlreadyExists) return;
 
     	this.guis.modals.push(modal);
+    }
+    removeModal(modal){
+
+        var i = this.guis.modals.indexOf(modal);
+        this.guis.modals.slice(i,1);
     }
 }

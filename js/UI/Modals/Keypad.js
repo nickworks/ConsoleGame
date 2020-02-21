@@ -9,7 +9,6 @@ class Keypad extends Modal {
         this.y=y;
         this.font=new Font({valign:"top"});
         
-        this.remove=false;
         this.timerBlink=0;
         this.showCursor=true;
         
@@ -65,7 +64,7 @@ class Keypad extends Modal {
         scene.cam.drawEnd(gfx);
     }
     end(submit){
-        this.remove=true;
+        this.close();
         if(submit&&this.onDone)this.onDone(this.val);
     }
     

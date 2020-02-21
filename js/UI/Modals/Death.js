@@ -8,7 +8,8 @@ class Death extends Modal {
         this.timer-=game.time.dt;
 
         if(keyboard.onDown(key.any())){
-            this.reloadLevel=true;
+            game.scene.startLevel();
+            this.close();
         }
     }
     draw(gfx){

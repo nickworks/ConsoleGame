@@ -103,7 +103,7 @@ class Dialog extends Modal {
         }
     }
     endDialog(){
-        this.remove=true;
+        this.close();
         Callback.do(this.callbacks.onSpeak);
     }
 }
