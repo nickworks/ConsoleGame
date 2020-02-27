@@ -19,6 +19,7 @@ class Scene {
                 this.physics =[];
                 this.bullets =[];
                 this.damageable =[];
+                this.hazards =[];
 			},
             add(obj){
                 this.all.push(obj);
@@ -43,6 +44,10 @@ class Scene {
                     case "Bullet":
                         this.bullets.push(obj);
                         break;
+                    case "ProximityMine":
+                        this.damageable.push(obj);
+                        this.hazards.push(obj);
+                        break;
                 }
             },
             remove(obj){
@@ -52,6 +57,7 @@ class Scene {
                 this.removeFrom(obj, this.physics);
                 this.removeFrom(obj, this.bullets);
                 this.removeFrom(obj, this.damageable);
+                this.removeFrom(obj, this.hazards);
             },
             removeFrom(obj, arr){
                 const i = arr.indexOf(obj);
@@ -66,13 +72,8 @@ class Scene {
                     if(obj.dead || (this.all[i].pawn && this.all[i].pawn.dead)) this.remove(obj);
                 }
             },
-            all:[],
-            blocking:[],
-            pawns:[],
-            physics:[],
-            bullets:[],
-            damageable:[],
         };
+        this.objs.clear();
         this.guis={
             overlays:[],
             modals:[],
@@ -171,6 +172,9 @@ class Scene {
             b.overlap(this.objs.pawns) 
         });
         this.objs.physics.forEach(i=>{ // check if physics objects overlap with:
+            i.overlap(this.objs.pawns);
+        });
+        this.objs.hazards.forEach(i=>{ // check if physics objects overlap with:
             i.overlap(this.objs.pawns);
         });
     }
