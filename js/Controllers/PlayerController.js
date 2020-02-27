@@ -4,6 +4,12 @@ class PlayerController extends Controller {
         weapon:null,
         coins:0,
         quests:[],
+        reset(){
+            this.weapon=null;
+            this.coins=0;
+            this.quests=[];
+            game.console.log("player data reset");
+        }
     };
     static addQuest(q){
         

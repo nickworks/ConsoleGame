@@ -3,7 +3,7 @@ class HUD extends Modal {
     constructor(){
         super();
         this.blocksSceneInput = false;
-        this.font=new Font({color:"#FFF",size:17,align:"center",valign:"middle"});
+        this.font=new Font({color:"#FFF",size:17,align:"left",valign:"middle"});
     }
 
     attach(pawn){
@@ -16,6 +16,7 @@ class HUD extends Modal {
     draw(gfx){
         this.drawAmmo(gfx);
         this.drawHealth(gfx);
+        this.drawMoney(gfx);
     }
     drawAmmo(gfx){
         
@@ -25,7 +26,7 @@ class HUD extends Modal {
         // calculate size of ammo txt box:
         let txt="";
         if(this.pawn)txt=this.pawn.weapon.ammo.toString(); // text string
-        let width = this.font.measure(gfx,txt).width + 12;
+        let width = this.font.measure(gfx,txt).width + 20;
         if(width < 35) width = 35;
         const height=26;
         
@@ -37,7 +38,7 @@ class HUD extends Modal {
         gfx.fillRect(0,y-height/2,width,height);
 
         this.font.apply(gfx);
-        gfx.fillText(txt,width/2,1+y);
+        gfx.fillText(txt,10,1+y);
 
     }
     drawBullets(gfx, x, y, height){
@@ -93,5 +94,10 @@ class HUD extends Modal {
         gfx.fillStyle="rgb(50,100,50)";
         gfx.fillRect(0,0,w*p,h);
         Matrix.pop();
+    }
+    drawMoney(gfx){
+        this.font.apply(gfx);
+        gfx.drawImage(sprites.item3, 5, game.height()-75);
+        gfx.fillText(PlayerController.data.coins, 30, game.height()-62);
     }
 }

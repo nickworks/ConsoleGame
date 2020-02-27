@@ -43,7 +43,7 @@ class Rect {
         this.fix();
     }
     speed(){
-        // calculate the velocity this rect is mocing
+        // calculate the velocity this rect is moving
         // IMPORTANT: this velocity is per-second! It has delta-time already applied.
         this.vx=this.x-this.prev.x;
         this.vy=this.y-this.prev.y;

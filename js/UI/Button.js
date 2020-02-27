@@ -1,5 +1,5 @@
 class Button {
-    constructor(caption,callback,x,y,w,h,align="left"){
+    constructor(caption,callback,x,y,w,h,align="left",worldSpace=false){
         this.padding=25;
         this.text=new TextField(caption,0,0,{align:align,valign:"middle"});
         this.callback=callback;
@@ -9,14 +9,29 @@ class Button {
         this.hover=false;
         this.selected=false;
         this.align=align;
+        this.mouse = {x:0,y:0};
+        this.worldSpace = !!worldSpace;
     }
-    update( selected){
-        this.hover=this.rect.hits(mouse.pos());
-        this.selected=selected;
+    update(selected=false, offset){
+
+        if(!offset) offset = {x:0, y:0};
+
+        if(this.worldSpace){
+            this.mouse = game.scene.cam.worldMouse(); // this messes up the pause menu...
+        } else {
+            this.mouse = mouse.pos();
+        }
+        this.mouse.x -= offset.x;
+        this.mouse.y -= offset.y;
+        
+
+        this.hover=this.rect.hits(this.mouse);
+        this.selected=!!selected;
         if(this.hover && mouse.onDown()) this.callback();
         if(this.selected && keyboard.onDown(key.menuChoose())) this.callback();
     }
-    draw(gfx){
+    draw(gfx, offset){
+
         Matrix.push();
         Matrix.translate(this.rect.x, this.rect.y);
         const hover=this.hover||this.selected;

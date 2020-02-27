@@ -12,7 +12,6 @@ class SceneLoad {
         
         speed = +speed;
         
-
         return new SceneLoad(new ScenePlay(n, pos), speed|1);
     }
 
