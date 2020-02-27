@@ -25,17 +25,16 @@ class Scene {
                 this.all.push(obj);
                 switch(obj.constructor.name){
                     case "Platform":
-                    case "Crate":
                     case "Door":
                         this.blocking.push(obj);
                         break;
                     case "PlayerController":
                     case "AIController":
                         this.pawns.push(obj);
+                        this.damageable.push(obj);
                         break;
-                    case "PlayerController":
-                    case "AIController":
                     case "Crate":
+                        this.blocking.push(obj);
                         this.damageable.push(obj);
                         break;
                     case "Item":

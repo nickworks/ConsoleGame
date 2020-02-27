@@ -24,13 +24,13 @@ class ProximityMine {
             const rect=(o.pawn?o.pawn.rect:o.rect);
             if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
 
-            this.boom(o);            
+            this.boom(o);
         });
     }
     boom(){
     	this.dead=true;
         const p=this.rect.mid();
-    	scene.explode(p.x, p.y, this.radius, 100);
+    	scene.explode(p.x, p.y, this.radius*2, 100);
     }
 	hurt(amt){
         this.hp-=amt;

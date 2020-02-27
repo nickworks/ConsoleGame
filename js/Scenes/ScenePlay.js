@@ -59,6 +59,7 @@ class ScenePlay extends Scene {
     }
     explode(x,y,r=200,dmg=0){
 
+
         this.addParticles(x,y,1,8);
         this.cam.shake=.5;
         
