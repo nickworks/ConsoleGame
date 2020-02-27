@@ -6,7 +6,7 @@ const sprites={
         return img;
     },
     
-    init:function(gfx){
+    init:function(){
         
         const pattern=(i)=>{return gfx.createPattern(i,'repeat');};
         

@@ -37,7 +37,7 @@ class BubbleBG {
     lerp(a,b){
         return (b-a)*(this.p*this.p)+a;
     }
-    draw(gfx){
+    draw(){
         const al=Math.PI;
         const ad=al/2;
         const ar=0;

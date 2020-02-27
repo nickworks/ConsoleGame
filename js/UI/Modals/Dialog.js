@@ -34,7 +34,7 @@ class Dialog extends Modal {
         let line='';
         for(var i in words){
             const t=line+words[i]+' ';
-            if(i>0&&this.font.measure(game.gfx(),t).width>this.w){
+            if(i>0&&this.font.measure(t).width>this.w){
                 this.lines.push(line);
                 line=words[i]+' ';
             }else{
@@ -56,15 +56,15 @@ class Dialog extends Modal {
             if(keyboard.onDown(key.activate())) this.showNext();
         }
     }
-    draw(gfx){
+    draw(){
         
         game.view.fill("rgba(0,0,0,.5)");
-        scene.cam.drawStart(gfx);
+        scene.cam.drawStart();
         Matrix.push();
         Matrix.translate(this.x,this.y);
-        this.bg.draw(gfx);
+        this.bg.draw();
         const p=this.bg.pos();
-        this.font.apply(gfx);
+        this.font.apply();
         var charOut=this.charNow;
         for(var n in this.lines){
             var str=this.lines[n];
@@ -77,7 +77,7 @@ class Dialog extends Modal {
             gfx.fillText(str, p.x, p.y+n*this.h);
         }
         Matrix.pop();
-        scene.cam.drawEnd(gfx);
+        scene.cam.drawEnd();
     }
     
     showNext(){
@@ -96,7 +96,7 @@ class Dialog extends Modal {
             this.charMax=txt.length;
             this.charNow=0;
             const w=(this.lines.length==1)
-                ?this.font.measure(game.gfx(),this.lines[0]).width
+                ?this.font.measure(this.lines[0]).width
                 :this.w;
             const h=this.h*this.lines.length;
             this.bg.setSize(w,h);

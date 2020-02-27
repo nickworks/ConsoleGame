@@ -136,7 +136,7 @@ class Editor extends Modal {
         (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw);
         if(!mouse.isDown())this.dragObj=null;
     }
-    draw(gfx){
+    draw(){
         gfx.fillStyle="#000";
         gfx.font="8pt Courier";
         gfx.textAlign="left";

@@ -23,9 +23,9 @@ class Pause extends Modal {
         this.menu.update();
         if(keyboard.onDown(key.exit())) game.scene.unpause();
     }
-    draw(gfx){
+    draw(){
         gfx.fillStyle="rgba(0,0,0,.75)";
         gfx.fillRect(0,0,game.width(),game.height());
-        this.menu.draw(gfx);
+        this.menu.draw();
     }
 }

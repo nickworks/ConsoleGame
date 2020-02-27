@@ -6,14 +6,14 @@ class Font {
         this.align=raw.align||"left";
         this.baseline=raw.valign||"alphabetic";
     }
-    apply(gfx){
+    apply(){
         gfx.fillStyle = this.color;
         gfx.font = this.size + "px " + this.font;
         gfx.textAlign = this.align;
         gfx.textBaseline = this.baseline;
     }
-    measure(gfx, str){
-        this.apply(gfx);
+    measure(str){
+        this.apply();
         return gfx.measureText(str);
     }
 }

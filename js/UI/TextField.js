@@ -5,8 +5,8 @@ class TextField {
 	    this.y=y;
 	    this.font=new Font(font);
 	}
-	draw(gfx){
-        this.font.apply(gfx);
+	draw(){
+        this.font.apply();
         gfx.fillText(this.text,this.x,this.y);
     }
 }

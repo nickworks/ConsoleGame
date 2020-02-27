@@ -46,14 +46,14 @@ class Camera {
             this.ty+=Math.random()*shake-shake/2;
         }
     }
-    drawStart(gfx){
+    drawStart(){
         Matrix.push();
         Matrix.translate(this.sx|0,this.sy|0);
         if(this.scale!=1)Matrix.scale(this.scale);
         if(this.angle!=0)Matrix.rotate(this.angle);
         Matrix.translate(-this.x|0,-this.y|0);
     }
-    drawEnd(gfx){
+    drawEnd(){
         Matrix.pop();
     }
     updateScreenOffset(){

@@ -150,7 +150,7 @@ class Game {
         window.obj = (i) => {return scene.objs.get(i);};
         window.player=(this.scene==undefined)?null:this.scene.player;
         window.game=this;
-
+        window.gfx=this.view.gfx;
     }
     draw(){
         this.scene.draw(this.view.gfx);

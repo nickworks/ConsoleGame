@@ -13,7 +13,7 @@ class Sprite {
         this.scale = 1;
         this.anchor = {x:0, y:0};
     }
-    draw (gfx){
+    draw (){
         gfx.translate(this.x, this.y);
         gfx.rotate(0);
         gfx.scale(this.scale, this.scale);

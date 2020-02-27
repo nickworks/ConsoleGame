@@ -105,7 +105,7 @@ class Item {
         }
         this.dead=true;
     }
-    draw(gfx){
+    draw(){
         
         var img;
         if(this.type==Item.Type.HEAL)img=sprites.item1;
@@ -114,12 +114,12 @@ class Item {
         if(this.type==Item.Type.GUN )img=sprites.gun;
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
-        else this.rect.draw(gfx);
+        else this.rect.draw();
         
         if(this.hint&&this.showHint){
             this.hint.x=this.rect.mid().x;
             this.hint.y=this.rect.y;
-            this.hint.draw(gfx);
+            this.hint.draw();
             this.showHint=false;
         }
     }

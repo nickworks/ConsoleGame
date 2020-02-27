@@ -79,8 +79,8 @@ class PlayerController extends Controller {
         this.pawn.moveH(move);
         this.pawn.update();
     }
-    draw(gfx){
-        this.pawn.draw(gfx,sprites.playerL,sprites.playerR,{x:4,y:4});
+    draw(){
+        this.pawn.draw(sprites.playerL,sprites.playerR,{x:4,y:4});
     }
     hurt(amt=10){
         this.pawn.hp-=amt;

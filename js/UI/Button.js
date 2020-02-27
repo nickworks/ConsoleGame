@@ -30,7 +30,7 @@ class Button {
         if(this.hover && mouse.onDown()) this.callback();
         if(this.selected && keyboard.onDown(key.menuChoose())) this.callback();
     }
-    draw(gfx, offset){
+    draw(offset){
 
         Matrix.push();
         Matrix.translate(this.rect.x, this.rect.y);
@@ -44,7 +44,7 @@ class Button {
         
         this.text.x=x;
         this.text.y=this.rect.h/2;
-        this.text.draw(gfx);
+        this.text.draw();
         Matrix.pop();
     }
 }

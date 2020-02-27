@@ -22,9 +22,9 @@ class Crate {
     update(){
         
     }
-    draw(gfx){
+    draw(){
         gfx.fillStyle="#000";
-        this.rect.draw(gfx);
+        this.rect.draw();
         Matrix.push();
         Matrix.translate(this.rect.x,this.rect.y);
         Matrix.scale(this.rect.w/100);

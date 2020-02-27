@@ -53,7 +53,7 @@ class SceneLoad {
             if(this.percent>=1) this.loadNextScene();
         }
     }
-    draw(gfx){
+    draw(){
         game.view.fill("#555");
         
         var w=(game.width())*(this.percent>1?1:this.percent);
@@ -61,7 +61,7 @@ class SceneLoad {
         gfx.fillRect(0,game.height()-10,w,10);
         
         //this.font.color="rgba(255,255,255,"+Math.min(this.alpha, 1)+")";
-        this.font.apply(gfx);
+        this.font.apply();
         gfx.fillText(this.tips[this.tip],game.width()/2,game.height()-25);
         
         var x=(game.width()-sprites.input.width)/2;

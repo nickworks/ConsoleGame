@@ -66,15 +66,15 @@ class Door {
             }
         }
     }
-    draw(gfx){
-        this.rect.draw(gfx);
+    draw(){
+        this.rect.draw();
         
         gfx.drawImage(this.lockCode?sprites.door2:sprites.door1,this.rect.x,this.rect.y-(100-this.rect.h));
         
         if(this.canActivate&&!scene.modal&&!this.animating){
             this.hint.x=this.rect.mid().x;
             this.hint.y=this.rect.mid().y-10;
-            this.hint.draw(gfx);
+            this.hint.draw();
         }
     }
     lock(){

@@ -9,7 +9,7 @@ class ProximityMine {
 	update(){
 
 	}
-	draw(gfx){
+	draw(){
 		gfx.fillStyle="#F00";
 
 

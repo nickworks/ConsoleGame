@@ -41,8 +41,8 @@ class ScenePlay extends Scene {
         if(keyboard.onDown(key.exit())) this.pause();
         
     }
-    draw(gfx){
-        super.draw(gfx);
+    draw(){
+        super.draw();
     }
     edit(){
         this.guis.editor = new Editor();

@@ -25,12 +25,12 @@ class Platform {
     update(){
         
     }
-    draw(gfx){
+    draw(){
         gfx.fillStyle=this.oneway?sprites.tiles2:sprites.tiles;
         
         Matrix.push();
         Matrix.translate(this.rect.x,this.rect.y);
-        //this.rect.draw(gfx);
+        //this.rect.draw();
         gfx.fillRect(0,0,this.rect.w,this.rect.h);
         Matrix.pop();
     }

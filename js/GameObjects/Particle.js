@@ -97,7 +97,7 @@ class Particle {
         this.scale+=this.scalev*game.time.dt;
         
     }
-    draw(gfx){
+    draw(){
         var a=this.alpha;
         if(this.fadeOut)a*=(this.lifespan-this.life)/this.lifespan;
         switch(this.t){

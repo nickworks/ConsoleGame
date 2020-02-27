@@ -10,20 +10,20 @@ class BubbleHint {
     update(){
         
     }
-    draw(gfx){
+    draw(){
         
         Matrix.push();
         Matrix.translate(this.x,this.y);
-        this.bg.draw(gfx);
+        this.bg.draw();
         const p=this.bg.pos();
-        this.font.apply(gfx);
+        this.font.apply();
         gfx.fillText(this.text, p.x, p.y);
         Matrix.pop();
         
     }
     setText(t){
         this.text=t;
-        const w=this.font.measure(game.gfx(),this.text).width;
+        const w=this.font.measure(this.text).width;
         this.bg.setSize(w,14);
         this.bg.snap();
     }

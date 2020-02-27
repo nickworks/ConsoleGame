@@ -16,9 +16,9 @@ class Portal {
             n:this.next
         };
     }
-    draw(gfx){
+    draw(){
         gfx.fillStyle="#39F";
-        this.rect.draw(gfx);
+        this.rect.draw();
     }
     use(){
         game.switchScene( SceneLoad.Level(this.next, this.spawnpos) );

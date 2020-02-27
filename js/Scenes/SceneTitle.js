@@ -13,10 +13,10 @@ class SceneTitle {
     update(){
         this.menu.update();
     }
-    draw(gfx){
+    draw(){
         game.view.fill("#555");
-        this.title.draw(gfx);
-        this.menu.draw(gfx);
+        this.title.draw();
+        this.menu.draw();
     }    
     
 }

@@ -95,7 +95,7 @@ class Rect {
     toString(){
         return "{"+this.x+", "+this.y+", "+this.w+", "+this.h+"}";
     }
-    draw(gfx){
+    draw(){
         gfx.fillRect(this.x,this.y,this.w,this.h);
     }
     raw(){

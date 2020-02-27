@@ -18,7 +18,7 @@ class Bullet {
         this.lifespan-=game.time.dt;
         if(this.lifespan<=0)this.dead=true;
     }
-    draw(gfx){
+    draw(){
         gfx.drawImage(sprites.projectile,this.rect.x,this.rect.y)
     }
     // check if this bullet is overlapping one or more other objects

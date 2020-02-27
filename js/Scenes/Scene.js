@@ -94,20 +94,20 @@ class Scene {
     unpause(){
         this.guis.pause = null;
     }
-	draw(gfx){
+	draw(){
         game.view.fill("#888");
 
-        this.cam.drawStart(gfx);
-        this.objs.all.forEach(o => o.draw(gfx));
-        this.particles.forEach(p => p.draw(gfx));
-        this.cam.drawEnd(gfx);
+        this.cam.drawStart();
+        this.objs.all.forEach(o => o.draw());
+        this.particles.forEach(p => p.draw());
+        this.cam.drawEnd();
         
 
         // GUI OVERLAYS:
-        this.guis.overlays.forEach(m => m.draw(gfx));
-        this.guis.modals.forEach(m => m.draw(gfx));
-        if(this.guis.pause) this.guis.pause.draw(gfx);
-        if(this.guis.editor) this.guis.editor.draw(gfx);
+        this.guis.overlays.forEach(m => m.draw());
+        this.guis.modals.forEach(m => m.draw());
+        if(this.guis.pause) this.guis.pause.draw();
+        if(this.guis.editor) this.guis.editor.draw();
     }
 	update(){
 

@@ -32,7 +32,7 @@ class Pawn {
         this.canDoubleJump=canDoubleJump;
 
     }
-    draw(gfx,imgL, imgR,o){
+    draw(imgL, imgR,o){
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
     update(){

@@ -42,7 +42,7 @@ class Keypad extends Modal {
         this.resizeBG(true);
     }
     resizeBG(snap=false){
-        //const size=this.font.measure(game.gfx(),this.txt+this.val+"_");
+        //const size=this.font.measure(this.txt+this.val+"_");
         //this.bg.setSize(size.width,14);
 
         this.bg.setSize(60,103);
@@ -90,14 +90,14 @@ class Keypad extends Modal {
             b.rect.y += p.y;
         });
     }
-    draw(gfx){
+    draw(){
         //gfx.fillStyle="rgba(0,0,0,.5)";
         //gfx.fillRect(0,0,800,400);
         game.view.fill("rgba(0,0,0,.5)");
-        scene.cam.drawStart(gfx);
+        scene.cam.drawStart();
         Matrix.push();
         Matrix.translate(this.x,this.y);
-        this.bg.draw(gfx);
+        this.bg.draw();
 
         if(this.isFullSize()){
             
@@ -105,15 +105,15 @@ class Keypad extends Modal {
             if(!this.contentsAreShifted) this.shiftContents();
 
 
-            this.font.apply(gfx);
+            this.font.apply();
             let o=this.txt+this.val;
             if(this.showCursor && this.val.length < this.maxInputSize)o+="_";
             gfx.fillText(o, this.textPos.x, this.textPos.y);
 
-            this.bttns.forEach(b=>b.draw(gfx));
+            this.bttns.forEach(b=>b.draw());
         }
         Matrix.pop();
-        scene.cam.drawEnd(gfx);
+        scene.cam.drawEnd();
     }
     end(submit){
         this.close();

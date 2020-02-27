@@ -20,7 +20,7 @@ class Menu {
         
         for(var i in b)b[i].update((i==this.index));
     }
-    draw(gfx){
-        this.buttons.forEach( b => b.draw(gfx) );
+    draw(){
+        this.buttons.forEach( b => b.draw() );
     }
 }

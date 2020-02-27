@@ -29,7 +29,7 @@ class Matrix {
         Matrix.stack.forEach(m=>{
             res.mult(m);
         });
-        game.gfx().setTransform(res.a,res.b,res.c,res.d,res.e,res.f);
+        gfx.setTransform(res.a,res.b,res.c,res.d,res.e,res.f);
     }
     static inverse() { // we might not need this feature...
         const res=new Matrix();
@@ -90,7 +90,7 @@ class Matrix {
         raw.y=this.b*p.x+this.d*p.y+this.f;
         return raw;    
     }
-    apply(gfx){
+    apply(){
         gfx.setTransform(this.a,this.b,this.c,this.d,this.e, this.f);
     }
 }
