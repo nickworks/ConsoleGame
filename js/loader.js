@@ -28,7 +28,6 @@ loadjs([
     'js/Controllers/PlayerController.js',
 
     'js/GameObjects/Particle.js',
-    'js/GameObjects/Camera.js',
     'js/GameObjects/Item.js',
     'js/GameObjects/Platform.js',
     'js/GameObjects/Pawn.js',
@@ -37,7 +36,9 @@ loadjs([
     'js/GameObjects/Bullet.js',
     'js/GameObjects/Portal.js',
     'js/GameObjects/Crate.js',
+    'js/GameObjects/ProximityMine.js',
 
+    'js/Core/Camera.js',
     'js/Core/Quest.js',
     'js/Core/Callback.js',
     'js/Core/Rect.js',
