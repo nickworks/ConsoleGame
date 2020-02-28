@@ -6,10 +6,16 @@ class ProximityMine {
 		this.radius=raw.r||400;
 		this.hp=1;
 		this.rect={};
+        this.fuseLit=false;
+        this.fuseTimer=.5;
 	}
 	update(){
 		const r = this.radius;
 		this.rect = new Rect(this.x-r, this.y-r, r+r, r+r);
+        if(this.fuseLit){
+            if(this.fuseTimer>0)this.fuseTimer-=game.time.dt;
+            else this.boom();
+        }
 	}
 	draw(){
 		gfx.fillStyle="#F00";
@@ -24,7 +30,7 @@ class ProximityMine {
             const rect=(o.pawn?o.pawn.rect:o.rect);
             if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
 
-            this.boom(o);
+            this.fuseLit=true;
         });
     }
     boom(){
