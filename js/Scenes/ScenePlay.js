@@ -52,8 +52,15 @@ class ScenePlay extends Scene {
     }
     explode(x,y,r=200,dmg=0){
 
-
-        this.addParticles(x,y,1,8);
+        let d = r/2;
+        let a = 0;
+        const num=6;
+        for(let i = 0; i < num; i++){
+            const xx = d*Math.cos(a);
+            const yy = d*Math.sin(a);
+            this.addParticles(x+xx,y+yy,Particle.Type.BOOM,8);
+            a+=2*Math.PI/num;
+        }
         this.cam.shake=.5;
         
         this.objs.damageable.forEach(o=>{
