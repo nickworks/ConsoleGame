@@ -5,26 +5,19 @@ class ScenePlay extends Scene {
     constructor(n, pos={x:0,y:0}){
         super();
         
-        this.level={
-            index:n,
-            pos:pos,
-            data:LevelData.level(n),
-        }
-        this.startLevel();
+        const data=LevelData.level(n);
+        
+        data.concat([this.player]).forEach(o => this.objs.add(o));        
+        this.ids(); // assign ID numbers to everything
+        
+        this.player.pawn.rect.x = pos.x;
+        this.player.pawn.rect.y = pos.y;
 
         const hud = new HUD();          // spawn a HUD
         this.guis.overlays.push(hud);     // add the HUD to the gui stack
         hud.attach(this.player.pawn);   // attach the hud to the player's body
-        
-    }
-    startLevel(){
-        this.objs.clear();
-        this.level.data.concat([this.player]).forEach(o => this.objs.add(o));
-        
-        this.ids(); // assign ID numbers to everything
 
-        this.player.pawn.rect.x = this.level.pos.x;
-        this.player.pawn.rect.y = this.level.pos.y;
+        this.reloadScene = ()=>game.switchScene(SceneLoad.Level(n, pos));
     }
     update(){
 
