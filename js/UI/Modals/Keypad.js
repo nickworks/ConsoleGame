@@ -1,8 +1,8 @@
 class Keypad extends Modal {
     constructor(x,y,onDone){
         super();
+
         this.maxInputSize = 5; // only allow up to 5 characters
-        this.zoom=2;
         this.index=0;
         this.val="";
         this.txt="";
@@ -49,7 +49,7 @@ class Keypad extends Modal {
         if(snap)this.bg.snap();
     }
     update(){
-        
+        scene.cam.goals.scale=2;
         this.bg.update();
         if(this.isFullSize()){
 

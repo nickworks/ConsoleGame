@@ -1,7 +1,7 @@
 class Modal {
-	constructor(){
-	}
+	constructor(){ }
 	close(){
-		this.dead=true;
+		scene.cam.goals.scale=1;
+		this.dead=true; // call close() on a modal to mark it as dead
 	}
 }

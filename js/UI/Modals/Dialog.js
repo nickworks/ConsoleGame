@@ -1,7 +1,6 @@
 class Dialog extends Modal {
     constructor(x,y,texts,callbacks={}){
         super();
-        this.zoom=2;
         if(typeof texts == "string") texts=[texts];
         if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
         
@@ -44,6 +43,7 @@ class Dialog extends Modal {
         this.lines.push(line);
     }
     update(){
+        scene.cam.goals.scale=2;
         this.bg.update();
         if(this.bg.p<1)return;
         if(this.charNow < this.charMax){

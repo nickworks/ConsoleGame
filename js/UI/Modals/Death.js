@@ -2,23 +2,25 @@ class Death extends Modal {
     constructor(){
         super();
         this.font=new Font({size:12,color:"#FFF",align:"center"});
-        this.timer=.5;
+        this.age=0;
     }
 	update(){
-        this.timer-=game.time.dt;
-
-        if(keyboard.onDown(key.any())){
+        if(scene.cam.goals.scale<2)scene.cam.goals.scale+=.2*game.time._dt;
+        if(scene.cam.goals.angle<1)scene.cam.goals.angle+=.02*game.time._dt;
+        if(game.time.scale>.1)game.time.scale-=.1*game.time._dt;
+        if(this.age<3)this.age+=game.time._dt;
+        else if(keyboard.onDown(key.any())){
             game.scene.reloadScene();
             this.close();
         }
     }
     draw(){
-        var p=1-(this.timer/.5);
+        var p=(this.age/2);
         if(p<0)p=0;
         if(p>1)p=1;
-        p*=.9;
+        p*=.5;
         game.view.fill("rgba(0,0,0,"+p+")");
-        this.font.color="rgba(255,255,255,"+p+")";
+        this.font.color="rgba(255,255,255,"+(p*2)+")";
         this.font.apply();
         gfx.fillText("You are dead, man.", game.width()/2,game.height()/2);
         gfx.fillText("Press ENTER", game.width()/2,game.height()/2+15);

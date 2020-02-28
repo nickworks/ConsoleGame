@@ -8,13 +8,15 @@ class Pawn {
         this.a=1200;
         this.dead=false;
         this.maxv=raw.maxv||200;
-        this.walking=false;
-        this.onWallLeft=false;
-        this.onWallRight=false;
-        this.isGrounded=false;
-        this.isSliding=false;
+
+        this.walking=false; // whether or not the pawn is sprinting
+        this.onWallLeft=false; // whether or not the pawn is pressed up against the left wall
+        this.onWallRight=false; // whether or not the pawn is pressed up against the right wall
+        this.isGrounded=false; // whether or not the pawn is on the ground
+        this.isSliding=false; // whether or not the pawn is...
         this.isJumping=false;
         this.onOneway=false;
+
         this.airJumpsLeft=1;
         this.dir=1; //-1 is left, 1 is right
         this.hp=100;
@@ -42,17 +44,20 @@ class Pawn {
         this.isGrounded=false;
         this.onWallLeft=false;
         this.onWallRight=false;
-        this.isSliding=false;
         this.onOneway=false;
         if(this.isDropping&&this.rect.y>this.dropFrom+20)this.isDropping=false;
         this.rect.speed();
     }
+    // the controller calls moveH() and
+    // passes along what direction
+    // the controller wants to move in
     moveH(move=0){
         let slowDown=false;            
         if(move==0){ // if no input
             if(this.isGrounded){
-                if(this.vx<0)move+=2;
-                if(this.vx>0)move-=2;
+                if(this.vx!=0) move = (this.vx<0) ? 1 : -1;
+                //if(this.vx<0)move+=2;
+                //if(this.vx>0)move-=2;
                 slowDown=true;
             }
         } else {

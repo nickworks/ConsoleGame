@@ -23,10 +23,13 @@ class Game {
             now:0,
             prev:0,
             dt:0,
+            scale:1,
+            _dt:0,
             tick:(t)=>{
                 if(t === undefined) t = 0;
                 this.time.now = t;
-                this.time.dt = (t - this.time.prev) / 1000;
+                this.time._dt = (t - this.time.prev) / 1000;
+                this.time.dt = this.time._dt * this.time.scale;
                 this.time.prev = t;
                 Game.Repair(this);
                 this.update();

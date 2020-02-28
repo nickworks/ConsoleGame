@@ -8,6 +8,7 @@ const loadjs = (a,c)=>{
 }
 loadjs([
     
+    'js/Core/Maths.js',
     'js/UI/Font.js',
     'js/UI/Button.js',
     'js/UI/Menu.js',

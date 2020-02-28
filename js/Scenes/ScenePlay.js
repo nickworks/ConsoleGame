@@ -18,6 +18,10 @@ class ScenePlay extends Scene {
         hud.attach(this.player.pawn);   // attach the hud to the player's body
 
         this.reloadScene = ()=>game.switchScene(SceneLoad.Level(n, pos));
+        game.time.scale=1;
+
+        this.cam.updateGoals(this.player.pawn);
+        this.cam.cut();
     }
     update(){
 

@@ -82,10 +82,8 @@ class Scene {
         this.particles=[];
 		
 		this.player=new PlayerController();
-
         this.cam=new Camera();
-        this.cam.target=this.player.pawn;
-        this.cam.updateTargetXY(true);
+        
 	}
     pause(){
         if(this.guis.editor) return;
@@ -140,19 +138,17 @@ class Scene {
             });
             this.reverseIterate(this.guis.overlays, (o, i)=>{
                 o.update();
-                if(o.zoom) zoom = o.zoom;
                 if(o.dead) this.guis.overlays.splice(i,1);
             });
         } else {
             this.reverseIterate(this.guis.modals, (o, i)=>{
                 o.update();
-                if(o.zoom) zoom = o.zoom;
                 if(o.dead) this.guis.modals.splice(i,1);
             });
         }
 
         // update camera
-        this.cam.update(zoom);
+        this.cam.update();
         return false;
     }
     reverseIterate(arr, f){

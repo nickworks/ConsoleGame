@@ -1,72 +1,95 @@
 class Camera {
     constructor(){
-        this.x=0;
-        this.y=0;
-        this.tx=0;
-        this.ty=0;
+        this.vals={
+            x:0,
+            y:0,
+            angle:0,
+            scale:.5,
+            
+        };
+        this.goals={
+            x:0,
+            y:0,
+            angle:0,
+            scale:1,
+        };
+        this.screenOffset={x:0,y:0};
         this.target=null;
-        this.angle=0;
         this.shake=0;
-        this.scale=1;
         this.cachemouse=null;
     }
-    update( scale){
+    update(){
         this.cachemouse=null
         this.updateScreenOffset();
-        this.updateTargetXY();
-        const speed=5;
-        this.x=(this.x+(this.tx-this.x)*game.time.dt*speed)|0;
-        this.y=(this.y+(this.ty-this.y)*game.time.dt*speed)|0;
-        if(this.shake>0)this.shake-=game.time.dt;
+        this.updateGoals();
+        this.doShake();
+        
 
-        scale = scale||1;
-        this.scale+=(scale - this.scale)*game.time.dt*5;
+        const pa1s=.001;
+        let p = Maths.slide(.001, game.time._dt);
+
+        this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p);
+        this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p);
+        this.vals.angle=Maths.lerp(this.vals.angle,this.goals.angle,p);
+        this.vals.scale=Maths.lerp(this.vals.scale,this.goals.scale,p);
+
         
     }
-    updateTargetXY(andSnap=true){
+    updateGoals(target){
+        if(typeof target == "object") this.target = target;
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();
-                this.tx=(m.x)|0;
-                this.ty=(m.y-50)|0;
+                this.goals.x=(m.x)|0;
+                this.goals.y=(m.y-50)|0;
             } else {
-                this.tx=this.target.x||this.tx;
-                this.ty=this.target.y||this.ty;
-            }
-            if(andSnap){
-                this.x=this.tx;
-                this.y=this.ty;
+                this.goals.x=this.target.x||this.goals.x;
+                this.goals.y=this.target.y||this.goals.y;
             }
         }
+
+    }
+    doShake(){
         if(this.shake>0){
+            this.shake-=game.time.dt; 
             var shake=this.shake;
             shake*=shake;
             shake*=500;
-            this.tx+=Math.random()*shake-shake/2;
-            this.ty+=Math.random()*shake-shake/2;
+            this.goals.x+=Math.random()*shake-shake/2;
+            this.goals.y+=Math.random()*shake-shake/2;
         }
+    }
+    // The camera is automatically snapped
+    // to it's target position, scale, rotation.
+    // This can be used to create a camera cut.
+    cut(){
+        console.log("cut");
+        this.vals.x=this.goals.x;
+        this.vals.y=this.goals.y;
+        this.vals.angle=this.goals.angle;
+        this.vals.scale=this.goals.scale;
     }
     drawStart(){
         Matrix.push();
-        Matrix.translate(this.sx|0,this.sy|0);
-        if(this.scale!=1)Matrix.scale(this.scale);
-        if(this.angle!=0)Matrix.rotate(this.angle);
-        Matrix.translate(-this.x|0,-this.y|0);
+        Matrix.translate(this.screenOffset.x|0,this.screenOffset.y|0);
+        if(this.vals.scale!=1)Matrix.scale(this.vals.scale);
+        if(this.vals.angle!=0)Matrix.rotate(this.vals.angle);
+        Matrix.translate(-this.vals.x|0,-this.vals.y|0);
     }
     drawEnd(){
         Matrix.pop();
     }
     updateScreenOffset(){
-        this.sx=game.width()/2;
-        this.sy=game.height()/2;  
+        this.screenOffset.x=game.width()/2;
+        this.screenOffset.y=game.height()/2;  
     }
     worldMouse(){        
         if(!this.cachemouse){
             const m=new Matrix();
-            m.translate(this.x|0,this.y|0);
-            if(this.angle!=0)m.rotate(-this.angle);
-            if(this.scale!=1)m.scale(1/this.scale);
-            m.translate(-this.sx|0,-this.sy|0);
+            m.translate(this.vals.x|0,this.vals.y|0);
+            if(this.vals.angle!=0)m.rotate(-this.vals.angle);
+            if(this.vals.scale!=1)m.scale(1/this.vals.scale);
+            m.translate(-this.screenOffset.x|0,-this.screenOffset.y|0);
             this.cachemouse=m.vec({x:mouse.x,y:mouse.y});
         }
         return {x:this.cachemouse.x,y:this.cachemouse.y};
