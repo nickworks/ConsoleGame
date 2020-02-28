@@ -76,6 +76,7 @@ class Scene {
         this.guis={
             overlays:[],
             modals:[],
+            death:null,
             editor:null,
             pause:null,
         };
@@ -106,6 +107,7 @@ class Scene {
         this.guis.modals.forEach(m => m.draw());
         if(this.guis.pause) this.guis.pause.draw();
         if(this.guis.editor) this.guis.editor.draw();
+        if(this.guis.death) this.guis.death.draw();
     }
 	update(){
 
@@ -118,8 +120,7 @@ class Scene {
             this.guis.pause.update();
             return true;
         }
-        
-        var zoom = 1;
+
         
         if(this.guis.modals.length == 0){
             // update all objects
@@ -149,6 +150,13 @@ class Scene {
 
         // update camera
         this.cam.update();
+
+        if(this.guis.death){
+            this.guis.death.update();
+            return true;
+        }
+
+        
         return false;
     }
     reverseIterate(arr, f){

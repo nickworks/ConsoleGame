@@ -30,7 +30,7 @@ class ScenePlay extends Scene {
         if(isPaused) return;
 
         if(this.player && this.player.pawn.dead){
-            this.modal(new Death());
+            scene.guis.death = new Death();
         } else {
             if(mouse.onDown()) this.handleClick();
         }
