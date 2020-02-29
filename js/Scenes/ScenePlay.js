@@ -32,7 +32,8 @@ class ScenePlay extends Scene {
         if(this.player && this.player.pawn.dead){
             scene.guis.death = new Death();
         } else {
-            if(mouse.onDown()) this.handleClick();
+            if(mouse.onDown()) this.shootAtMouse();
+            if(mouse.onDownRight()) this.scanAtMouse();
         }
         
         if(keyboard.onDown(key.exit())) this.pause();
@@ -95,15 +96,21 @@ class ScenePlay extends Scene {
             }
         });
     }
-    handleClick(){
+    shootAtMouse(){
 
-        if(this.player.pawn.rect.mouseOver()) game.console.log("<dim>you clicked on</dim> player");
+    }
+    scanAtMouse(){
 
+        if(this.player.pawn.rect.mouseOver()) {
+            game.console.log("<dim>You clicked on <val>player</val> // you can access it by typing</dim> player");
+            return;
+        }
+
+        // get the object under the mouse:
         const o = this.objs.getUnderMouse();
-        if(o){
-            const index = this.objs.indexOf(o);
-            const oid = o.oid;
-            game.console.log("<dim>you clicked on object <val>"+index+"</val>. You can access it by typing </dim>obj(<val>"+index+"</val>)");
+        if(o){ // if it exists:
+            const index = this.objs.indexOf(o); // get its index number
+            game.console.log("<dim>you clicked on object <val>"+index+"</val> // you can access it by typing </dim>obj(<val>"+index+"</val>)");
         }
 
 

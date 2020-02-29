@@ -24,6 +24,7 @@ const mouse={
     },
     update:function(){
         this.left_prev=this.left;
+        this.right_prev=this.right;
         this.px=this.x;
         this.py=this.y;
     },
