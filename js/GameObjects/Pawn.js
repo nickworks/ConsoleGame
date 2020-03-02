@@ -201,7 +201,6 @@ class Pawn {
     hurt(amt=10){
         if(this.mind)this.mind.notify();
         this.hp-=amt;
-        if(this.hp<=0)this.dead=true;
     }
     heal(amt=10){
         this.hp+=amt;
