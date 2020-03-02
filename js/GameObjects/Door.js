@@ -119,12 +119,9 @@ class Door {
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects
-            const rect=(o.pawn?o.pawn.rect:o.rect);
-            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
-            const fix=this.rect.findFix(rect);
-            (o.pawn
-                ?o.pawn.applyFix(fix)
-                :o.applyFix(fix));
+            if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
+            const fix=this.rect.findFix(o.rect);
+            o.applyFix(fix);
         });
     }
     changeType(){

@@ -7,7 +7,7 @@ class ScenePlay extends Scene {
         
         const data=LevelData.level(n);
         
-        data.concat([this.player]).forEach(o => this.objs.add(o));        
+        data.concat([this.player.pawn]).forEach(o => this.objs.add(o));        
         this.ids(); // assign ID numbers to everything
         
         this.player.pawn.rect.x = pos.x;
@@ -69,8 +69,7 @@ class ScenePlay extends Scene {
         this.cam.shake=.5;
         
         this.objs.damageable.forEach(o=>{
-            const rect=o.rect||o.pawn.rect;
-            const p=rect.mid();
+            const p=o.rect.mid();
             const dx=p.x-x;
             const dy=p.y-y;
             if(Math.abs(dx)<r&&Math.abs(dy)<r){
@@ -82,16 +81,9 @@ class ScenePlay extends Scene {
                     let vx=s*dx/d;
                     let vy=s*dy/d;
                     if(vy>0)vy*=-1;
-                    vx+=Math.random()*200-100;
-                    vy+=Math.random()*200;
+                    o.vx=vx+Math.random()*200-100;
+                    o.vy=vy+Math.random()*200;
                     if(o.isAsleep)o.isAsleep=false;
-                    if(o.pawn){
-                        o.pawn.vx=vx;
-                        o.pawn.vy=vy;
-                    }else{
-                        o.vx=vx;
-                        o.vy=vy;
-                    }
                 }
             }
         });

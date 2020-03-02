@@ -4,7 +4,16 @@ const LevelData={
         d.forEach(t=>{ // for each type
             t.d.forEach(o=>{ // for each object
                 const j=new t.t(o); // spawn the object
-                objs.push(j);
+
+                switch(t.t){ // store it in the correct spot
+                    case PlayerController:
+                    case AIController:
+                        objs.push(j.pawn);
+                        break;
+                    default:
+                        objs.push(j);
+                        break;
+                }
             });
         });
         return objs;

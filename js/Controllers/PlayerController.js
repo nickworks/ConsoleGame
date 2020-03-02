@@ -26,6 +26,7 @@ class PlayerController extends Controller {
         this.oid=raw.i||0;
         this.canDoubleJump=Game.DEVMODE||false;
         this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
+        this.pawn.mind=this;
         this.pawn.jumpCooldownAmt=0;
         this.friend=true;
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
@@ -45,22 +46,14 @@ class PlayerController extends Controller {
     }
     update(){
         
-        if(typeof this.canWallJump!="function"){
-            game.console.log("/* Careful there!\n * scene.player.canWallJump() is a function.\n * Changing a function can introduce bugs that CRASH\n * THE GAME. There may not be any coming back from a crashed game...\n * so be careful! Perhaps you should visit the Western guru to\n * learn more about functions.\n */");
-            this.canWallJump=()=>{return false};
-        } 
         
+        // control the pawn's horizontal movement:
         let move=0;
-        let slowDown=false;
-        
-        if(this.hp<=0||this.dead==true){
-            this.dead=true;
-            return;
-        } else this.dead=false;
-        
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
-        
+        this.pawn.move = move;
+
+        // make the pawn jump:
         if(keyboard.onDown(key.jump())){
             const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
             
@@ -75,20 +68,10 @@ class PlayerController extends Controller {
         
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         
-        this.pawn.moveV();
-        this.pawn.moveH(move);
-        this.pawn.update();
+        
     }
     draw(){
-        this.pawn.draw(sprites.playerL,sprites.playerR,{x:4,y:4});
-    }
-    hurt(amt=10){
-        this.pawn.hp-=amt;
-        if(this.pawn.hp<=0)this.pawn.dead=true;
-    }
-    heal(amt=10){
-        this.pawn.hp+=amt;
-        if(this.pawn.hp>this.pawn.hpMax)this.pawn.hp=this.pawn.hpMax;
+        // draw the mind
     }
     weapon(w){
         if(!w||w.constructor.name!="Weapon")return;

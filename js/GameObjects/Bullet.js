@@ -26,8 +26,7 @@ class Bullet {
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             
-            const rect=(o.pawn?o.pawn.rect:o.rect);
-            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
+            if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
 
             this.hit(o);            
         });
@@ -35,10 +34,10 @@ class Bullet {
 
     hit(o){
         if(o.oneway)return; // ignore oneway platforms
-        if(o.friend===this.friend)return; // ignore same allegiance
-        if(o.pawn){
-            o.pawn.vx=this.vx>0?200:-200;
-            o.pawn.vy=-200;
+        if(o.mind&&o.mind.friend===this.friend)return; // ignore same allegiance
+        if(o.mind){
+            o.vx=this.vx>0?200:-200;
+            o.vy=-200;
         }
         if(o.hurt)o.hurt(this.dmg); // if the thing has a hurt() function, call it
 

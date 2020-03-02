@@ -45,7 +45,7 @@ class Editor extends Modal {
             this.dragModeSize=resize;
             this.dragStart=m;
             this.dragObj=o;
-            this.dragOrig=(o.rect||o.pawn.rect).raw();
+            this.dragOrig=o.rect.raw();
         };
         if(keyboard.isDown([key.n1,key.p1])){//platforms
             const o=new Platform({x:m.x,y:m.y,w:25,h:25});
@@ -80,7 +80,7 @@ class Editor extends Modal {
         else {
             const check=(a)=>{ //check to see if objects in array a are clicked on...
                 for(var i in a){
-                    const r=a[i].rect||a[i].pawn.rect;
+                    const r=a[i].rect;
                     if(r.hits(m)){
                         if(keyboard.isDown(key.q)){
                             a.splice(i,1);//destroy
@@ -133,7 +133,7 @@ class Editor extends Modal {
         if(raw.w==0)raw.w=this.snapSize;
         if(raw.h==0)raw.h=this.snapSize;
         
-        (this.dragObj.rect||this.dragObj.pawn.rect).setRaw(raw);
+        (this.dragObj.rect).setRaw(raw);
         if(!mouse.isDown())this.dragObj=null;
     }
     draw(){

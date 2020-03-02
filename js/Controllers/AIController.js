@@ -4,6 +4,7 @@ class AIController extends Controller {
         this.oid=raw.i||0;
         this.agro=false;
         this.pawn=new Pawn(raw);
+        this.pawn.mind=this;
         this.pawn.a=raw.a||400;
         this.canTalk=false;
         this.friend=(!!raw.f);
@@ -55,9 +56,6 @@ class AIController extends Controller {
         if(this.canTalk && keyboard.onDown(key.activate())){
             this.speak();
         }
-        this.pawn.moveV();
-        this.pawn.moveH(0);
-        this.pawn.update();
     }
     aiAlly(){
 
@@ -85,9 +83,10 @@ class AIController extends Controller {
             if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
         this.pawn.walking=!this.agro;
-        this.pawn.moveV();
-        this.pawn.moveH(move);
-        this.pawn.update();
+        this.pawn.move=move;
+    }
+    notify(){
+        this.agro=true;
     }
     patrol(){
         let move=0;
@@ -122,29 +121,11 @@ class AIController extends Controller {
         this.canTalk = false;
     }
     draw(){
-        const imgL = this.friend ? sprites.playerL : sprites.enemyL;
-        const imgR = this.friend ? sprites.playerR : sprites.enemyR;
-        
-        this.pawn.draw(imgL, imgR,{x:4,y:4});
-        
+
         if(this.friend&&this.canTalk){
             this.hint.x=this.pawn.rect.mid().x;
             this.hint.y=this.pawn.rect.y;
             this.hint.draw();
-        }
-    }
-    hurt(amt){
-        this.agro=true;
-        if(this.pawn.dead)return; // stop, stop! he's already dead
-        this.pawn.hp-=amt;
-        
-        const r=this.pawn.rect;
-        const raw={x:r.x,y:r.y};
-        
-        if(this.pawn.hp<=0){
-            if(this.pawn.dead==false)Callback.do(this.callbacks.onDeath);
-            this.pawn.dead=true;
-            scene.spawnLoot(3,raw);
         }
     }
     changeType(){

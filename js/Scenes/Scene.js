@@ -7,8 +7,7 @@ class Scene {
 			getUnderMouse(){
 				let obj = null;
 				this.all.forEach(o=>{
-					const rect=o.rect||o.pawn.rect;
-					if(rect.mouseOver())obj=o; 
+					if(o.rect.mouseOver())obj=o; 
 				});
 				return obj;
 			},
@@ -28,8 +27,7 @@ class Scene {
                     case "Door":
                         this.blocking.push(obj);
                         break;
-                    case "PlayerController":
-                    case "AIController":
+                    case "Pawn":
                         this.pawns.push(obj);
                         this.damageable.push(obj);
                         break;
@@ -68,7 +66,7 @@ class Scene {
             cleanup(){
                 for(let i=this.all.length-1; i>= 0; i--){
                     const obj = this.all[i];
-                    if(obj.dead || (this.all[i].pawn && this.all[i].pawn.dead)) this.remove(obj);
+                    if(obj.dead) this.remove(obj);
                 }
             },
         };

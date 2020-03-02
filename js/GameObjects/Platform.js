@@ -35,22 +35,21 @@ class Platform {
         Matrix.pop();
     }
     block(a){
+
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.isAsleep)return;//skip sleeping objects
-            const rect=(o.pawn?o.pawn.rect:o.rect);
-            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
-            const fix=this.rect.findFix(rect);
+            
+            if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
+            const fix=this.rect.findFix(o.rect);
             if(this.oneway){
                 fix.x=0;
                 //when should we IGNORE vertical fixes?
-                if(rect.vy<=0)return; //if the object is moving UP, this platform shouldn't affect it
+                if(o.rect.vy<=0)return; //if the object is moving UP, this platform shouldn't affect it
                 if(fix.y>0)return; //this object should never push another object down
-                if(fix.y<-rect.vy*3)return; //if we have to push it up MORE than it could have reasonably moved in the last 3 frames
+                if(fix.y<-o.rect.vy*3)return; //if we have to push it up MORE than it could have reasonably moved in the last 3 frames
             }
-            (o.pawn
-                ?o.pawn.applyFix(fix,this.oneway)
-                :o.applyFix(fix,this.oneway));
+            o.applyFix(fix,this.oneway);
             
         });
     }

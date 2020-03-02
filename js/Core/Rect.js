@@ -68,7 +68,7 @@ class Rect {
     }
     groupCheck(g,o){
         g.forEach(i=>{
-            if(this.overlaps(i.rect||i.pawn.rect)) o(i);
+            if(this.overlaps(i.rect)) o(i);
         });
     }
     findFix(o){

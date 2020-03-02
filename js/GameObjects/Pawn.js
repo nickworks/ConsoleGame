@@ -26,27 +26,59 @@ class Pawn {
         this.isAsleep=false;
         this.dropFrom=0;
 
+        this.mind = null; // AIController or PlayerController
 
-        this.mind = null;
+        this.move = 0;
         
         this.weapon=new Weapon();
 
         this.canDoubleJump=canDoubleJump;
 
     }
-    draw(imgL, imgR,o){
+    draw(){
+
+        let isFriend = true;
+
+        if(this.mind) {
+            this.mind.draw();
+            isFriend = this.mind.friend;
+        }
+
+        const imgL = isFriend ? sprites.playerL : sprites.enemyL;
+        const imgR = isFriend ? sprites.playerR : sprites.enemyR;
+
+        //gfx.fillStyle="#F00";
+        //this.rect.draw(); // draw collider
+
+        const o = {x:4,y:4};
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
     update(){
 
-        if(this.weapon)this.weapon.update(); 
+        this.move = 0;
+
+        if(this.hp<=0){
+            this.die();
+            return;
+        }
+
+        if(this.mind) this.mind.update();
+        if(this.weapon) this.weapon.update(); 
+
+        this.moveH(this.move);
+        this.moveV();
+
+        this.clearFlags(); // clear what collision detection is going to set
+        
+        this.rect.speed();
+    }
+    clearFlags(){
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=game.time.dt;
         this.isGrounded=false;
         this.onWallLeft=false;
         this.onWallRight=false;
         this.onOneway=false;
         if(this.isDropping&&this.rect.y>this.dropFrom+20)this.isDropping=false;
-        this.rect.speed();
     }
     // the controller calls moveH() and
     // passes along what direction
@@ -105,18 +137,19 @@ class Pawn {
                 this.onWallRight=true;
             }
         }
-        if(fix.y>0){
+        if(fix.y>0){ // move down:
             this.vy=0;
             this.rect.y+=fix.y;
         }
-        if(fix.y<0){
+        if(fix.y<0){ // move up:
             if(!oneway||!this.isDropping){
                 this.rect.y+=fix.y;
                 this.onOneway=oneway;
                 this.isGrounded=true;
                 this.airJumpsLeft=1;
                 this.vy=0;
-                this.isAsleep=true;
+                //this.isAsleep=true;
+                //this.rect.y = 0;
             }
         }
         this.rect.cache();
@@ -164,5 +197,24 @@ class Pawn {
         const x=this.rect.x-((this.dir<0)?w:0);
         const y=this.rect.y+h/4;
         return Rect.from({x:x,y:y,w:w,h:h}).overlaps(o);
+    }
+    hurt(amt=10){
+        if(this.mind)this.mind.notify();
+        this.hp-=amt;
+        if(this.hp<=0)this.dead=true;
+    }
+    heal(amt=10){
+        this.hp+=amt;
+        if(this.hp>this.hpMax)this.hp=this.hpMax;
+    }
+    die(){
+        if(this.dead) return;
+        if(this.mind){
+            Callback.do(this.mind.callbacks.onDeath);
+            const r=this.rect;
+            const raw={x:r.x,y:r.y};
+            scene.spawnLoot(3,raw);
+        }
+        this.dead=true;
     }
 }

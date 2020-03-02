@@ -27,8 +27,7 @@ class ProximityMine {
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             
-            const rect=(o.pawn?o.pawn.rect:o.rect);
-            if(!rect||!rect.overlaps(this.rect))return;//return if not overlapping
+            if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
 
             this.fuseLit=true;
         });
