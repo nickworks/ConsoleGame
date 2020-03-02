@@ -12,6 +12,7 @@ class Editor extends Modal {
         return Math.round(v/this.snapSize)*this.snapSize
     }
     update(){
+
         if(mouse.onDown()) this.handleClick();
         if(this.dragObj) this.handleDrag();
         if(keyboard.onDown(key.escape)){
@@ -32,10 +33,11 @@ class Editor extends Modal {
     moveCam(){
         const c=scene.cam;
         const s=300;
-        if(keyboard.isDown(key.w)) c.ty-=s*game.time.dt;
-        if(keyboard.isDown(key.a)) c.tx-=s*game.time.dt;
-        if(keyboard.isDown(key.s)) c.ty+=s*game.time.dt;
-        if(keyboard.isDown(key.d)) c.tx+=s*game.time.dt;
+        if(keyboard.isDown(key.w)) c.goals.y-=s*game.time._dt;
+        if(keyboard.isDown(key.a)) c.goals.x-=s*game.time._dt;
+        if(keyboard.isDown(key.s)) c.goals.y+=s*game.time._dt;
+        if(keyboard.isDown(key.d)) c.goals.x+=s*game.time._dt;
+        c.update();
     }
     handleClick(){
         
@@ -47,6 +49,7 @@ class Editor extends Modal {
             this.dragObj=o;
             this.dragOrig=o.rect.raw();
         };
+
         if(keyboard.isDown([key.n1,key.p1])){//platforms
             const o=new Platform({x:m.x,y:m.y,w:25,h:25});
             scene.platforms.push(o);
@@ -93,13 +96,8 @@ class Editor extends Modal {
                     }
                 }
             };
-            check([scene.player.pawn]);
-            check(scene.platforms);
-            check(scene.npcs);
-            check(scene.doors);
-            check(scene.enemies);
-            check(scene.items);
-            check(scene.crates);
+            //check([scene.player.pawn]);
+            check(scene.objs.all);
         }
         scene.ids();
     }
