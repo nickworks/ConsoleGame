@@ -86,7 +86,7 @@ class Item {
             case Item.Type.AMMO:o.weapon.addAmmo(25);break;
             case Item.Type.COIN:PlayerController.data.coins++;break; //PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
             case Item.Type.GUN:
-                if(o != scene.player) break;
+                if(o != scene.player.pawn) break;
                 if(!this.weapon){
                     this.weapon=Weapon.random();
                     this.hint=new BubbleHint(this.weapon.title);
