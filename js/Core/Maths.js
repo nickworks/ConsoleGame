@@ -12,5 +12,13 @@ const Maths={
 	slide(pa1s, dt){
 		if(!!dt)dt=game.time.dt;
 		return 1 - Math.pow(pa1s, dt);
+	},
+	magSq(a,b){
+		const dx=a.x-b.x;
+		const dy=a.y-b.y;
+		return dx*dx+dy*dy;
+	},
+	mag(a,b){
+		return Math.sqrt(this.magSq(a,b));
 	}
 };

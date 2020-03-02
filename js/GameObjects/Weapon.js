@@ -97,11 +97,7 @@ class Weapon {
             this.reloadDelay-=game.time.dt;
             if(this.reloadDelay<=0)this.doReload();
         }
-        else if(this.shootDelay>0)this.shootDelay-=game.time.dt;
-        
-        if(keyboard.onDown(key.reload())){
-            this.reload();
-        }        
+        else if(this.shootDelay>0)this.shootDelay-=game.time.dt;       
     }
     shoot(pos,dir,isFriend){
         if(this.reloadDelay>0)return;

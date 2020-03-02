@@ -18,16 +18,20 @@ class ProximityMine {
         }
 	}
 	draw(){
+        const mid = this.rect.mid();
 		gfx.fillStyle="#F00";
-		gfx.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
-		
+		gfx.fillCircle(mid.x, mid.y, this.radius);
 	}
 	// check if this mine is overlapping one or more other objects
     overlap(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             
-            if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
+            // return if rects not overlapping
+            if(!o.rect||!o.rect.overlaps(this.rect))return;
+
+            // return if centers are further away than length of this.radius
+            if(Maths.magSq(o.rect.mid(), this.rect.mid()) > this.radius * this.radius) return;
 
             this.fuseLit=true;
         });

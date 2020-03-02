@@ -68,6 +68,7 @@ class PlayerController extends Controller {
         
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         
+        if(keyboard.onDown(key.reload()) && this.pawn.weapon) this.pawn.weapon.reload();
         
     }
     draw(){

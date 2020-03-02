@@ -2,12 +2,13 @@
 class Pawn {
     constructor(raw,canDoubleJump=()=>{return false;}){
         this.rect=new Rect(raw.x||0,raw.y||0,25,45);
-        this.sightRange=raw.s||300;
+        this.a=1200;
         this.vx=0;
         this.vy=0;
-        this.a=1200;
-        this.dead=false;
         this.maxv=raw.maxv||200;
+        
+        this.dead=false;
+        this.sightRange=raw.s||300;
 
         this.walking=false; // whether or not the pawn is sprinting
         this.onWallLeft=false; // whether or not the pawn is pressed up against the left wall
@@ -209,7 +210,7 @@ class Pawn {
     die(){
         if(this.dead) return;
         if(this.mind){
-            Callback.do(this.mind.callbacks.onDeath);
+            if(this.mind.callbacks) Callback.do(this.mind.callbacks.onDeath);
             const r=this.rect;
             const raw={x:r.x,y:r.y};
             scene.spawnLoot(3,raw);

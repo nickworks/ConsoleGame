@@ -52,6 +52,14 @@ class Game {
                 if(this.canvas==undefined) return false;
                 this.gfx=this.canvas.getContext("2d");
                 if(this.gfx==undefined) return false;
+
+
+                this.gfx.fillCircle=(x,y,r)=>{
+                    this.gfx.beginPath();
+                    this.gfx.ellipse(x,y,r,r,0,0,Math.PI*2);
+                    this.gfx.fill();
+                };
+
                 return true;
             },
             // fade in or out, returns true when done

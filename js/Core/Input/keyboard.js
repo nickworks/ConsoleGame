@@ -44,7 +44,7 @@ const key = {
     ////////////////////////// INPUT MAPPING:
     jump:function(){return this.space},
     reload:function(){return [this.r]},
-    menuChoose:function(){return [this.enter,this.space]},
+    menuChoose:function(){return [this.enter,this.space,this.e]},
     activate:function(){return [this.e,this.enter]},
     moveLeft:function(){return [this.left,this.a]},
     moveRight:function(){return [this.right,this.d]},
