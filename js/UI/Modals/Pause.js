@@ -7,9 +7,9 @@ class Pause extends Modal {
             callback:()=>{ game.scene.unpause(); }
         },{
             caption:"Reset Level",
-            callback:()=>{ game.scene.startLevel(); game.scene.unpause(); }
+            callback:()=>{ game.scene.reloadScene(); }
         }];
-        if(game.settings.editModeEnabled)options.push({
+        if(game.settings.editModeEnabled||Game.DEVMODE)options.push({
             caption:"Editor",
             callback:()=>{ scene.guis.editor = new Editor(); game.scene.unpause(); }
         });

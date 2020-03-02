@@ -33,7 +33,10 @@ class Game {
                 this.time.prev = t;
                 Game.Repair(this);
                 this.update();
-            }
+            },
+            // these are used in DEVMODE:
+            delayUpdateFPS:0,
+            frameRate:0,
         }
         // game.view
         // This section controls the size of the viewport,
@@ -116,8 +119,8 @@ class Game {
 
         // meta-game stuff here:
         this.settings={
-            skipLoadingScenes:Game.DEVMODE||false,
-            editModeEnabled:Game.DEVMODE||false,
+            skipLoadingScenes:false,
+            editModeEnabled:false,
         };
     }
 
@@ -164,11 +167,27 @@ class Game {
         window.gfx=this.view.gfx;
     }
     draw(){
-        this.scene.draw(this.view.gfx);
+        this.scene.draw();
+        if(Game.DEVMODE) this.drawDev();
+        
 
         // if focused on console (input is not going to game)
         if(document.activeElement!=document.body) this.view.fill("rgba(0,0,0,.5)");
         
+    }
+    drawDev(){
+        this.time.delayUpdateFPS -= this.time._dt;
+        if(this.time.delayUpdateFPS <= 0) {
+            this.time.frameRate = parseInt(1.0/this.time._dt);
+            this.time.delayUpdateFPS=.5;
+        }
+        gfx.font="10pt Courier";
+        gfx.textAlign="center";
+        gfx.textBaseline="middle";
+        gfx.fillStyle="rgba(0,0,0,.8)";
+        gfx.fillRect(0,0,25,18);
+        gfx.fillStyle="#FFF";
+        gfx.fillText(this.time.frameRate,12,10);
     }
     switchScene(nextScene){
         this.nextScene = nextScene;
