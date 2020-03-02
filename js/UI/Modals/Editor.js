@@ -156,6 +156,15 @@ class Editor extends Modal {
         gfx.fillText(" +5 : spawn item", x, 96);
         gfx.fillText(" +6 : spawn crate", x, 108);
         gfx.fillText(" +T : change type", x, 120);
+
+        if(this.dragObj){
+            const r = this.dragObj.rect;
+            scene.cam.drawStart();
+            gfx.strokeStyle="#F00";
+            gfx.lineWidth=3;
+            gfx.strokeRect(r.x,r.y,r.w,r.h);
+            scene.cam.drawEnd();
+        }
     }
     serialize(){
         let res="[";
