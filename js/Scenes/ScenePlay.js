@@ -1,27 +1,36 @@
 class ScenePlay extends Scene {
 
-    // n - what level to load
-    // pos - where to spawn the player
-    constructor(n, pos={x:0,y:0}){
-        super();
-        
-        const data=LevelData.level(n);
-        
-        data.concat([this.player.pawn]).forEach(o => this.objs.add(o));        
-        this.ids(); // assign ID numbers to everything
-        
+
+    // this creates a scene from deserialized data.
+    // but it fails for serialized data...  :/
+    fromData(data,pos={x:0,y:0}){
+
+        if(!pos)pos={x:0,y:0};
         this.player.pawn.rect.x = pos.x;
         this.player.pawn.rect.y = pos.y;
+        this.cam.updateGoals(this.player.pawn);
+        this.cam.cut();
 
+        this.objs.clear();
+        data.concat([this.player.pawn]).forEach(o => this.objs.add(o));        
+        this.ids(); // assign ID numbers to everything
+        game.time.scale=1;
+    }
+    fromLevel(n,pos={x:0,y:0}){
+        const data=LevelData.level(n);
+        this.reloadScene = ()=>game.switchScene(SceneLoad.Level(n, pos));
+        this.fromData(data,pos);
+    }
+
+    // n - what level to load
+    // pos - where to spawn the player
+    constructor(){
+        super();
+        
         const hud = new HUD();          // spawn a HUD
         this.guis.overlays.push(hud);     // add the HUD to the gui stack
         hud.attach(this.player.pawn);   // attach the hud to the player's body
-
-        this.reloadScene = ()=>game.switchScene(SceneLoad.Level(n, pos));
-        game.time.scale=1;
-
-        this.cam.updateGoals(this.player.pawn);
-        this.cam.cut();
+        
     }
     update(){
 
@@ -94,7 +103,7 @@ class ScenePlay extends Scene {
     scanAtMouse(){
 
         if(this.player.pawn.rect.mouseOver()) {
-            game.console.log("<dim>You clicked on <val>player</val> // you can access it by typing</dim> player");
+            game.console.log("<dim>You clicked on <val>player</val>. You can access it by typing</dim> player");
             return;
         }
 
@@ -102,7 +111,7 @@ class ScenePlay extends Scene {
         const o = this.objs.getUnderMouse();
         if(o){ // if it exists:
             const index = this.objs.indexOf(o); // get its index number
-            game.console.log("<dim>you clicked on object <val>"+index+"</val> // you can access it by typing </dim>obj(<val>"+index+"</val>)");
+            game.console.log("<dim>you clicked on object <val>"+index+"</val>. You can access it by typing </dim>obj(<val>"+index+"</val>)");
         }
 
 

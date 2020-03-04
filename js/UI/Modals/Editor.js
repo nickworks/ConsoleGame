@@ -168,56 +168,7 @@ class Editor extends Modal {
         }
     }
     serialize(){
-
-        // TODO:
-        // During serialization, objects are grouped together for
-        // a lower filesize. [{t:Door,d:[]},{t:Crate,d:[]}]
-
-        // During deserialization, objects are put into scene.objs
-        // in order, so the first objects deserialized are at the
-        // back of the scene.
-
-        // We need to find a solution to preserve
-        // the relative depth of objects...
-
-        // we could serialize them in order, but we
-        // can't deserialize them in the correct order
-
-        // We'll need to store their relative depths.
-        // During deserialization, we then will order them by depth.
-
-
-        // DON'T serialize the player pawn
-        // DON'T serialize objects without .serialize() (bullets, particles)
-        // For each Ai pawn, serialize the AIController
-        let res="[";
-        const f=(t,a)=>{
-            res+="{t:"+t.name+",d:[";
-            let idx1=0;
-            a.forEach(i=>{
-                if(idx1++>0)res+=",";
-                res+="{";
-                const r=i.serialize();
-                let idx2=0;
-                for(var p in r){
-                    if(idx2++>0)res+=",";
-                    res+=p+":"+JSON.stringify(r[p]);
-                }
-                res+="}";
-            });
-            res+="]},";
-        };
-        f(PlayerController,[scene.player]);
-        if(scene.goal){
-            console.log("serializing goal");
-            f(Portal,[scene.goal]);
-        }
-        f(Platform,scene.platforms);
-        f(AIController,scene.npcs);
-        f(Door,scene.doors);
-        f(Item,scene.items);
-        f(Crate,scene.crates);
-        res+="]";
+        const res = LevelData.serialize();
         game.console.logData(res,"level data:");
     }
 };

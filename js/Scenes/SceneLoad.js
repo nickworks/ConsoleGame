@@ -11,8 +11,11 @@ class SceneLoad {
     static Level(n, pos={x:0,y:0}, speed=1){
         
         speed = +speed;
+
+        const scene = new ScenePlay();
+        scene.fromLevel(n, pos);
         
-        return new SceneLoad(new ScenePlay(n, pos), speed|1);
+        return new SceneLoad(scene, speed|1);
     }
 
 

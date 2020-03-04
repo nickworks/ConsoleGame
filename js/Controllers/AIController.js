@@ -28,7 +28,6 @@ class AIController extends Controller {
             d:this.dialog,
             f:this.friend,
             a:this.pawn.a,
-            h:this.hp,
         };
         var a=Callback.serialize(this.callbacks.onSpeak);
         var b=Callback.serialize(this.callbacks.onDeath);

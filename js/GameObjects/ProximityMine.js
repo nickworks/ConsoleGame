@@ -9,6 +9,14 @@ class ProximityMine {
         this.fuseLit=false;
         this.fuseTimer=.5;
 	}
+    serialize(){
+        return {
+            i:this.oid,
+            x:this.x,
+            y:this.y,
+            r:this.radius,
+        };
+    }
 	update(){
 		const r = this.radius;
 		this.rect = new Rect(this.x-r, this.y-r, r+r, r+r);
@@ -18,6 +26,7 @@ class ProximityMine {
         }
 	}
 	draw(){
+        if(!this.rect.mid)return;
         const mid = this.rect.mid();
 		gfx.fillStyle="#F00";
 		gfx.fillCircle(mid.x, mid.y, this.radius);

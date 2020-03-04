@@ -69,6 +69,15 @@ class Scene {
                     if(obj.dead) this.remove(obj);
                 }
             },
+            allByType(){
+                const sorted={};
+                this.all.forEach(i=>{
+                    const n = i.constructor.name;
+                    if(!Array.isArray(sorted[n])) sorted[n] = [];
+                    sorted[n].push(i);
+                });
+                return sorted;
+            }
         };
         this.objs.clear();
         this.guis={
