@@ -82,7 +82,9 @@ class Editor extends Modal {
         }
         else {
             const check=(a)=>{ //check to see if objects in array a are clicked on...
-                for(var i in a){
+                // assuming the objects are drawn back-to-front, loop
+                // through them in reverse to click on top objects first:
+                for(var i=a.length-1;i>=0;i--){
                     const r=a[i].rect;
                     if(r.hits(m)){
                         if(keyboard.isDown(key.q)){
@@ -96,7 +98,6 @@ class Editor extends Modal {
                     }
                 }
             };
-            //check([scene.player.pawn]);
             check(scene.objs.all);
         }
         scene.ids();
@@ -167,6 +168,28 @@ class Editor extends Modal {
         }
     }
     serialize(){
+
+        // TODO:
+        // During serialization, objects are grouped together for
+        // a lower filesize. [{t:Door,d:[]},{t:Crate,d:[]}]
+
+        // During deserialization, objects are put into scene.objs
+        // in order, so the first objects deserialized are at the
+        // back of the scene.
+
+        // We need to find a solution to preserve
+        // the relative depth of objects...
+
+        // we could serialize them in order, but we
+        // can't deserialize them in the correct order
+
+        // We'll need to store their relative depths.
+        // During deserialization, we then will order them by depth.
+
+
+        // DON'T serialize the player pawn
+        // DON'T serialize objects without .serialize() (bullets, particles)
+        // For each Ai pawn, serialize the AIController
         let res="[";
         const f=(t,a)=>{
             res+="{t:"+t.name+",d:[";

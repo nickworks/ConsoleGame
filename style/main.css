@@ -37,6 +37,13 @@ body {
     padding:5px;
     margin:0;
 }
+#console err {
+    color:#FF4;
+    background:#F00;
+    font-weight:bold;
+    padding:0 4px;
+    border-radius:4px;
+}
 #console dim {
     color:#777;
 }

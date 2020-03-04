@@ -8,7 +8,7 @@ class PlayerController extends Controller {
             this.weapon=null;
             this.coins=0;
             this.quests=[];
-            game.console.log("player data reset");
+            game.console.log("<dim>player data reset</dim>");
         }
     };
     static addQuest(q){

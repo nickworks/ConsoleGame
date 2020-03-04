@@ -222,7 +222,9 @@ class Game {
         window.addEventListener("resize",(e)=>{
             if(this.view.isFullscreen)this.view.fullscreen(true);
         });
-        
+        window.onerror=(msg,url,line,column,error)=>{
+            this.console.log("<err>"+msg+"</err> <dim>Run-time error detected. There's a good chance the game is broken. If you can't get it to work, you might need to <a href=\"index.html\">refresh</a> the page.</dim>");
+        };
         keyboard.setup();
         mouse.setup(this.view.canvas, this);
         
