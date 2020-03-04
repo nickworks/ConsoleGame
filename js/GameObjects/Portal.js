@@ -3,7 +3,10 @@ class Portal {
         this.rect=new Rect(raw.x||0,raw.y||0,50,100);
         this.next=raw.n||0;
         this.active=false;
-        this.spawnpos=raw.p||{x:0, y:0};
+        this.spawnpos={
+            x:raw.sx||0,
+            y:raw.sy||0,
+        };
     }
     update(){
         this.active = this.rect.overlaps(scene.player.pawn.rect);
@@ -13,7 +16,9 @@ class Portal {
         return {
             x:this.rect.x,
             y:this.rect.y,
-            n:this.next
+            n:this.next,
+            sx:this.spawnpos.x,
+            sy:this.spawnpos.y,
         };
     }
     draw(){
