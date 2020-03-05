@@ -23,10 +23,8 @@ class Editor extends Modal {
             this.serialize();
         }
         if(keyboard.onDown(key.n)){
-            var s = new ScenePlay();
-            s.modal=this;
-            s.cam.target=null;
-            return s;
+            scene.fromData([]);
+            scene.cam.target=null;
         }
         this.moveCam();
     }
@@ -52,32 +50,34 @@ class Editor extends Modal {
 
         if(keyboard.isDown([key.n1,key.p1])){//platforms
             const o=new Platform({x:m.x,y:m.y,w:25,h:25});
-            scene.platforms.push(o);
+            scene.objs.add(o);
             drag(o,true);
         }
         else if(keyboard.isDown([key.n2,key.p2])){//door
             const o=new Door({x:m.x,y:m.y});
-            scene.doors.push(o);
+            scene.objs.add(o);
             drag(o);
         }
         else if(keyboard.isDown([key.n3,key.p3])){//npc
             const o=new AIController({x:m.x, y:m.y});
-            scene.npcs.push(o);
-            drag(o);
+            scene.objs.add(o.pawn);
+            drag(o.pawn);
         }
-        else if(keyboard.isDown([key.n4,key.p4])){//goal
+        else if(keyboard.isDown([key.n4,key.p4])){//portal
             var x=this.snap(m.x);
             var y=this.snap(m.y);
-            scene.goal(new Portal({x:x,y:y}));
-        }
-        else if(keyboard.isDown([key.n5,key.p5])){//goal
-            const o=new Item({x:m.x, y:m.y});
-            scene.items.push(o);
+            const o=new Portal({x:x,y:y});
+            scene.objs.add(o);
             drag(o);
         }
-        else if(keyboard.isDown([key.n6,key.p6])){//goal
+        else if(keyboard.isDown([key.n5,key.p5])){//item
+            const o=new Item({x:m.x, y:m.y});
+            scene.objs.add(o);
+            drag(o);
+        }
+        else if(keyboard.isDown([key.n6,key.p6])){//crate
             const o=new Crate({x:m.x, y:m.y});
-            scene.crates.push(o);
+            scene.objs.add(o);
             drag(o);
         }
         else {
