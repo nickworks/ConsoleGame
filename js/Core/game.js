@@ -185,9 +185,9 @@ class Game {
         gfx.textAlign="center";
         gfx.textBaseline="middle";
         gfx.fillStyle="rgba(0,0,0,.8)";
-        gfx.fillRect(0,0,25,18);
+        gfx.fillRect(this.width()-25,this.height()-18,25,18);
         gfx.fillStyle="#FFF";
-        gfx.fillText(this.time.frameRate,12,10);
+        gfx.fillText(this.time.frameRate,this.width()-12,this.height()-9);
     }
     switchScene(nextScene){
         this.nextScene = nextScene;
@@ -222,9 +222,9 @@ class Game {
         window.addEventListener("resize",(e)=>{
             if(this.view.isFullscreen)this.view.fullscreen(true);
         });
-        window.onerror=(msg,url,line,column,error)=>{
-            this.console.log("<err>"+msg+"</err> <dim>Run-time error detected. There's a good chance the game is broken. If you can't get it to work, you might need to <a href=\"index.html\">refresh</a> the page.</dim>");
-        };
+        window.addEventListener("error", (e)=>{
+            this.console.log("<err> ERROR </err> <dim>Run-time error detected. There's a good chance the game is broken. If you can't get it to work, you might need to <a href=\"index.html\">refresh</a> the page.</dim>");
+        });
         keyboard.setup();
         mouse.setup(this.view.canvas, this);
         

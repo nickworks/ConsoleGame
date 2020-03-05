@@ -14,7 +14,6 @@ class Pawn {
         this.onWallLeft=false; // whether or not the pawn is pressed up against the left wall
         this.onWallRight=false; // whether or not the pawn is pressed up against the right wall
         this.isGrounded=false; // whether or not the pawn is on the ground
-        this.isSliding=false; // whether or not the pawn is...
         this.isJumping=false;
         this.onOneway=false;
 
@@ -34,7 +33,6 @@ class Pawn {
         this.weapon=new Weapon();
 
         this.canDoubleJump=canDoubleJump;
-
     }
     draw(){
 
