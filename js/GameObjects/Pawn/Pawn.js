@@ -6,7 +6,9 @@ class Pawn {
         this.vx=0;
         this.vy=0;
         this.maxv=raw.maxv||200;
-        
+
+        this.state=null;
+
         this.dead=false;
         this.sightRange=raw.s||300;
 
@@ -36,6 +38,8 @@ class Pawn {
     }
     draw(){
 
+        if(this.state && this.state.draw) this.state.draw(this);
+
         let isFriend = true;
 
         if(this.mind) {
@@ -53,6 +57,10 @@ class Pawn {
         gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
     update(){
+
+        if(!this.state) this.state = PawnStates.idle;
+
+        if(this.state && this.state.update) this.state.update(this);
 
         this.move = 0;
 
