@@ -42,6 +42,8 @@ const PawnStates={
             if(!PawnStates.isPawn(pawn)) return;
 
             if(pawn.input.move != 0) pawn.state=PawnStates.walking;
+            if(pawn.input.jump)pawn.launch({y:-350},true);
+
             pawn.moveH(pawn.input.move);
             pawn.moveV();
         }
@@ -73,6 +75,9 @@ const PawnStates={
         },
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
+            pawn.moveH(pawn.input.move);
+            pawn.moveV();
+            if(pawn.isGrounded) pawn.state=PawnStates.idle;
 
         }
     },
@@ -83,6 +88,9 @@ const PawnStates={
         },
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
+            pawn.moveH(pawn.input.move);
+            pawn.moveV(.4);
+            if(pawn.vy>0 || pawn.input.jump==false) pawn.state=PawnStates.inAir;
 
         }
     },
@@ -114,6 +122,8 @@ const PawnStates={
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
             if(pawn.input.move==0)pawn.state=PawnStates.idle;
+            if(!pawn.isGrounded)pawn.state=PawnStates.inAir;
+            if(pawn.input.jump)pawn.launch({y:-350},true);
             pawn.moveH(pawn.input.move);
             pawn.moveV();
         }

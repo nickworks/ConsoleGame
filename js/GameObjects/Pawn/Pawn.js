@@ -32,6 +32,7 @@ class Pawn {
 
         this.input = {
             move:0,         // an axis for left/right walking
+            jump:false,     // whether or not "jump" is held
         }
         
         this.weapon=new Weapon();
@@ -116,16 +117,9 @@ class Pawn {
             if(move>0&&this.vx>0)this.vx=0;
         }
     }
-    moveV(){
-        let grav=1;
-        if(this.isJumping&&this.vy<0){
-            grav=.4;
-        }else{
-            //if(this.onWallLeft||this.onWallRight)grav=.2;
-            this.isJumping=false;
-        }
-        
-        this.vy+=1200*grav*game.time.dt;
+    moveV(mult=1){
+        mult=+mult;
+        this.vy+=scene.gravity*mult*game.time.dt;
         const terminalVelocity=(this.onWallLeft||this.onWallRight)?150:400
         if(this.vy>terminalVelocity)this.vy=terminalVelocity;
         this.rect.y+=this.vy*game.time.dt;
@@ -158,8 +152,16 @@ class Pawn {
         }
         this.rect.cache();
     }
-    jump(isAirJump=false,isWallJump=false){ // try to jump...
+    launch(amt={x:0,y:0}, isJump=false){
+        if(!amt)amt={};
+        if(typeof amt.x == "number")this.vx = amt.x;
+        if(typeof amt.y == "number")this.vy = amt.y;
         
+        
+        this.state = (isJump) ? PawnStates.jumping : PawnStates.inAir;
+    }
+    jump(isAirJump=false,isWallJump=false){ // try to jump...
+
         if(isWallJump&&!this.isGrounded){
             if(this.onWallLeft){
                 this.vy=-400;

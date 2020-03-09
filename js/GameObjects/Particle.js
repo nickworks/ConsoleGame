@@ -25,6 +25,8 @@ class Particle {
         
         this.angle=0;
         this.anglev=0;
+
+        this.gravityScale=1;
         
         this.color="#000";
         this.init(t);
@@ -32,69 +34,58 @@ class Particle {
     
     init(t){
         this.t = t;
-        const randDir=(s=1)=>{
-            const a=Math.random()*Math.PI*2;
-            return {
-                x:s*Math.cos(a),
-                y:s*Math.sin(a)
-            };
-        };
-        const randBox=(sx=1,sy=1)=>{
-            return {
-                x:Math.random()*sx-sx/2,
-                y:Math.random()*sy-sy/2
-            };
-        };
-        const rand=(min,max)=>{
-            return Math.random()*(max-min)+min;
-        };
+        
         // TODO: Maybe move this into /data/ folder?
         switch(t){
             case Particle.Type.BOOM:
-                var scale=rand(0,750)+rand(0,750);
-                this.v=randDir(scale);
+                var scale=Maths.rand(0,750)+Maths.rand(0,750);
+                this.v=Maths.randDir(scale);
                 this.drag=.2;
-                this.scale=rand(.5,1);
-                this.scalev=rand(0,1);
-                this.lifespan=rand(0,.5)+rand(0,.5);
+                this.scale=Maths.rand(.5,1);
+                this.scalev=Maths.rand(0,1);
+                this.lifespan=Maths.rand(0,.5)+Maths.rand(0,.5);
+                this.gravityScale=0;
                 break;
             case Particle.Type.HIT:
-                this.v={x:rand(-800,800),y:rand(-500,-100)};
-                this.a.y=1600;
+                this.v={x:Maths.rand(-800,800),y:Maths.rand(-500,-100)};
                 this.scalev=0;
-                this.rect.w=this.rect.h=rand(5, 15);
-                this.lifespan=rand(.5,1.5);
+                this.rect.w=this.rect.h=Maths.rand(5, 15);
+                this.lifespan=Maths.rand(.5,1.5);
                 break;
             case Particle.Type.DUST:
-                this.v=randDir(rand(0,800));
+                this.v=Maths.randDir(Maths.rand(0,800));
                 this.drag=.1;
-                this.lifespan=rand(.5,1);
-                this.rect.w=this.rect.h=rand(20,30);
+                this.lifespan=Maths.rand(.5,1);
+                this.rect.w=this.rect.h=Maths.rand(20,30);
                 this.alpha=.5;
+                this.gravityScale=1;
                 break;
             case Particle.Type.CRATE:
-                this.v={x:rand(-400,400),y:rand(-800,-300)};
-                this.lifespan=rand(.5,2);
-                this.rect.w=this.rect.h=rand(20,40);
-                this.a.y=rand(1200,2000);
-                this.angle=rand(0,Math.PI);
-                this.anglev=rand(-5,5);
-                const hue=rand(10,30);
-                const sat=rand(55,65)|0;
-                const lit=rand(45,50)|0;
+                this.v={x:Maths.rand(-400,400),y:Maths.rand(-800,-300)};
+                this.lifespan=Maths.rand(.5,2);
+                this.rect.w=this.rect.h=Maths.rand(20,40);
+                this.gravityScale=Maths.rand(1,2);
+                this.angle=Maths.rand(0,Math.PI);
+                this.anglev=Maths.rand(-5,5);
+                const hue=Maths.rand(10,30);
+                const sat=Maths.rand(55,65)|0;
+                const lit=Maths.rand(45,50)|0;
                 this.color="hsl("+hue+", "+sat+"%, "+lit+"%)";
         }
     }
     update(){
-        this.life+=game.time.dt;
+        const dt = game.time.dt;
+
+        this.life+=dt;
         if(this.life>this.lifespan)this.dead=true;
-        this.v.x+=this.a.x*game.time.dt;
-        this.v.y+=this.a.y*game.time.dt;
-        this.rect.x+=this.v.x*game.time.dt;
-        this.rect.y+=this.v.y*game.time.dt;
+        this.v.x+=this.a.x*dt;
+        this.v.y+=this.a.y*dt;
+        if(this.gravityScale != 0) this.v.y+=this.gravityScale*scene.gravity*dt;
+        this.rect.x+=this.v.x*dt;
+        this.rect.y+=this.v.y*dt;
         this.v.x-=this.v.x*this.drag;
         this.v.y-=this.v.y*this.drag;
-        this.scale+=this.scalev*game.time.dt;
+        this.scale+=this.scalev*dt;
         
     }
     draw(){

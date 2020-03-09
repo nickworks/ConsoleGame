@@ -63,7 +63,7 @@ class Item {
                 if(this.vx==0&&this.vy==0)this.isAsleep=true;
             }            
             
-            this.vy+=800*game.time.dt;
+            this.vy+=scene.gravity*game.time.dt;
             this.rect.x+=this.vx*game.time.dt;
             this.rect.y+=this.vy*game.time.dt;
             this.isGrounded=false;

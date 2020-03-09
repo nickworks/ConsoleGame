@@ -51,10 +51,13 @@ class PlayerController extends Controller {
         let move=0;
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
-        this.pawn.input.move = move;
 
+        this.pawn.input.move = move;
+        this.pawn.input.jump = keyboard.isDown(key.jump());
+        /*
         // make the pawn jump:
         if(keyboard.onDown(key.jump())){
+
             const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
             
             if(this.pawn.onOneway&&keyboard.isDown(key.crouch()))this.pawn.drop();
@@ -64,7 +67,7 @@ class PlayerController extends Controller {
         }
         if(!keyboard.isDown(key.jump())){
             this.pawn.isJumping=false;
-        }
+        }*/
         
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
         

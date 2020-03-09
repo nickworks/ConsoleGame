@@ -91,7 +91,7 @@ class Scene {
 		
 		this.player=new PlayerController();
         this.cam=new Camera();
-        
+        this.gravity=1200;
 	}
     pause(){
         if(this.guis.editor) return;

@@ -1,4 +1,24 @@
 const Maths={
+	// return a 2D vector of magnitude @s
+	// which points in a random direction
+	randDir(s=1){
+        const a=Math.random()*Math.PI*2;
+        return {
+            x:s*Math.cos(a),
+            y:s*Math.sin(a)
+        };
+    },
+    // return a 2D value within a rectangle of size @w by @h
+    // where 0,0 is the rectangle's center
+    randBox(w=1,h=1){
+        return {
+            x:Math.random()*w-w/2,
+            y:Math.random()*h-h/2
+        };
+    },
+    rand(min,max){
+        return Math.random()*(max-min)+min;
+    },
 	lerp(a, b, p){
 		return (b-a)*p+a;
 	},
