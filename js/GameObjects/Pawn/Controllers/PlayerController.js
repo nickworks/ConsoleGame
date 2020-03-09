@@ -51,7 +51,7 @@ class PlayerController extends Controller {
         let move=0;
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
-        this.pawn.move = move;
+        this.pawn.input.move = move;
 
         // make the pawn jump:
         if(keyboard.onDown(key.jump())){

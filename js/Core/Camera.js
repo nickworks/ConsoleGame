@@ -40,6 +40,10 @@ class Camera {
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();
+
+                if(typeof this.target.vx == "number") m.x += this.target.vx * .2;
+                if(typeof this.target.vy == "number") m.y += this.target.vy * .2;
+
                 this.goals.x=(m.x)|0;
                 this.goals.y=(m.y-50)|0;
             } else {

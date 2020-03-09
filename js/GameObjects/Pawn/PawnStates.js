@@ -41,13 +41,81 @@ const PawnStates={
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
 
+            if(pawn.input.move != 0) pawn.state=PawnStates.walking;
+            pawn.moveH(pawn.input.move);
+            pawn.moveV();
         }
     },
-    dead:{},
-    hurt:{},
-    inAir:{},
-    jumping:{},
-    crouching:{},
-    sneaking:{},
-    walking:{},
+    dead:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("dead", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    hurt:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("hurt", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    inAir:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("inAir", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    jumping:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("jumping", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    crouching:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("crouching", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    sneaking:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("sneaking", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+
+        }
+    },
+    walking:{
+        draw(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("walking", pawn);
+        },
+        update(pawn){
+            if(!PawnStates.isPawn(pawn)) return;
+            if(pawn.input.move==0)pawn.state=PawnStates.idle;
+            pawn.moveH(pawn.input.move);
+            pawn.moveV();
+        }
+    },
 }

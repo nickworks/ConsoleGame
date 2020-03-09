@@ -82,7 +82,7 @@ class AIController extends Controller {
             if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
         this.pawn.walking=!this.agro;
-        this.pawn.move=move;
+        this.pawn.input.move=move;
     }
     notify(){
         this.agro=true;

@@ -30,7 +30,9 @@ class Pawn {
 
         this.mind = null; // AIController or PlayerController
 
-        this.move = 0;
+        this.input = {
+            move:0,         // an axis for left/right walking
+        }
         
         this.weapon=new Weapon();
 
@@ -58,22 +60,17 @@ class Pawn {
     }
     update(){
 
+        this.input.move = 0;
+
+        if(this.mind) this.mind.update();
         if(!this.state) this.state = PawnStates.idle;
-
         if(this.state && this.state.update) this.state.update(this);
-
-        this.move = 0;
+        if(this.weapon) this.weapon.update();
 
         if(this.hp<=0){
             this.die();
             return;
         }
-
-        if(this.mind) this.mind.update();
-        if(this.weapon) this.weapon.update(); 
-
-        this.moveH(this.move);
-        this.moveV();
 
         this.clearFlags(); // clear what collision detection is going to set
         
