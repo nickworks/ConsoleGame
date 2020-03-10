@@ -33,6 +33,7 @@ class Pawn {
         this.input = {
             move:0,         // an axis for left/right walking
             jump:false,     // whether or not "jump" is held
+            onJump:false,   // whether or not a "jump" just went down
         }
         
         this.weapon=new Weapon();
@@ -62,6 +63,8 @@ class Pawn {
     update(){
 
         this.input.move = 0;
+        this.input.jump = false;
+        this.input.onJump = false;
 
         if(this.mind) this.mind.update();
         if(!this.state) this.state = PawnStates.idle;
