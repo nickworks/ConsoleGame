@@ -29,6 +29,7 @@ class PlayerController extends Controller {
         this.pawn.mind=this;
         this.pawn.jumpCooldownAmt=0;
         this.friend=true;
+        this.isPlayer=true;
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
         this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
         if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
@@ -55,6 +56,7 @@ class PlayerController extends Controller {
         this.pawn.input.move = move;
         this.pawn.input.jump = keyboard.isDown(key.jump());
         this.pawn.input.onJump = keyboard.onDown(key.jump());
+        this.pawn.input.crouch = keyboard.isDown(key.crouch());
         /*
         // make the pawn jump:
         if(keyboard.onDown(key.jump())){

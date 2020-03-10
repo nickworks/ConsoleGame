@@ -34,6 +34,7 @@ class Pawn {
             move:0,         // an axis for left/right walking
             jump:false,     // whether or not "jump" is held
             onJump:false,   // whether or not a "jump" just went down
+            crouch:false    // whether or not "crouch" is held
         }
         
         this.weapon=new Weapon();
@@ -86,7 +87,10 @@ class Pawn {
         this.onWallLeft=false;
         this.onWallRight=false;
         this.onOneway=false;
-        if(this.isDropping&&this.rect.y>this.dropFrom+20)this.isDropping=false;
+
+        if(this.isDropping&&this.rect.y>this.dropFrom+20){
+            this.isDropping=false;
+        }
     }
     // the controller calls moveH() and
     // passes along what direction
@@ -143,11 +147,15 @@ class Pawn {
             this.rect.y+=fix.y;
         }
         if(fix.y<0){ // move up:
-            if(!oneway||!this.isDropping){
+
+            // is the player currently "dropping":
+            const isDropping = this.state.isDropping?this.state.isDropping():false;
+
+            if(!oneway || !isDropping){
                 this.rect.y+=fix.y;
                 this.onOneway=oneway;
                 this.isGrounded=true;
-                this.airJumpsLeft=1;
+                this.airJumpsLeft=2;
                 this.vy=0;
                 //this.isAsleep=true;
                 //this.rect.y = 0;
@@ -156,12 +164,18 @@ class Pawn {
         this.rect.cache();
     }
     launch(amt={x:0,y:0}, isJump=false){
+
+
+        if(isJump){
+            if(--this.airJumpsLeft < 0) return;
+        }
+
         if(!amt)amt={};
         if(typeof amt.x == "number")this.vx = amt.x;
         if(typeof amt.y == "number")this.vy = amt.y;
         
         
-        this.state = (isJump) ? PawnStates.jumping : PawnStates.inAir;
+        this.state = (isJump) ? PawnStates.jumping : new PawnStates.inAir();
     }
     jump(isAirJump=false,isWallJump=false){ // try to jump...
 
@@ -169,7 +183,7 @@ class Pawn {
             if(this.onWallLeft){
                 this.vy=-400;
                 this.vx=400;
-                this.isJumping=true;    
+                this.isJumping=true;  
                 return;
             }
             if(this.onWallRight){
@@ -190,10 +204,8 @@ class Pawn {
         if(isAirJump)this.airJumpsLeft--;
     }
     drop(){
-        if(!this.isDropping){
-            this.dropFrom=this.rect.y;
-            this.isDropping=true;
-        }
+        this.isGrounded=false;
+        this.state=new PawnStates.inAir(true,this.rect.y);
     }
     shoot(isFriend){
         if(this.weapon){

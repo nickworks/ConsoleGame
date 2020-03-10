@@ -26,7 +26,7 @@ class Camera {
         
 
         const pa1s=.001;
-        let p = Maths.slide(.001, game.time._dt);
+        let p = Maths.slide(.01, game.time._dt);
 
         this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p);
         this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p);
@@ -67,7 +67,6 @@ class Camera {
     // to it's target position, scale, rotation.
     // This can be used to create a camera cut.
     cut(){
-        console.log("cut");
         this.vals.x=this.goals.x;
         this.vals.y=this.goals.y;
         this.vals.angle=this.goals.angle;
