@@ -1,6 +1,7 @@
 class Bullet {
     constructor(p,v,f,d,g=false){
-        this.rect=new Rect(p.x,p.y,10,10);
+        this.radius=5;
+        this.rect=new Rect(p.x,p.y,this.radius*2,this.radius*2);
         this.vx=v.x;
         this.vy=v.y;
         this.g=g?400:0;
@@ -19,7 +20,19 @@ class Bullet {
         if(this.lifespan<=0)this.dead=true;
     }
     draw(){
-        gfx.drawImage(sprites.projectile,this.rect.x,this.rect.y)
+        const img = sprites.projectile;
+        const p = this.rect.mid();
+
+        //gfx.drawImage(img,p.x-img.width/2,p.y-img.height/2);
+
+        gfx.beginPath();
+        gfx.strokeStyle="#FFF";
+        gfx.lineWidth=this.radius;
+
+
+        gfx.moveTo(p.x-this.vx*.02,p.y-this.vy*.02);
+        gfx.lineTo(p.x,p.y);
+        gfx.stroke();
     }
     // check if this bullet is overlapping one or more other objects
     overlap(a){
@@ -28,7 +41,7 @@ class Bullet {
             
             if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
 
-            this.hit(o);            
+            this.hit(o);
         });
     }
 
