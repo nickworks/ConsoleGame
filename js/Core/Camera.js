@@ -27,9 +27,10 @@ class Camera {
 
         const pa1s=.001;
         let p = Maths.slide(.01, game.time._dt);
+        let p2 = Maths.slide(.1, game.time._dt);
 
         this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p);
-        this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p);
+        this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p2);
         this.vals.angle=Maths.lerp(this.vals.angle,this.goals.angle,p);
         this.vals.scale=Maths.lerp(this.vals.scale,this.goals.scale,p);
 
