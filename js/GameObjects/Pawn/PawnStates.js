@@ -46,7 +46,7 @@ const PawnStates={
             if(pawn.input.crouch) pawn.state=PawnStates.crouching;
             if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
 
-            pawn.moveH(pawn.input.move);
+            pawn.moveH();
             pawn.moveV();
         }
     },
@@ -80,7 +80,7 @@ const PawnStates={
         };
         this.update=(pawn)=>{
             if(!PawnStates.isPawn(pawn)) return;
-            pawn.moveH(pawn.input.move);
+            pawn.moveH(1,pawn.airControl);
             pawn.moveV();
             if(pawn.isGrounded)pawn.state=PawnStates.idle;
             if(pawn.input.onJump)pawn.launch({y:-375},true); // set state to  jumping
@@ -95,7 +95,7 @@ const PawnStates={
         },
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
-            pawn.moveH(pawn.input.move);
+            pawn.moveH(1,pawn.airControl);
             pawn.moveV(.4); // less gravity when jumping
             if(pawn.vy>0 || pawn.input.jump==false) pawn.state=new PawnStates.inAir();
 
@@ -109,15 +109,17 @@ const PawnStates={
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
             
-            pawn.moveH(pawn.input.move);
-            pawn.moveV();
 
-            if(pawn.input.onJump) {
-                pawn.drop();
-                return;
-            }
             if(!pawn.input.crouch) pawn.state = PawnStates.idle;
             if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
+            if(pawn.input.onJump) {
+                if(pawn.onOneway)pawn.drop();
+                else {
+                    pawn.launch({y:-375},true); // set state to  jumping
+                }
+            }
+            pawn.moveH(.5);
+            pawn.moveV();
         }
     },
     sneaking:{
@@ -141,7 +143,7 @@ const PawnStates={
             if(!pawn.isGrounded)pawn.state=new PawnStates.inAir();
             if(pawn.input.onJump)pawn.launch({y:-375},true);
             if(pawn.input.crouch)pawn.state=PawnStates.crouching;
-            pawn.moveH(pawn.input.move);
+            pawn.moveH();
             pawn.moveV();
         }
     },

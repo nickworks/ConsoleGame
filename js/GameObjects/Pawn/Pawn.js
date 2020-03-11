@@ -20,6 +20,7 @@ class Pawn {
         this.onOneway=false;
 
         this.airJumpsLeft=1;
+        this.airControl=.25;
         this.dir=1; //-1 is left, 1 is right
         this.hp=100;
         this.hpMax=100;
@@ -108,9 +109,10 @@ class Pawn {
         }
     }
     // the controller calls moveH() and
-    // passes along what direction
-    // the controller wants to move in
-    moveH(move=0){
+    // passes along a max speed multiplier
+    // and acceleration multiplier
+    moveH(multMaxSpeed=1,multAcceleration=1){
+        let move = this.input.move;
         let slowDown=false;            
         if(move==0){ // if no input
             if(this.isGrounded){
@@ -124,13 +126,13 @@ class Pawn {
             if(move>0&&this.vx<0)move+=2;
             if(move<0&&this.vx>0)move-=2;
         }
-        if(!this.isGrounded)move*=.4;//40% air control
+
         // Clamp horizontal velocity:
-        this.vx+=this.a*move*game.time.dt;
-        var clamp=(this.walking)?this.maxv/2:this.maxv;
-        if(!this.isGrounded)this.clamp=this.maxv*2;
+        this.vx+=this.a*move*multAcceleration*game.time.dt;
+        const clamp=this.maxv*+multMaxSpeed;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
+
         // Apply velocity:
         this.rect.x+=this.vx*game.time.dt;
         // Prevent ping-ponging:
