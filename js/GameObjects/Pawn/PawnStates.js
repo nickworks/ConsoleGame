@@ -42,7 +42,7 @@ const PawnStates={
             if(!PawnStates.isPawn(pawn)) return;
 
             if(pawn.input.move != 0) pawn.state=PawnStates.walking; // set state to walking
-            if(pawn.input.onJump) pawn.launch({y:-350},true); // set state to  jumping
+            if(pawn.input.onJump) pawn.launch({y:-375},true); // set state to  jumping
             if(pawn.input.crouch) pawn.state=PawnStates.crouching;
             if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
 
@@ -83,7 +83,7 @@ const PawnStates={
             pawn.moveH(pawn.input.move);
             pawn.moveV();
             if(pawn.isGrounded)pawn.state=PawnStates.idle;
-            if(pawn.input.onJump)pawn.launch({y:-350},true); // set state to  jumping
+            if(pawn.input.onJump)pawn.launch({y:-375},true); // set state to  jumping
 
             if(isDropping&&pawn.rect.y>dropFrom+20)pawn.state=new PawnStates.inAir();
         };
@@ -139,7 +139,7 @@ const PawnStates={
             if(!PawnStates.isPawn(pawn)) return;
             if(pawn.input.move==0)pawn.state=PawnStates.idle;
             if(!pawn.isGrounded)pawn.state=new PawnStates.inAir();
-            if(pawn.input.onJump)pawn.launch({y:-350},true);
+            if(pawn.input.onJump)pawn.launch({y:-375},true);
             if(pawn.input.crouch)pawn.state=PawnStates.crouching;
             pawn.moveH(pawn.input.move);
             pawn.moveV();
