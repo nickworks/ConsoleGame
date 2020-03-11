@@ -8,7 +8,7 @@ class Pawn {
         this.maxv=raw.maxv||200;
 
         this.state=null;
-
+        this.trail=[];
         this.dead=false;
         this.sightRange=raw.s||300;
 
@@ -60,11 +60,21 @@ class Pawn {
             imgR = sprites.playerR;            
         }
 
+
+        const offset = {x:4,y:4};
+        const pos = {x:this.rect.x-offset.x,y:this.rect.y-offset.y};
+        const img = (this.dir<0)?imgL:imgR;
+
+        if(this.trail.length>0)this.trail.forEach(p=>{
+            gfx.drawImage(p.img,p.x-offset.x,p.y-offset.y);
+        });
+        gfx.drawImage(img,pos.x,pos.y);
+
+        if(this.mind&&this.mind.isPlayer) this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
+        if(this.trail.length > 25) this.trail.splice(0,1);
+
         //gfx.fillStyle="#F00";
         //this.rect.draw(); // draw collider
-
-        const o = {x:4,y:4};
-        gfx.drawImage((this.dir<0)?imgL:imgR,this.rect.x-o.x,this.rect.y-o.y);
     }
     update(){
 

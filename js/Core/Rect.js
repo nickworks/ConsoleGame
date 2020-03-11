@@ -98,6 +98,13 @@ class Rect {
     draw(){
         gfx.fillRect(this.x,this.y,this.w,this.h);
     }
+    drawStroke(color="#F00",w=3){
+        gfx.beginPath();
+        gfx.strokeStyle=color;
+        gfx.strokeWegith=+w;
+        gfx.rect(this.x,this.y,this.w,this.h);
+        gfx.stroke();
+    }
     raw(){
         return {x:this.x,y:this.y,w:this.w,h:this.h};
     }
