@@ -29,6 +29,8 @@ class Pawn {
         this.isAsleep=false;
         this.dropFrom=0;
 
+        this.delayIgnoreInput=0;
+
         this.mind = null; // AIController or PlayerController
 
         this.input = {
@@ -71,17 +73,20 @@ class Pawn {
         });
         gfx.drawImage(img,pos.x,pos.y);
 
-        if(this.mind&&this.mind.isPlayer) this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
-        if(this.trail.length > 25) this.trail.splice(0,1);
+        // add to trail:
+        //if(this.mind&&this.mind.isPlayer) this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
+        //if(this.trail.length > 25) this.trail.splice(0,1);
 
-        //gfx.fillStyle="#F00";
-        //this.rect.draw(); // draw collider
+        // draw collider:
+        //this.rect.drawStroke();
     }
     update(){
 
         this.input.move = 0;
         this.input.jump = false;
         this.input.onJump = false;
+
+        if(this.delayIgnoreInput>0)this.delayIgnoreInput-=game.time.dt;
 
         if(this.mind) this.mind.update();
         if(!this.state) this.state = PawnStates.idle;
@@ -123,12 +128,15 @@ class Pawn {
             }
         } else {
             this.dir=move;
+            if(this.delayIgnoreInput>0)move=0; 
+            // turn around fast:
             if(move>0&&this.vx<0)move+=2;
             if(move<0&&this.vx>0)move-=2;
         }
 
+        this.vx+=this.a*move*+multAcceleration*game.time.dt;
+        
         // Clamp horizontal velocity:
-        this.vx+=this.a*move*multAcceleration*game.time.dt;
         const clamp=this.maxv*+multMaxSpeed;
         if(this.vx>clamp)this.vx=clamp;
         if(this.vx<-clamp)this.vx=-clamp;
@@ -141,10 +149,9 @@ class Pawn {
             if(move>0&&this.vx>0)this.vx=0;
         }
     }
-    moveV(mult=1){
-        mult=+mult;
-        this.vy+=scene.gravity*mult*game.time.dt;
-        const terminalVelocity=(this.onWallLeft||this.onWallRight)?150:400
+    moveV(multMaxSpeed=1,multGravity=1){
+        this.vy+=scene.gravity*+multGravity*game.time.dt;
+        const terminalVelocity=400*+multMaxSpeed;
         if(this.vy>terminalVelocity)this.vy=terminalVelocity;
         this.rect.y+=this.vy*game.time.dt;
     }
@@ -182,9 +189,10 @@ class Pawn {
     }
     launch(amt={x:0,y:0}, isJump=false){
 
-
         if(isJump){
             if(--this.airJumpsLeft < 0) return;
+        } else {
+            this.delayIgnoreInput=.25;
         }
 
         if(!amt)amt={};

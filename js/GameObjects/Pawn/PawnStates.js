@@ -86,6 +86,26 @@ const PawnStates={
             if(pawn.input.onJump)pawn.launch({y:-375},true); // set state to  jumping
 
             if(isDropping&&pawn.rect.y>dropFrom+20)pawn.state=new PawnStates.inAir();
+            if(!isDropping){
+                if(pawn.onWallLeft) pawn.state=new PawnStates.onWall(false);
+                if(pawn.onWallRight) pawn.state=new PawnStates.onWall(true);
+            }
+        };
+    },
+    onWall:function(onRight){
+        onRight=!!onRight;
+        this.draw=(pawn)=>{
+            if(!PawnStates.isPawn(pawn)) return;
+            PawnStates.drawTextAbove("onWall", pawn);
+        };
+        this.update=(pawn)=>{
+            if(!PawnStates.isPawn(pawn)) return;
+            if(pawn.isGrounded)pawn.state=PawnStates.idle;
+            if(onRight && !pawn.onWallRight) pawn.state=PawnStates.inAir();
+            if(!onRight && !pawn.onWallLeft) pawn.state=PawnStates.inAir();
+            if(pawn.input.onJump)pawn.launch({x:(onRight?-600:600),y:-400},false); // set state to  jumping
+            pawn.moveH(1,pawn.airControl);
+            pawn.moveV(.45);
         };
     },
     jumping:{
@@ -96,7 +116,7 @@ const PawnStates={
         update(pawn){
             if(!PawnStates.isPawn(pawn)) return;
             pawn.moveH(1,pawn.airControl);
-            pawn.moveV(.4); // less gravity when jumping
+            pawn.moveV(1,.4); // less gravity when jumping
             if(pawn.vy>0 || pawn.input.jump==false) pawn.state=new PawnStates.inAir();
 
         }
