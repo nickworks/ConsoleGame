@@ -52,8 +52,13 @@ class Pawn {
             isFriend = this.mind.friend;
         }
 
-        const imgL = isFriend ? sprites.playerL : sprites.enemyL;
-        const imgR = isFriend ? sprites.playerR : sprites.enemyR;
+        let imgL = isFriend ? sprites.npcL : sprites.enemyL;
+        let imgR = isFriend ? sprites.npcR : sprites.enemyR;
+
+        if(this.mind&&this.mind.isPlayer){
+            imgL = sprites.playerL;
+            imgR = sprites.playerR;            
+        }
 
         //gfx.fillStyle="#F00";
         //this.rect.draw(); // draw collider
