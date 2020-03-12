@@ -57,7 +57,7 @@ loadjs([
     'js/Scenes/ScenePlay.js',
     'js/Scenes/SceneTitle.js',
 
-    'js/Core/Game.js',
+    'js/Core/game.js',
 
     'js/data/sprites.js',
 
