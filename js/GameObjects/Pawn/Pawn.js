@@ -189,6 +189,9 @@ class Pawn {
         if(typeof amt.x == "number")this.vx = amt.x;
         if(typeof amt.y == "number")this.vy = amt.y;
         
+        this.isGrounded=false;
+        this.onWallLeft=false;
+        this.onWallRight=false;
         this.state = (!ignoreInputFor) ? new PawnStates.jumping(this) : new PawnStates.launched(this, +ignoreInputFor);
     }
     drop(){
@@ -199,7 +202,6 @@ class Pawn {
     }
     jump(){ // this pawn has been told to jump
         if(this.state.jump){
-            this.isGrounded=false;
             this.state.jump(); // let the current state decide what to do
         }
     }

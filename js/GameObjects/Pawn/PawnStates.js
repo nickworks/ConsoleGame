@@ -113,6 +113,9 @@ const PawnStates={
             delayIgnoreInput-=game.time.dt;
             if(delayIgnoreInput<=0)pawn.state=new PawnStates.inAir(pawn);
 
+            if(pawn.onWallLeft) pawn.state=new PawnStates.onWall(pawn,false); 
+            if(pawn.onWallRight) pawn.state=new PawnStates.onWall(pawn,true);
+
             pawn.moveH(10,0);
             pawn.moveV(10,.8);
         };
