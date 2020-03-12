@@ -34,7 +34,7 @@ class Pawn {
     }
     draw(){
 
-        if(this.state && this.state.draw) this.state.draw(this);
+        if(this.state && this.state.draw) this.state.draw();
 
         let isFriend = true;
 
@@ -71,8 +71,8 @@ class Pawn {
     update(){
 
         if(this.mind) this.mind.update();
-        if(!this.state) this.state = PawnStates.idle;
-        if(this.state && this.state.update) this.state.update(this);
+        if(!this.state) this.state =new PawnStates.idle(this);
+        if(this.state && this.state.update) this.state.update();
         if(this.weapon) this.weapon.update();
 
         if(this.hp<=0){
@@ -140,10 +140,12 @@ class Pawn {
         
         if(fix.x!=0){
             this.vx=0;
-            if(fix.x>0){
-                this.onWallLeft=true;
-            } else{
-                this.onWallRight=true;
+            if(!this.isGrounded){
+                if(fix.x>0){
+                    this.onWallLeft=true;
+                } else{
+                    this.onWallRight=true;
+                }
             }
         }
         if(fix.y>0){ // move down:
@@ -165,6 +167,16 @@ class Pawn {
                 //this.rect.y = 0;
             }
         }
+        if(fix.x!=0){
+            this.vx=0;
+            if(!this.isGrounded){
+                if(fix.x>0){
+                    this.onWallLeft=true;
+                } else{
+                    this.onWallRight=true;
+                }
+            }
+        }
         this.rect.cache();
     }
     launch(amt={x:0,y:0}, isJump=false){
@@ -178,18 +190,18 @@ class Pawn {
         if(typeof amt.y == "number")this.vy = amt.y;
         
         
-        this.state = (isJump) ? PawnStates.jumping : new PawnStates.launched(.4);
+        this.state = (isJump) ? new PawnStates.jumping(this) : new PawnStates.launched(this, .4);
     }
     drop(){
         if(this.onOneway){
             this.isGrounded=false;
-            this.state=new PawnStates.inAir(true,this.rect.y);
+            this.state=new PawnStates.inAir(this,true,this.rect.y);
         }
     }
     jump(){ // this pawn has been told to jump
         if(this.state.jump){
             this.isGrounded=false;
-            this.state.jump(this); // let the current state decide what to do
+            this.state.jump(); // let the current state decide what to do
         }
     }
     shoot(isFriend){

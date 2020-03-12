@@ -4,9 +4,13 @@ const PawnStates={
 	
 
     // this draws a textfield above a pawn
-    drawTextAbove:(name,pawn)=>{
+    drawDebug:(state, pawn)=>{
+
+        if(!Game.DEVMODE) return;
+
         const gfx=game.view.gfx;
-        const mid = pawn.rect.mid();
+        const mid=pawn.rect.mid();
+        const name=state.constructor.name;
 
         gfx.font="10pt Courier";
         gfx.textAlign="center";
@@ -25,193 +29,151 @@ const PawnStates={
     There are several states below. Each state
     should follow this basic template:
 
-	state:{
-		draw(pawn){},
-		update(pawn){},
+	state:function(pawn){
+		this.draw=()=>{};
+		this.update=()=>{};
+        this.jump=()=>{};
 	}
     
 	*/
 
-    idle:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("idle", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
+    idle:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+            if(pawn.mind&&pawn.mind.wantsToMove!=0) pawn.state=new PawnStates.walking(pawn); // switch to walking
+            if(pawn.mind&&pawn.mind.wantsToCrouch) pawn.state =new PawnStates.crouched(pawn);
 
-            if(pawn.mind&&pawn.mind.wantsToMove!=0) pawn.state=PawnStates.walking; // switch to walking
-            if(pawn.mind&&pawn.mind.wantsToCrouch) pawn.state = PawnStates.crouched;
-
-            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir(); // switch to falling
+            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir(pawn); // switch to falling
 
             pawn.moveH();
             pawn.moveV();
-        },
-        jump(pawn){
+        };
+        this.jump=()=>{
             pawn.launch({y:-375},true);
-        },
-    },
-    dead:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("dead", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-
-        }
-    },
-    hurt:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("hurt", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-
-        }
-    },
-    inAir:function(isDropping=false, dropFrom=0){
-        this.isDropping=()=>{
-            return isDropping;
         };
-        this.draw=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("inAir", pawn);
+    },
+    dead:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+
         };
-        this.update=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
+    },
+    hurt:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+
+        };
+    },
+    inAir:function(pawn, isDropping=false, dropFrom=0){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.isDropping=()=>{return isDropping;};
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
             pawn.moveH(10,pawn.airControl);
             pawn.moveV();
-            if(pawn.isGrounded)pawn.state=PawnStates.idle;
+            if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
-            if(isDropping&&pawn.rect.y>dropFrom+20)pawn.state=new PawnStates.inAir(); // if we're dropping and we've dropped 20 pixels, switch to inAir
+            if(isDropping&&pawn.rect.y>dropFrom+20)pawn.state=new PawnStates.inAir(pawn); // if we're dropping and we've dropped 20 pixels, switch to inAir
             if(!isDropping){
-                if(pawn.onWallLeft) pawn.state=new PawnStates.onWall(false); 
-                if(pawn.onWallRight) pawn.state=new PawnStates.onWall(true);
+                if(pawn.onWallLeft) pawn.state=new PawnStates.onWall(pawn,false); 
+                if(pawn.onWallRight) pawn.state=new PawnStates.onWall(pawn,true);
             }
         };
-        this.jump=(pawn)=>{
-            pawn.launch({y:-375},true);
-        };
+        this.jump=()=>{ pawn.launch({y:-375},true); };
     },
-    onWall:function(onRight){
+    onWall:function(pawn,onRight){
+        if(!PawnStates.isPawn(pawn)) return;
         onRight=!!onRight;
-        this.draw=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("onWall", pawn);
-        };
-        this.update=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
-            
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
             const slidOffWall=onRight?!pawn.onWallRight:!pawn.onWallLeft;
-            if(slidOffWall) pawn.state=PawnStates.inAir();
+            if(slidOffWall) pawn.state=new PawnStates.inAir(pawn);
 
-            if(pawn.isGrounded)pawn.state=PawnStates.idle;
+            if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
             pawn.moveH(1,pawn.airControl);
             pawn.moveV(.45);
         };
-        this.jump=(pawn)=>{
-            pawn.launch({x:(onRight?-400:400),y:-400},false); // set state to  jumping
-        };
+        this.jump=()=>{ pawn.launch({x:(onRight?-400:400),y:-400},false); };
     },
-    launched:function(delayIgnoreInput=0){
-        this.draw=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("launched", pawn);
-        };
-        this.update=(pawn)=>{
-            if(!PawnStates.isPawn(pawn)) return;
-
+    launched:function(pawn,delayIgnoreInput=0){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
             delayIgnoreInput-=game.time.dt;
-            if(delayIgnoreInput<=0)pawn.state=new PawnStates.inAir();
+            if(delayIgnoreInput<=0)pawn.state=new PawnStates.inAir(pawn);
 
             pawn.moveH(10,0);
             pawn.moveV(10,.8);
         };
     },
-    jumping:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("jumping", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
+    jumping:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
             pawn.moveH(1,pawn.airControl);
             pawn.moveV(1,.4); // less gravity when jumping
 
-            if(pawn.vy>0)pawn.state=new PawnStates.inAir();
-            if(pawn.mind&&!pawn.mind.wantsToJump) pawn.state=new PawnStates.inAir();
-        }
+            if(pawn.vy>0)pawn.state=new PawnStates.inAir(pawn);
+            if(pawn.mind&&!pawn.mind.wantsToJump) pawn.state=new PawnStates.inAir(pawn);
+        };
     },
-    crouched:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("crouched", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            
+    crouched:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+
+        this.isStealth=true;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
             if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
 
-            if(pawn.mind&&pawn.mind.wantsToMove!=0)pawn.state=PawnStates.sneaking;
-            if(pawn.mind&&!pawn.mind.wantsToCrouch)pawn.state=PawnStates.idle;
+            if(pawn.mind&&pawn.mind.wantsToMove!=0)pawn.state=new PawnStates.sneaking(pawn);
+            if(pawn.mind&&!pawn.mind.wantsToCrouch)pawn.state=new PawnStates.idle(pawn);
 
             pawn.moveH(.5);
             pawn.moveV();
-        },
-        jump(pawn){
+        };
+        this.jump=()=>{
             if(pawn.onOneway)pawn.drop();
             else {
                 pawn.launch({y:-275},true); // set state to  jumping
             }
-        },
+        };
     },
-    sneaking:{
-        isStealth:true,
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("sneaking", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
+    sneaking:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.isStealth=true;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+            if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=new PawnStates.crouched(pawn);
+            if(pawn.mind&&!pawn.mind.wantsToCrouch)pawn.state=new PawnStates.idle(pawn);
 
-            if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=PawnStates.crouched;
-            if(pawn.mind&&!pawn.mind.wantsToCrouch)pawn.state=PawnStates.idle;
-
-            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
+            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir(pawn);
 
             pawn.moveH(.5);
             pawn.moveV();
-        },
-        jump(pawn){
+        };
+        this.jump=()=>{
             if(pawn.onOneway)pawn.drop();
             else {
                 pawn.launch({y:-275},true); // set state to  jumping
             }
-        },
+        };
     },
-    walking:{
-        draw(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            if(Game.DEVMODE)PawnStates.drawTextAbove("walking", pawn);
-        },
-        update(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
+    walking:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+            if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=new PawnStates.idle(pawn);
+            if(pawn.mind&&pawn.mind.wantsToCrouch)pawn.state=new PawnStates.sneaking(pawn);
 
-            if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=PawnStates.idle;
-            if(pawn.mind&&pawn.mind.wantsToCrouch)pawn.state=PawnStates.sneaking;
-
-            if(!pawn.isGrounded)pawn.state=new PawnStates.inAir();
+            if(!pawn.isGrounded)pawn.state=new PawnStates.inAir(pawn);
 
             pawn.moveH();
             pawn.moveV();
-        },
-        jump(pawn){
-            if(!PawnStates.isPawn(pawn)) return;
-            pawn.launch({y:-375},true);
-        },
+        };
+        this.jump=()=>{ pawn.launch({y:-375},true); };
     },
 }
