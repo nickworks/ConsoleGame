@@ -1,14 +1,12 @@
 class Dialog extends Modal {
     constructor(x,y,texts,callbacks={}){
-        super();
+        super(x,y,1.5,0);
         if(typeof texts == "string") texts=[texts];
         if(!Array.isArray(texts)) texts=["ERROR: Dialogs should use an array of strings."];
         
         this.index=0;
         this.texts=texts;
         this.lines=[];
-        this.x=x;
-        this.y=y;
         this.w=200;//max width
         this.h=14;
         
@@ -43,8 +41,8 @@ class Dialog extends Modal {
         this.lines.push(line);
     }
     update(){
-        scene.cam.goals.scale=2;
         this.bg.update();
+        this.offset.y=-this.bg.h.target/2;
         if(this.bg.p<1)return;
         if(this.charNow < this.charMax){
             this.timer-=game.time.dt;

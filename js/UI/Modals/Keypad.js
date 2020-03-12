@@ -1,13 +1,11 @@
 class Keypad extends Modal {
     constructor(x,y,onDone){
-        super();
+        super(x,y,2,0);
 
         this.maxInputSize = 5; // only allow up to 5 characters
         this.index=0;
         this.val="";
         this.txt="";
-        this.x=x;
-        this.y=y;
         this.font=new Font({size:20, valign:"top", font:"monospace"});
         this.fontSmall=new Font({size:10, valign:"middle", align:"center"});
         this.textPos = {x:1, y:2};
@@ -49,8 +47,8 @@ class Keypad extends Modal {
         if(snap)this.bg.snap();
     }
     update(){
-        scene.cam.goals.scale=2;
         this.bg.update();
+        this.offset.y=-this.bg.h.target/2;
         if(this.isFullSize()){
 
             this.timerBlink-=game.time.dt;

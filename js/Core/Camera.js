@@ -5,7 +5,6 @@ class Camera {
             y:0,
             angle:0,
             scale:.5,
-            
         };
         this.goals={
             x:0,
@@ -23,19 +22,43 @@ class Camera {
         this.updateScreenOffset();
         this.updateGoals();
 
-
         this.doShake();
 
+        this.easeTowardsGoals();        
+    }
+    easeTowardsGoals(){
         const pa1s=.01;
         let p = Maths.slide(pa1s, game.time._dt);
         this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p);
         this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p);
         this.vals.angle=Maths.lerp(this.vals.angle,this.goals.angle,p);
         this.vals.scale=Maths.lerp(this.vals.scale,this.goals.scale,p);
-        
     }
     updateGoals(target){
         if(typeof target == "object") this.target = target;
+
+        // for modals:
+        if(scene.guis){
+            if(scene.guis.death){
+                const m = scene.guis.death;
+                this.goals.scale=m.scale;
+                this.goals.angle=m.angle;
+                return;
+            }
+            if(scene.guis.modals.length>0){
+                const m = scene.guis.modals[scene.guis.modals.length-1];
+                this.goals.x=m.x;
+                this.goals.y=m.y;
+                if(m.offset)this.goals.x+=+m.offset.x;
+                if(m.offset)this.goals.y+=+m.offset.y;
+                this.goals.scale=m.scale;
+                this.goals.angle=m.angle;
+                return;
+            }
+        }
+        this.goals.scale=1;
+        this.goals.angle=0;
+
         if(this.target){
             if(this.target.rect){
                 const m=this.target.rect.mid();

@@ -5,8 +5,8 @@ class Death extends Modal {
         this.age=0;
     }
 	update(){
-        if(scene.cam.goals.scale<2)scene.cam.goals.scale+=.2*game.time._dt;
-        if(scene.cam.goals.angle<1)scene.cam.goals.angle+=.02*game.time._dt;
+        if(this.scale<2)this.scale+=.2*game.time._dt;
+        if(this.angle<1)this.angle+=.02*game.time._dt;
         if(game.time.scale>.1)game.time.scale-=.1*game.time._dt;
         if(this.age<3)this.age+=game.time._dt;
         else if(keyboard.onDown(key.any())){

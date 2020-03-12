@@ -128,8 +128,8 @@ class Scene {
             this.guis.pause.update();
             return true;
         }
-
         
+
         if(this.guis.modals.length == 0){
             // update all objects
             this.objs.all.forEach(o => o.update());
@@ -150,6 +150,7 @@ class Scene {
                 if(o.dead) this.guis.overlays.splice(i,1);
             });
         } else {
+            // UPDATE MODALS:
             this.reverseIterate(this.guis.modals, (o, i)=>{
                 o.update();
                 if(o.dead) this.guis.modals.splice(i,1);
