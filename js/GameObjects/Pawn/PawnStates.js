@@ -97,10 +97,11 @@ const PawnStates={
 
             const slidOffWall=onRight?!pawn.onWallRight:!pawn.onWallLeft;
             if(slidOffWall && delayUntilFall<=0) pawn.state=new PawnStates.inAir(pawn);
-
+            if(onRight&&pawn.mind&&pawn.mind.wantsToMove<0) pawn.state=new PawnStates.inAir(pawn);
+            if(!onRight&&pawn.mind&&pawn.mind.wantsToMove>0) pawn.state=new PawnStates.inAir(pawn);
             if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
-            pawn.moveH(1,.25);
+            pawn.moveH(1,.1);
             pawn.moveV(.45);
         };
         const wallJumpSpeed = 400;

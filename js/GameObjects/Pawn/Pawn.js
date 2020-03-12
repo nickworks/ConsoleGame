@@ -205,10 +205,11 @@ class Pawn {
             this.state.jump(); // let the current state decide what to do
         }
     }
-    shoot(isFriend){
+    shoot(){
         if(this.weapon){
             let p=this.rect.mid();
-            this.weapon.shoot(p, this.dir, isFriend);
+
+            this.weapon.shoot(p, this.dir, this.mind&&this.mind.friend);
         }
     }
     canSee(o,h=20){

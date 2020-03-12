@@ -58,7 +58,7 @@ class PlayerController extends Controller {
         this.wantsToDash=keyboard.isDown(key.dash());
 
         if(keyboard.onDown(key.jump())) this.pawn.jump();
-        if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
+        if(keyboard.isDown(key.attack())) this.pawn.shoot();
         if(keyboard.onDown(key.reload()) && this.pawn.weapon) this.pawn.weapon.reload();
         
     }

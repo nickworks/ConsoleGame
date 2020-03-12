@@ -76,7 +76,7 @@ class AIController extends Controller {
             } else if(me.y+50<p.y){
                 this.pawn.drop();
             } else {
-                this.pawn.shoot(false);
+                this.pawn.shoot();
             }
         } else {
             
