@@ -85,16 +85,19 @@ const PawnStates={
         this.jump=()=>{ pawn.launch({y:-375},true); };
     },
     onWall:function(pawn,onRight){
+        var delayUntilFall=.55;
         if(!PawnStates.isPawn(pawn)) return;
         onRight=!!onRight;
         this.draw=()=>PawnStates.drawDebug(this, pawn);
         this.update=()=>{
+            if(delayUntilFall>0)delayUntilFall-=game.time.dt;
+
             const slidOffWall=onRight?!pawn.onWallRight:!pawn.onWallLeft;
-            if(slidOffWall) pawn.state=new PawnStates.inAir(pawn);
+            if(slidOffWall && delayUntilFall<=0) pawn.state=new PawnStates.inAir(pawn);
 
             if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
-            pawn.moveH(1,pawn.airControl);
+            pawn.moveH(1,.25);
             pawn.moveV(.45);
         };
         this.jump=()=>{ pawn.launch({x:(onRight?-400:400),y:-400},false); };
