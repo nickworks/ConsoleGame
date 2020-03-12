@@ -73,8 +73,9 @@ const PawnStates={
         this.isDropping=()=>{return isDropping;};
         this.draw=()=>PawnStates.drawDebug(this, pawn);
         this.update=()=>{
-            pawn.moveH(10,pawn.airControl);
+            pawn.moveH(pawn.mind&&pawn.mind.wantsToDash?10:1,pawn.airControl);
             pawn.moveV();
+            
             if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
             if(isDropping&&pawn.rect.y>dropFrom+20)pawn.state=new PawnStates.inAir(pawn); // if we're dropping and we've dropped 20 pixels, switch to inAir
@@ -99,6 +100,7 @@ const PawnStates={
             if(slidOffWall && delayUntilFall<=0) pawn.state=new PawnStates.inAir(pawn);
             if(onRight&&pawn.mind&&pawn.mind.wantsToMove<0) pawn.state=new PawnStates.inAir(pawn);
             if(!onRight&&pawn.mind&&pawn.mind.wantsToMove>0) pawn.state=new PawnStates.inAir(pawn);
+
             if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
             pawn.moveH(1,.1);
@@ -125,11 +127,11 @@ const PawnStates={
         if(!PawnStates.isPawn(pawn)) return;
         this.draw=()=>PawnStates.drawDebug(this, pawn);
         this.update=()=>{
-            pawn.moveH(1,pawn.airControl);
+            pawn.moveH(pawn.mind&&pawn.mind.wantsToDash?10:1,pawn.airControl);
             pawn.moveV(1,.4); // less gravity when jumping
 
             if(pawn.vy>0)pawn.state=new PawnStates.inAir(pawn);
-            if(pawn.mind&&!pawn.mind.wantsToJump) pawn.state=new PawnStates.inAir(pawn);
+            if(!pawn.mind||!pawn.mind.wantsToJump)pawn.state=new PawnStates.inAir(pawn);
         };
     },
     crouched:function(pawn){
@@ -138,10 +140,10 @@ const PawnStates={
         this.isStealth=true;
         this.draw=()=>PawnStates.drawDebug(this, pawn);
         this.update=()=>{
-            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
-
             if(pawn.mind&&pawn.mind.wantsToMove!=0)pawn.state=new PawnStates.sneaking(pawn);
             if(pawn.mind&&!pawn.mind.wantsToCrouch)pawn.state=new PawnStates.idle(pawn);
+
+            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir();
 
             pawn.moveH(.5);
             pawn.moveV();

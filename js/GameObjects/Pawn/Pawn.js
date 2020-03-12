@@ -56,14 +56,23 @@ class Pawn {
         const pos = {x:this.rect.x-offset.x,y:this.rect.y-offset.y};
         const img = (this.dir<0)?imgL:imgR;
 
+        gfx.globalAlpha=0;
         if(this.trail.length>0)this.trail.forEach(p=>{
+            gfx.globalAlpha+=.01;
+            if(gfx.globalAlpha>.1)gfx.globalAlpha=.1;
             gfx.drawImage(p.img,p.x-offset.x,p.y-offset.y);
         });
+        gfx.globalAlpha=1;
         gfx.drawImage(img,pos.x,pos.y);
 
         // add to trail:
-        //if(this.mind&&this.mind.isPlayer) this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
-        //if(this.trail.length > 25) this.trail.splice(0,1);
+
+        let limit = 0;
+        if((this.vx*this.vx+this.vy*this.vy) > 500*500){// || (this.mind&&this.mind.wantsToDash)){
+            this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
+            limit=10;
+        }
+        if(this.trail.length>limit) this.trail.splice(0,1);
 
         // draw collider:
         //this.rect.drawStroke();

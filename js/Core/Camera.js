@@ -12,6 +12,7 @@ class Camera {
             angle:0,
             scale:1,
         };
+        this.pa1s=.01;
         this.screenOffset={x:0,y:0};
         this.target=null;
         this.shake=0;
@@ -27,16 +28,18 @@ class Camera {
         this.easeTowardsGoals();        
     }
     easeTowardsGoals(){
-        const pa1s=.01;
-        let p = Maths.slide(pa1s, game.time._dt);
-        this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p);
-        this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p);
-        this.vals.angle=Maths.lerp(this.vals.angle,this.goals.angle,p);
-        this.vals.scale=Maths.lerp(this.vals.scale,this.goals.scale,p);
+        
+        let p1 = Maths.slide(this.pa1s, game.time._dt);
+        let p2 = Maths.slide(this.pa1s, game.time._dt);
+        this.vals.x=Maths.lerp(this.vals.x,this.goals.x,p1);
+        this.vals.y=Maths.lerp(this.vals.y,this.goals.y,p1);
+        this.vals.angle=Maths.lerp(this.vals.angle,this.goals.angle,p2);
+        this.vals.scale=Maths.lerp(this.vals.scale,this.goals.scale,p2);
     }
     updateGoals(target){
         if(typeof target == "object") this.target = target;
 
+        this.pa1s=.01;
         // for modals:
         if(scene.guis){
             if(scene.guis.death){
@@ -46,6 +49,7 @@ class Camera {
                 return;
             }
             if(scene.guis.modals.length>0){
+                this.pa1s=.0001;
                 const m = scene.guis.modals[scene.guis.modals.length-1];
                 this.goals.x=m.x;
                 this.goals.y=m.y;

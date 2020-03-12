@@ -25,7 +25,6 @@ class PhysicsComponent {
         const mass=this.getMass();
         this.vx+=+f.x/mass;
         this.vy+=+f.y/mass;
-        console.log(mass);
     }
     slowOnGround(){
         if(!this.isGrounded)return;
