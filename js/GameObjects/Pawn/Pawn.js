@@ -12,11 +12,10 @@ class Pawn {
         this.dead=false;
         this.sightRange=raw.s||300;
 
-        this.walking=false; // whether or not the pawn is sprinting
-        this.onWallLeft=false; // whether or not the pawn is pressed up against the left wall
-        this.onWallRight=false; // whether or not the pawn is pressed up against the right wall
-        this.isGrounded=false; // whether or not the pawn is on the ground
-        this.isJumping=false;
+        // COLLISION FLAGS
+        this.onWallLeft=false;
+        this.onWallRight=false;
+        this.isGrounded=false;
         this.onOneway=false;
 
         this.airJumpsLeft=1;
@@ -25,20 +24,11 @@ class Pawn {
         this.hp=100;
         this.hpMax=100;
         this.coins=0;
-        this.isDropping=false;
         this.isAsleep=false;
-        this.dropFrom=0;
 
-        this.delayIgnoreInput=0;
+        this.delayIgnoreInput=0; // how long to ignore input... used by wall jump
 
         this.mind = null; // AIController or PlayerController
-
-        this.input = {
-            move:0,         // an axis for left/right walking
-            jump:false,     // whether or not "jump" is held
-            onJump:false,   // whether or not a "jump" just went down
-            crouch:false    // whether or not "crouch" is held
-        }
         
         this.weapon=new Weapon();
 
@@ -82,9 +72,6 @@ class Pawn {
     }
     update(){
 
-        this.input.move = 0;
-        this.input.jump = false;
-        this.input.onJump = false;
 
         if(this.delayIgnoreInput>0)this.delayIgnoreInput-=game.time.dt;
 
@@ -109,15 +96,13 @@ class Pawn {
         this.onWallRight=false;
         this.onOneway=false;
 
-        if(this.isDropping&&this.rect.y>this.dropFrom+20){
-            this.isDropping=false;
-        }
     }
     // the controller calls moveH() and
     // passes along a max speed multiplier
     // and acceleration multiplier
     moveH(multMaxSpeed=1,multAcceleration=1){
-        let move = this.input.move;
+        let move = this.mind&&this.mind.wantsToMove;
+        if(!move)move=0;
         let slowDown=false;            
         if(move==0){ // if no input
             if(this.isGrounded){
@@ -173,7 +158,7 @@ class Pawn {
         if(fix.y<0){ // move up:
 
             // is the player currently "dropping":
-            const isDropping = this.state.isDropping?this.state.isDropping():false;
+            const isDropping = this.state&&this.state.isDropping?this.state.isDropping():false;
 
             if(!oneway || !isDropping){
                 this.rect.y+=fix.y;
@@ -202,35 +187,17 @@ class Pawn {
         
         this.state = (isJump) ? PawnStates.jumping : new PawnStates.inAir();
     }
-    jump(isAirJump=false,isWallJump=false){ // try to jump...
-
-        if(isWallJump&&!this.isGrounded){
-            if(this.onWallLeft){
-                this.vy=-400;
-                this.vx=400;
-                this.isJumping=true;  
-                return;
-            }
-            if(this.onWallRight){
-                this.vy=-400;
-                this.vx=-400;
-                this.isJumping=true;    
-                return;
-            }
-        }
-        if(!isAirJump&&!this.isGrounded)return;
-        if(!isAirJump&&this.jumpCooldown>0)return;
-        if(isAirJump&&this.airJumpsLeft<=0)return;
-        if(isAirJump&&!this.canDoubleJump())return;
-        
-        this.vy=-350;
-        this.isJumping=true;
-        this.jumpCooldown=this.jumpCooldownAmt;
-        if(isAirJump)this.airJumpsLeft--;
-    }
     drop(){
-        this.isGrounded=false;
-        this.state=new PawnStates.inAir(true,this.rect.y);
+        if(this.onOneway){
+            this.isGrounded=false;
+            this.state=new PawnStates.inAir(true,this.rect.y);
+        }
+    }
+    jump(){ // this pawn has been told to jump
+        if(this.state.jump){
+            this.isGrounded=false;
+            this.state.jump(this); // let the current state decide what to do
+        }
     }
     shoot(isFriend){
         if(this.weapon){

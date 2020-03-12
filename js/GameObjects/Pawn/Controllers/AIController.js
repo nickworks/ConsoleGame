@@ -67,8 +67,11 @@ class AIController extends Controller {
             this.pawn.dir=(me.x<p.x)?1:-1;
             if(me.x>p.x+200) move--;
             if(me.x<p.x-200) move++;
-            
+
+            this.wantsToJump=false;
             if(me.y-50>p.y){//enemy is below player
+
+                this.wantsToJump=true;
                 this.pawn.jump();
             } else if(me.y+50<p.y){
                 this.pawn.drop();
@@ -81,8 +84,7 @@ class AIController extends Controller {
             
             if(this.pawn.canSee(scene.player.pawn.rect))this.agro=true;
         }
-        this.pawn.walking=!this.agro;
-        this.pawn.input.move=move;
+        this.wantsToMove=move;
     }
     notify(){
         this.agro=true;

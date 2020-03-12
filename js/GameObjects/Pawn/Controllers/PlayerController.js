@@ -47,33 +47,17 @@ class PlayerController extends Controller {
     }
     update(){
         
-        
         // control the pawn's horizontal movement:
         let move=0;
         if(keyboard.isDown(key.moveLeft()))move--;
         if(keyboard.isDown(key.moveRight()))move++;
 
-        this.pawn.input.move = move;
-        this.pawn.input.jump = keyboard.isDown(key.jump());
-        this.pawn.input.onJump = keyboard.onDown(key.jump());
-        this.pawn.input.crouch = keyboard.isDown(key.crouch());
-        /*
-        // make the pawn jump:
-        if(keyboard.onDown(key.jump())){
+        this.wantsToMove=move;
+        this.wantsToCrouch=keyboard.isDown(key.crouch());
+        this.wantsToJump=keyboard.isDown(key.jump());
 
-            const onWall=this.pawn.onWallLeft||this.pawn.onWallRight;
-            
-            if(this.pawn.onOneway&&keyboard.isDown(key.crouch()))this.pawn.drop();
-            else if(this.pawn.isGrounded)this.pawn.jump(false);
-            else if(onWall&&this.canWallJump())this.pawn.jump(false,true);
-            else if(this.pawn.airJumpsLeft>0)this.pawn.jump(true);
-        }
-        if(!keyboard.isDown(key.jump())){
-            this.pawn.isJumping=false;
-        }*/
-        
+        if(keyboard.onDown(key.jump())) this.pawn.jump();
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);
-        
         if(keyboard.onDown(key.reload()) && this.pawn.weapon) this.pawn.weapon.reload();
         
     }
