@@ -26,8 +26,6 @@ class Pawn {
         this.coins=0;
         this.isAsleep=false;
 
-        this.delayIgnoreInput=0; // how long to ignore input... used by wall jump
-
         this.mind = null; // AIController or PlayerController
         
         this.weapon=new Weapon();
@@ -72,9 +70,6 @@ class Pawn {
     }
     update(){
 
-
-        if(this.delayIgnoreInput>0)this.delayIgnoreInput-=game.time.dt;
-
         if(this.mind) this.mind.update();
         if(!this.state) this.state = PawnStates.idle;
         if(this.state && this.state.update) this.state.update(this);
@@ -113,7 +108,7 @@ class Pawn {
             }
         } else {
             this.dir=move;
-            if(this.delayIgnoreInput>0)move=0; 
+
             // turn around fast:
             if(move>0&&this.vx<0)move+=2;
             if(move<0&&this.vx>0)move-=2;
@@ -176,8 +171,6 @@ class Pawn {
 
         if(isJump){
             if(--this.airJumpsLeft < 0) return;
-        } else {
-            this.delayIgnoreInput=.25;
         }
 
         if(!amt)amt={};
@@ -185,7 +178,7 @@ class Pawn {
         if(typeof amt.y == "number")this.vy = amt.y;
         
         
-        this.state = (isJump) ? PawnStates.jumping : new PawnStates.inAir();
+        this.state = (isJump) ? PawnStates.jumping : new PawnStates.launched(.4);
     }
     drop(){
         if(this.onOneway){

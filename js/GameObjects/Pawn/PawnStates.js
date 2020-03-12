@@ -82,7 +82,7 @@ const PawnStates={
         };
         this.update=(pawn)=>{
             if(!PawnStates.isPawn(pawn)) return;
-            pawn.moveH(1,pawn.airControl);
+            pawn.moveH(10,pawn.airControl);
             pawn.moveV();
             if(pawn.isGrounded)pawn.state=PawnStates.idle;
 
@@ -114,7 +114,22 @@ const PawnStates={
             pawn.moveV(.45);
         };
         this.jump=(pawn)=>{
-            pawn.launch({x:(onRight?-600:600),y:-400},false); // set state to  jumping
+            pawn.launch({x:(onRight?-400:400),y:-400},false); // set state to  jumping
+        };
+    },
+    launched:function(delayIgnoreInput=0){
+        this.draw=(pawn)=>{
+            if(!PawnStates.isPawn(pawn)) return;
+            if(Game.DEVMODE)PawnStates.drawTextAbove("launched", pawn);
+        };
+        this.update=(pawn)=>{
+            if(!PawnStates.isPawn(pawn)) return;
+
+            delayIgnoreInput-=game.time.dt;
+            if(delayIgnoreInput<=0)pawn.state=new PawnStates.inAir();
+
+            pawn.moveH(10,0);
+            pawn.moveV(10,.8);
         };
     },
     jumping:{
