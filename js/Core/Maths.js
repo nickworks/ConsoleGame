@@ -33,6 +33,11 @@ const Maths={
 		if(!!dt)dt=game.time.dt;
 		return 1 - Math.pow(pa1s, dt);
 	},
+	clamp(c,min,max){
+		if(c<min)c=min;
+		if(c>max)c=max;
+		return c;
+	},
 	magSq(a,b){
 		const dx=a.x-b.x;
 		const dy=a.y-b.y;

@@ -78,23 +78,41 @@ class ScenePlay extends Scene {
         this.cam.shake=.5;
         
         this.objs.damageable.forEach(o=>{
-            const p=o.rect.mid();
-            const dx=p.x-x;
-            const dy=p.y-y;
-            if(Math.abs(dx)<r&&Math.abs(dy)<r){
-                const d=Math.sqrt(dx*dx+dy*dy);
-                if(d<r){
-                    let s=(r-d)/r;
-                    if(o.hurt)o.hurt(dmg*s)
-                    s*=400;
-                    let vx=s*dx/d;
-                    let vy=s*dy/d;
-                    if(vy>0)vy*=-1;
-                    o.vx=vx+Math.random()*200-100;
-                    o.vy=vy+Math.random()*200;
-                    if(o.isAsleep)o.isAsleep=false;
-                }
-            }
+            const res = o.rect.overlapsCircle(x,y,r);
+            if(res&&res.p>0&&o.hurt) o.hurt(dmg*res.p);
+        });
+
+        this.pulse(x,y,r,dmg*10);
+    }
+    pulse(x,y,radius,force=0){
+
+        let n=0;
+
+        this.circ=function(){
+            gfx.fillStyle="rgba(0,0,0,.5)";
+            gfx.fillCircle(x,y,radius);
+        }
+
+        this.objs.physics.forEach(o=>{
+            
+            const res = o.rect.overlapsCircle(x,y,radius);
+            if(!res) return;
+
+            n++;
+            //console.log("WAKE "+o.constructor.name);
+            o.phys.isAsleep=false;
+
+            if(!force)return;
+
+            let mag=force*res.p;
+            let vx=mag*res.dir.x;
+            let vy=mag*res.dir.y;
+            if(vy>0)vy*=-1; // always launch up
+
+            o.phys.impulse({
+                x:vx+Math.random()*200-100,
+                y:vy+Math.random()*200
+            });
         });
     }
     shootAtMouse(){

@@ -58,6 +58,31 @@ class Rect {
     hits(p){
         return (p.x>this.x&&p.x<this.x+this.w&&p.y>this.y&&p.y<this.y+this.h);
     }
+    // this checks to see if this rect overlaps with a circle
+    overlapsCircle(x,y,r){
+        const p={ // nearest point in rect to the circle's center
+            x:Maths.clamp(x,this.x,this.x+this.w),
+            y:Maths.clamp(y,this.y,this.y+this.h),
+        }
+        const dx=p.x-x;
+        const dy=p.y-y;
+        
+        const d2=(dx*dx+dy*dy);
+        if(d2>r*r) return null;
+
+        const d = Math.sqrt(d2);
+
+        return {
+            p:(r-d)/r,      // percent of the circle penetrated (1 = exact center)
+            dis:d,          // distance from center of circle to penetration point
+            dir:{           // direction towards penetration point
+                x:dx/d,     // normalized x
+                y:dy/d,     // normalized y
+            }
+        }
+        
+        return null; // not intersecting
+    }
     overlaps(o){
         const r=this;
         if(r.x>=o.x+o.w) return false;

@@ -7,6 +7,9 @@ class PhysicsComponent {
         this.isAsleep=false;
         this.isGrounded=false;
     }
+    getVelMagSq(){
+        return this.vx*this.vx+this.vy*this.vy;
+    }
     update(){
         if(this.isAsleep)return;
 

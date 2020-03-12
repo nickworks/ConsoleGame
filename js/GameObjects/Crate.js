@@ -35,21 +35,50 @@ class Crate {
         Matrix.pop();
     }
     block(a){
+        if(this.dead)return;
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
             if(o.rect==this.rect)return; // don't self-check
-            if(o.isAsleep)return;//skip sleeping objects
+            //if(o.isAsleep)return;//skip sleeping objects
             if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
+
             const fix=this.rect.findFix(o.rect);
+
+            if(o.constructor.name=="Crate"){
+                const v1 = o.phys.getVelMagSq();
+                const v2 = this.phys.getVelMagSq();
+
+                const otherIsMovingFaster = (v1 > v2);
+                
+                o.isAsleep=false;
+                this.isAsleep=false;
+
+                if(!otherIsMovingFaster) return; // don't move the other cube
+
+                if(fix.y > 0) {
+                    fix.y*=-1;
+                    this.applyFix(fix); // move up this crate instead
+                    return;
+                }
+            }
+            if(o.constructor.name=="Item"){
+                if(fix.y > 0) fix.y*=-1; // crates CAN'T move items down
+            }
             o.applyFix(fix,this.oneway);
         });
     }
     hurt(amt){
         this.hp-=amt;
+
+        let r=Math.max(this.rect.w/2,this.rect.h/2);
+        r=Math.sqrt(r*r*2);
+        const p=this.rect.mid();
+        scene.pulse(p.x,p.y,r,0);
+
         if(this.hp<=0){
             this.dead=true;
-            const p=this.rect.mid();
             scene.addParticles(p.x,p.y,4,5);
+            
             if(this.hasLoot){
                 const amt=Math.random()+Math.random()+Math.random();
                 scene.spawnLoot((amt*3)|0,this.rect.mid());
