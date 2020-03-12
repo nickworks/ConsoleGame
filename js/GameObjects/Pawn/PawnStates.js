@@ -49,9 +49,9 @@ const PawnStates={
             pawn.moveH();
             pawn.moveV();
         };
-        this.jump=()=>{
-            pawn.launch({y:-375},true);
-        };
+        this.jump=()=>{ pawn.launch({y:-375}); };
+        const dashSpeed=1200;
+        this.dash=()=>{ pawn.launch({x:dashSpeed*(pawn.dir>0?1:-1)},.2);}
     },
     dead:function(pawn){
         if(!PawnStates.isPawn(pawn)) return;
@@ -82,7 +82,7 @@ const PawnStates={
                 if(pawn.onWallRight) pawn.state=new PawnStates.onWall(pawn,true);
             }
         };
-        this.jump=()=>{ pawn.launch({y:-375},true); };
+        this.jump=()=>{ pawn.launch({y:-375}); };
     },
     onWall:function(pawn,onRight){
         var delayUntilFall=.55;
@@ -100,7 +100,8 @@ const PawnStates={
             pawn.moveH(1,.25);
             pawn.moveV(.45);
         };
-        this.jump=()=>{ pawn.launch({x:(onRight?-400:400),y:-400},false); };
+        const wallJumpSpeed = 400;
+        this.jump=()=>{ pawn.launch({x:wallJumpSpeed*(onRight?-1:1),y:-400},.4); };
     },
     launched:function(pawn,delayIgnoreInput=0){
         if(!PawnStates.isPawn(pawn)) return;
@@ -141,7 +142,7 @@ const PawnStates={
         this.jump=()=>{
             if(pawn.onOneway)pawn.drop();
             else {
-                pawn.launch({y:-275},true); // set state to  jumping
+                pawn.launch({y:-275}); // set state to  jumping
             }
         };
     },
@@ -161,7 +162,7 @@ const PawnStates={
         this.jump=()=>{
             if(pawn.onOneway)pawn.drop();
             else {
-                pawn.launch({y:-275},true); // set state to  jumping
+                pawn.launch({y:-275}); // set state to  jumping
             }
         };
     },
@@ -171,12 +172,30 @@ const PawnStates={
         this.update=()=>{
             if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=new PawnStates.idle(pawn);
             if(pawn.mind&&pawn.mind.wantsToCrouch)pawn.state=new PawnStates.sneaking(pawn);
+            if(pawn.mind&&pawn.mind.wantsToDash)pawn.state=new PawnStates.dashing(pawn);
 
             if(!pawn.isGrounded)pawn.state=new PawnStates.inAir(pawn);
 
             pawn.moveH();
             pawn.moveV();
         };
-        this.jump=()=>{ pawn.launch({y:-375},true); };
+        this.jump=()=>{ pawn.launch({y:-375}); };
+    },
+    dashing:function(pawn){
+        if(!PawnStates.isPawn(pawn)) return;
+        this.isDashing=true;
+        this.draw=()=>PawnStates.drawDebug(this, pawn);
+        this.update=()=>{
+            
+            if(pawn.mind&&pawn.mind.wantsToMove==0)pawn.state=new PawnStates.idle(pawn);
+            if(pawn.mind&&pawn.mind.wantsToCrouch)pawn.state=new PawnStates.sneaking(pawn);
+            if(pawn.mind&&!pawn.mind.wantsToDash)pawn.state=new PawnStates.walking(pawn);
+
+            if(!pawn.isGrounded) pawn.state=new PawnStates.inAir(pawn);
+
+            pawn.moveH(1.7,2);
+            pawn.moveV(1,1);
+        };
+        this.jump=()=>{ pawn.launch({y:-375}); };
     },
 }

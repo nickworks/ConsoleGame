@@ -179,18 +179,17 @@ class Pawn {
         }
         this.rect.cache();
     }
-    launch(amt={x:0,y:0}, isJump=false){
+    launch(amt={x:0,y:0}, ignoreInputFor=0){
 
-        if(isJump){
-            if(--this.airJumpsLeft < 0) return;
+        if(!ignoreInputFor){ // treat this like a jump
+            if(--this.airJumpsLeft < 0) return; // no jumps left
         }
 
         if(!amt)amt={};
         if(typeof amt.x == "number")this.vx = amt.x;
         if(typeof amt.y == "number")this.vy = amt.y;
         
-        
-        this.state = (isJump) ? new PawnStates.jumping(this) : new PawnStates.launched(this, .4);
+        this.state = (!ignoreInputFor) ? new PawnStates.jumping(this) : new PawnStates.launched(this, +ignoreInputFor);
     }
     drop(){
         if(this.onOneway){

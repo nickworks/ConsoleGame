@@ -55,6 +55,7 @@ class PlayerController extends Controller {
         this.wantsToMove=move;
         this.wantsToCrouch=keyboard.isDown(key.crouch());
         this.wantsToJump=keyboard.isDown(key.jump());
+        this.wantsToDash=keyboard.isDown(key.dash());
 
         if(keyboard.onDown(key.jump())) this.pawn.jump();
         if(keyboard.isDown(key.attack())) this.pawn.shoot(true);

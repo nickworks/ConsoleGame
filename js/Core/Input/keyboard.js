@@ -1,6 +1,7 @@
 const key = {
     tab:9,
     enter:13,
+    shift:16,
     escape:27,
     space:32,
     left:37,
@@ -52,7 +53,7 @@ const key = {
     exit:function(){return this.escape},
     console:function(){return this.tab},
     attack:function(){return this.f},
-    sprint:function(){return this.shift},
+    dash:function(){return this.shift},
     any:function(){return [this.space,this.e,this.f,this.tab,this.escape,this.r,this.left,this.right,this.enter]},
 };
 

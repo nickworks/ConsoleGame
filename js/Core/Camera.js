@@ -51,6 +51,9 @@ class Camera {
                     m.y += -100; // focus 50px above pawn
 
                     this.goals.x=m.x|0; // ease on x
+                    this.goals.scale=1;
+                    if(this.target.mind.wantsToDash) this.goals.scale=.9;
+                    if(this.target.mind.wantsToCrouch) this.goals.scale=1.3;
 
                     const dy = this.goals.y-m.y;
                     if(this.target.isGrounded || dy > 300 || dy < -10)this.goals.y=m.y|0;

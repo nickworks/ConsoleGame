@@ -2,6 +2,7 @@
 class Controller {
 	constructor(){
 		this.wantsToJump=true;
+		this.wantsToDash=false;
 		this.wantsToCrouch=false; // whether or not this controller wants to be crouched
 		this.wantsToMove=0; // which direction this controller wants to move
 	}
