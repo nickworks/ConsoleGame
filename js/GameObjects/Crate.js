@@ -4,6 +4,8 @@ class Crate {
         this.rect=Rect.from(raw);
         this.hp=40;
         this.hasLoot=(Math.random()>.5);
+
+        this.phys=new PhysicsComponent(this);
     }
     serialize(){
         const data={
@@ -20,7 +22,8 @@ class Crate {
         return this.oid;
     }
     update(){
-        
+        this.phys.update();
+        this.rect.speed();
     }
     draw(){
         gfx.fillStyle="#000";
@@ -34,6 +37,7 @@ class Crate {
     block(a){
         if(!Array.isArray(a))a=[a];
         a.forEach(o=>{
+            if(o.rect==this.rect)return; // don't self-check
             if(o.isAsleep)return;//skip sleeping objects
             if(!o.rect||!o.rect.overlaps(this.rect))return;//return if not overlapping
             const fix=this.rect.findFix(o.rect);
@@ -51,5 +55,11 @@ class Crate {
                 scene.spawnLoot((amt*3)|0,this.rect.mid());
             }
         }
+    }
+    applyFix(fix){
+        this.rect.x+=fix.x;
+        this.rect.y+=fix.y;
+        this.phys.applyFix(fix);
+        this.rect.cache();
     }
 }

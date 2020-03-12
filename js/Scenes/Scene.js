@@ -34,6 +34,7 @@ class Scene {
                     case "Crate":
                         this.blocking.push(obj);
                         this.damageable.push(obj);
+                        this.physics.push(obj);
                         break;
                     case "Item":
                         this.physics.push(obj);
@@ -182,7 +183,7 @@ class Scene {
             b.overlap(this.objs.pawns) 
         });
         this.objs.physics.forEach(i=>{ // check if physics objects overlap with:
-            i.overlap(this.objs.pawns);
+            if(i.overlap)i.overlap(this.objs.pawns);
         });
         this.objs.hazards.forEach(i=>{ // check if physics objects overlap with:
             i.overlap(this.objs.pawns);

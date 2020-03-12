@@ -24,6 +24,8 @@ loadjs([
     'js/UI/Modals/Death.js',
     'js/UI/Modals/Editor.js',
 
+    'js/Components/PhysicsComponent.js',
+    
     'js/GameObjects/Pawn/Controllers/Controller.js',
     'js/GameObjects/Pawn/Controllers/AIController.js',
     'js/GameObjects/Pawn/Controllers/PlayerController.js',

@@ -17,8 +17,8 @@ class Item {
         else raw.t=3; //40% chance of coin
         
         const i=new Item(raw);
-        i.vx=Math.random()*400-200;
-        i.vy=-(Math.random()*200+200);
+        i.phys.vx=Math.random()*400-200;
+        i.phys.vy=-(Math.random()*200+200);
         
         return i
     };
@@ -29,13 +29,16 @@ class Item {
         this.oid=raw.i||0;
         this.type=raw.t||3;
         this.rect=Rect.from(raw);
-        this.vx=0;
-        this.vy=0;
-        this.isAsleep=(!!raw.a);
+
+        
+        this.phys=new PhysicsComponent(this);
+        this.phys.isAsleep=(!!raw.a);
         
         this.weapon=null;
         this.hint=null;
         this.showHint=false;
+
+
     }
     serialize(){
         const data={
@@ -52,24 +55,8 @@ class Item {
         return this.oid;  
     }
     update(){
-        if(!this.isAsleep){
-            if(this.isGrounded){
-                var move=0;
-                if(this.vx<0)move+=2;
-                if(this.vx>0)move-=2;
-                this.vx+=move*400*game.time.dt;
-                if(move<0&&this.vx<0)this.vx=0;
-                if(move>0&&this.vx>0)this.vx=0;
-                if(this.vx==0&&this.vy==0)this.isAsleep=true;
-            }            
-            
-            this.vy+=scene.gravity*game.time.dt;
-            this.rect.x+=this.vx*game.time.dt;
-            this.rect.y+=this.vy*game.time.dt;
-            this.isGrounded=false;
-            this.rect.speed();
-        }
-        
+        this.phys.update();
+        this.rect.speed();
     }
     // checks if this object overlaps one or more other objects
     overlap(a){
@@ -121,13 +108,7 @@ class Item {
     applyFix(fix){
         this.rect.x+=fix.x;
         this.rect.y+=fix.y;
-        if(fix.x!=0)this.vx*=-.5;
-        if(fix.y<0) this.isGrounded=true;
-        if(fix.y!=0){
-            const before=this.vy;
-            this.vy*=-.5;
-            if(Math.abs(this.vy+before)<10) this.vy=0;
-        }
+        this.phys.applyFix(fix);
         this.rect.cache();
     }
     changeType(){

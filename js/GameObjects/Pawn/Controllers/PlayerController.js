@@ -32,7 +32,7 @@ class PlayerController extends Controller {
         this.isPlayer=true;
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
         this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
-        if(Game.DEVMODE)this.weapon(new Weapon({t:5}));
+        if(Game.DEVMODE)this.weapon(new Weapon({t:4}));
     }
     serialize(){
         return{

@@ -54,6 +54,8 @@ class Bullet {
         }
         if(o.hurt)o.hurt(this.dmg); // if the thing has a hurt() function, call it
 
+        if(o.phys&&o.phys.impulse)o.phys.impulse({x:this.vx,y:0});
+
         this.dead=true; // bullet is dead
         
         const p=this.rect.mid(); // position of bullet        
