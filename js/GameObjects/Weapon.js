@@ -18,6 +18,7 @@ class Weapon {
         this.type;
         this.shootDelay=0;
         this.reloadDelay=0;
+        this.speed=600;
         this.changeType(raw.t||Weapon.Type.WEAK);
         this.clip=this.clipMax;
     }
@@ -26,6 +27,7 @@ class Weapon {
     changeType(t){
         switch(t){
             case Weapon.Type.WEAK:
+            default:
                 this.shootCooldown=.5;
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=100;
@@ -41,6 +43,7 @@ class Weapon {
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=20;
                 this.clip=this.clipMax=5;
+                this.speed=2400;
                 this.dmg=25;
                 this.shootAmt=1;
                 this.angleRand=.01;
@@ -56,6 +59,7 @@ class Weapon {
                 this.shootAmt=5;
                 this.angleRand=.5;
                 this.title="SHOTGUN";
+                this.speed=800;
                 this.explode=false;
                 break;
             case Weapon.Type.SMG:
@@ -68,6 +72,7 @@ class Weapon {
                 this.angleRand=.1;
                 this.title="SMG";
                 this.explode=false;
+                this.speed=1200;
                 break;
             case Weapon.Type.ROCKET:
                 this.shootCooldown=1;
@@ -80,9 +85,6 @@ class Weapon {
                 this.title="ROCKET LAUNCHER";
                 this.explode=true;
                 break;
-            default:
-                game.console.log("// Weapon type not recognized.");
-                return;
         }
         this.type=t;
     }
@@ -106,7 +108,6 @@ class Weapon {
         
         if(this.clip>0){
             
-            let speed=600;
             let angle=(dir<0)?Math.PI:0;
             
             for(var i=0;i<this.shootAmt;i++){
@@ -114,8 +115,8 @@ class Weapon {
                 var finalAngle=angle+Math.random()*this.angleRand-this.angleRand/2;
                 
                 const dir={};
-                dir.x=Math.cos(finalAngle)*speed
-                dir.y=Math.sin(finalAngle)*speed
+                dir.x=Math.cos(finalAngle)*this.speed
+                dir.y=Math.sin(finalAngle)*this.speed
                 const b=new Bullet(pos,dir,isFriend,this.dmg);
                 b.explode=this.explode;
                 scene.objs.add(b);

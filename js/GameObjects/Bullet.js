@@ -6,6 +6,7 @@ class Bullet {
         this.vy=v.y;
         this.g=g?400:0;
         this.friend=f;
+        this.age=0;
         this.lifespan=3;
         this.dead=false;
         this.dmg=d;
@@ -16,8 +17,8 @@ class Bullet {
         this.vy+=this.g*game.time.dt;
         this.rect.x+=this.vx*game.time.dt;
         this.rect.y+=this.vy*game.time.dt;
-        this.lifespan-=game.time.dt;
-        if(this.lifespan<=0)this.dead=true;
+        this.age+=game.time.dt;
+        if(this.age>this.lifespan)this.dead=true;
     }
     draw(){
         const img = sprites.projectile;
@@ -27,12 +28,21 @@ class Bullet {
 
         gfx.beginPath();
         gfx.strokeStyle="#FFF";
-        gfx.lineWidth=this.radius;
+        gfx.lineWidth=this.radius*2;
 
+        const offsetInSeconds=Math.min(.01,this.age);
 
-        gfx.moveTo(p.x-this.vx*.02,p.y-this.vy*.02);
-        gfx.lineTo(p.x,p.y);
+        const o={
+            x:this.vx*offsetInSeconds,
+            y:this.vy*offsetInSeconds,
+        };
+
+        gfx.moveTo(p.x+o.x,p.y+o.y);
+        gfx.lineTo(p.x-o.x,p.y-o.y);
         gfx.stroke();
+
+        //draw collider:
+        //this.rect.draw();
     }
     // check if this bullet is overlapping one or more other objects
     overlap(a){

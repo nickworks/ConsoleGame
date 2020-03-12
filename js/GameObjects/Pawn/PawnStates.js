@@ -41,6 +41,7 @@ const PawnStates={
         if(!PawnStates.isPawn(pawn)) return;
         this.draw=()=>PawnStates.drawDebug(this, pawn);
         this.update=()=>{
+
             if(pawn.mind&&pawn.mind.wantsToMove!=0) pawn.state=new PawnStates.walking(pawn); // switch to walking
             if(pawn.mind&&pawn.mind.wantsToCrouch) pawn.state =new PawnStates.crouched(pawn);
 
@@ -82,7 +83,9 @@ const PawnStates={
                 if(pawn.onWallRight) pawn.state=new PawnStates.onWall(pawn,true);
             }
         };
-        this.jump=()=>{ pawn.launch({y:-375}); };
+        this.jump=()=>{
+            pawn.launch({y:-375});
+        };
     },
     onWall:function(pawn,onRight){
         var delayUntilFall=.55;
