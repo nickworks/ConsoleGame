@@ -108,8 +108,6 @@ class Scene {
         this.objs.all.forEach(o => o.draw());
         this.particles.forEach(p => p.draw());
 
-        if(this.circ)this.circ();
-
         this.cam.drawEnd();
         
 

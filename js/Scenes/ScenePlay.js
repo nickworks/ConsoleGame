@@ -88,11 +88,6 @@ class ScenePlay extends Scene {
 
         let n=0;
 
-        this.circ=function(){
-            gfx.fillStyle="rgba(0,0,0,.5)";
-            gfx.fillCircle(x,y,radius);
-        }
-
         this.objs.physics.forEach(o=>{
             
             const res = o.rect.overlapsCircle(x,y,radius);
