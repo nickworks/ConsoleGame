@@ -5,6 +5,8 @@ class Controller {
 		this.wantsToDash=false;
 		this.wantsToCrouch=false; // whether or not this controller wants to be crouched
 		this.wantsToMove=0; // which direction this controller wants to move
+
+		this.weaponAccuracy=.5;
 	}
 	notify(){
 		// notifies the controller to another controller's presence

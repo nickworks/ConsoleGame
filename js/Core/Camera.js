@@ -74,8 +74,8 @@ class Camera {
                 // for pawn objects:
                 if(this.target.mind){
 
-                    m.x += (this.target.dir>0) ? 50 : -50; // focus 50px in front of pawn
-                    m.y += -100; // focus 50px above pawn
+                    m.x += 100*((this.target.dir>0)?1:-1); // focus in front of pawn
+                    m.y += -100; // focus above pawn
 
                     this.goals.x=m.x|0; // ease on x
                     this.goals.scale=1;

@@ -86,6 +86,7 @@ loadThen(files,()=>{
     
     window.scene=null;
     window.player=null;
+    window.cam=null;
     window.obj=()=>{};
     window.game=new Game();
     window.game.start("myCanvas");

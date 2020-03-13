@@ -28,7 +28,8 @@ class Pawn {
 
         this.mind = null; // AIController or PlayerController
         
-        this.weapon=new Weapon();
+        this.weapon=Weapon.random();
+        this.aimAngle=0;
 
         this.canDoubleJump=canDoubleJump;
     }
@@ -56,26 +57,44 @@ class Pawn {
         const pos = {x:this.rect.x-offset.x,y:this.rect.y-offset.y};
         const img = (this.dir<0)?imgL:imgR;
 
+        this.updateTrail(img, pos);
+        this.drawTrail();
+        gfx.drawImage(img,pos.x,pos.y);
+
+        this.drawAimLine();
+
+        // draw collider:
+        //this.rect.drawStroke();
+    }
+    updateTrail(img, pos){
+        const isGoingFast = (this.vx*this.vx+this.vy*this.vy) > 500*500;
+        if(isGoingFast)this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
+        if(this.trail.length>(isGoingFast?10:0)) this.trail.splice(0,1);
+    }
+    drawTrail(img){
         gfx.globalAlpha=0;
         if(this.trail.length>0)this.trail.forEach(p=>{
             gfx.globalAlpha+=.01;
             if(gfx.globalAlpha>.1)gfx.globalAlpha=.1;
-            gfx.drawImage(p.img,p.x-offset.x,p.y-offset.y);
+            gfx.drawImage(p.img,p.x,p.y);
         });
         gfx.globalAlpha=1;
-        gfx.drawImage(img,pos.x,pos.y);
-
-        // add to trail:
-
-        let limit = 0;
-        if((this.vx*this.vx+this.vy*this.vy) > 500*500){// || (this.mind&&this.mind.wantsToDash)){
-            this.trail.push({img:img,x:this.rect.x,y:this.rect.y});
-            limit=10;
+    }
+    drawAimLine(){
+        if(this.aimAlpha>0){
+            const p = this.rect.mid();
+            const dir={
+                x:Math.cos(this.aimAngle),
+                y:Math.sin(this.aimAngle),
+            };
+            gfx.beginPath();
+            gfx.moveTo(p.x+dir.x*50,p.y+dir.y*50);
+            gfx.lineTo(p.x+dir.x*100,p.y+dir.y*100);
+            gfx.lineWidth=2;
+            gfx.strokeStyle="rgba(0,0,0,"+(this.aimAlpha/2)+")";
+            gfx.stroke();
+            this.aimAlpha-=game.time.dt;
         }
-        if(this.trail.length>limit) this.trail.splice(0,1);
-
-        // draw collider:
-        //this.rect.drawStroke();
     }
     update(){
 
@@ -92,6 +111,8 @@ class Pawn {
         this.clearFlags(); // clear what collision detection is going to set
         
         this.rect.speed();
+
+        
     }
     clearFlags(){
         if(this.isGrounded&&this.jumpCooldown>0) this.jumpCooldown-=game.time.dt;
@@ -116,7 +137,6 @@ class Pawn {
                 slowDown=true;
             }
         } else {
-            this.dir=move;
 
             // turn around fast:
             if(move>0&&this.vx<0)move+=2;
@@ -214,11 +234,34 @@ class Pawn {
             this.state.jump(); // let the current state decide what to do
         }
     }
+    aimAtMouse(){
+
+        if(scene.cam){
+            const m = scene.cam.worldMouse();
+            this.aimAt(m);
+            this.dir=(m.x>this.rect.mid().x)?1:-1;
+        }
+    }
+    aimAt(p){
+
+        if(p.rect) p = p.rect.mid(); // if p is an object, set p to object center
+        
+        const o = this.rect.mid();
+        const d={
+            x:+p.x-+o.x,
+            y:+p.y-+o.y,
+        };
+
+        this.aimAngle=Math.atan2(d.y,d.x);
+        this.aimAlpha=1;
+    }
     shoot(){
         if(this.weapon){
             let p=this.rect.mid();
-
-            this.weapon.shoot(p, this.dir, this.mind&&this.mind.friend);
+            let jitter=Maths.clamp(1-this.mind.weaponAccuracy,0,1)*2;
+            jitter=+Maths.rand(-jitter/2,jitter/2);
+            jitter+=Maths.rand(-jitter/2,jitter/2);
+            this.weapon.shoot(p, this.aimAngle+jitter, this.mind&&this.mind.friend);
         }
     }
     canSee(o,h=20){

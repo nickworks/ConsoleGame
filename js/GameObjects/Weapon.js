@@ -3,14 +3,14 @@ class Weapon {
 
     static Type = {
         WEAK: 1,
-        PISTOL: 2,
+        RIFLE: 2,
         SHOTGUN: 3,
         SMG: 4,
         ROCKET: 5,
     }
 
     static random(){
-        const t=((Math.random()*4)|0)+2;
+        const t=((Math.random()*Weapon.Type.length+1)|0)+2;
         return new Weapon({t:t});
     }
 
@@ -38,8 +38,8 @@ class Weapon {
                 this.title="PEA-SHOOTER";
                 this.explode=false;
                 break;
-            case Weapon.Type.PISTOL:
-                this.shootCooldown=.25;
+            case Weapon.Type.RIFLE:
+                this.shootCooldown=1;
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=20;
                 this.clip=this.clipMax=5;
@@ -47,7 +47,7 @@ class Weapon {
                 this.dmg=25;
                 this.shootAmt=1;
                 this.angleRand=.01;
-                this.title="PISTOL";
+                this.title="RIFLE";
                 this.explode=false;
                 break;
             case Weapon.Type.SHOTGUN:
@@ -108,7 +108,7 @@ class Weapon {
         
         if(this.clip>0){
             
-            let angle=(dir<0)?Math.PI:0;
+            let angle=dir;
             
             for(var i=0;i<this.shootAmt;i++){
                 

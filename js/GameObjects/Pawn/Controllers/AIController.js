@@ -12,6 +12,8 @@ class AIController extends Controller {
         this.patrolStart=this.pawn.rect.mid().x;
         this.patrolDis=100;
         this.patrolTimer=0;
+
+        this.weaponAccuracy=.5;
         
         this.hint=new BubbleHint("TALK");
         this.callbacks={
@@ -44,12 +46,12 @@ class AIController extends Controller {
     }
     update(){
         this.canTalk=this.pawn.rect.overlaps(scene.player.pawn.rect);
-        
         if(this.friend){
             this.aiFriend();
         } else {
             this.aiFoe();
         }
+        //this.pawn.dir=this.wantsToMove;
     }
     aiFriend(){
         if(this.canTalk && keyboard.onDown(key.activate())){
@@ -69,6 +71,7 @@ class AIController extends Controller {
             if(me.x<p.x-200) move++;
 
             this.wantsToJump=false;
+            this.pawn.aimAt(player.pawn);
             if(me.y-50>p.y){//enemy is below player
 
                 this.wantsToJump=true;
