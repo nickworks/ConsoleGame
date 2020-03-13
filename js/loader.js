@@ -1,12 +1,4 @@
-const loadjs = (a,c)=>{
-    let loaded=0;
-    a.forEach((u)=>{
-        const s=document.createElement('script');
-        s.addEventListener("load", ()=>{if(++loaded==a.length)c();});
-        s.src=u; document.head.appendChild(s);
-    });
-}
-loadjs([
+const files=[
     
     'js/Core/Maths.js',
     'js/UI/Font.js',
@@ -60,9 +52,37 @@ loadjs([
     'js/Core/game.js',
 
     'js/data/sprites.js',
+    'js/data/LevelData.js',
+];
 
-],()=>loadjs(['js/data/LevelData.js',],()=>{
+// This function loads one or more scripts in order,
+// when they're all loaded, an optional callback is ran.
+// It is a recursive nightmare.
 
+const loadThen=(a,callback=()=>{})=>{
+    let loaded=0;
+    if(typeof a=="string"){
+        // LOAD SCRIPT:
+        const s=document.createElement('script');
+        s.addEventListener("load", ()=>{ // when the file has loaded:
+            console.log(a+" loaded!");
+            if(typeof callback == "function")callback(); // run the callback
+        });
+        s.src=a; document.head.appendChild(s); // add the <script> to the DOM
+    }
+    else if(Array.isArray(a)){
+        if(a.length > 0)
+            loadThen(a[0],()=>{ // load the first script in the array
+                a=a.slice(1); // then shift the array
+                loadThen(a,callback); // do it again
+            }); 
+        else if(typeof callback=="function")callback(); // run the callback
+    }
+};
+
+loadThen(files,()=>{
+    console.log("------ ALL FILES LOADED ------");
+    console.log("launching game...");
     
     window.scene=null;
     window.player=null;
@@ -70,4 +90,4 @@ loadjs([
     window.game=new Game();
     window.game.start("myCanvas");
 
-}));
+});
