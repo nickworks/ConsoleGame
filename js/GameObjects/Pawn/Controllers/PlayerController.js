@@ -35,7 +35,13 @@ class PlayerController extends Controller {
 
         this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
         this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
-        if(Game.DEVMODE)this.weapon(new Weapon({t:4}));
+        if(Game.DEVMODE){
+            this.weapon(new Weapon({t:Weapon.Type.WEAK}));
+            this.weapon(new Weapon({t:Weapon.Type.RIFLE}));
+            this.weapon(new Weapon({t:Weapon.Type.SHOTGUN}));
+            this.weapon(new Weapon({t:Weapon.Type.SMG}));
+            this.weapon(new Weapon({t:Weapon.Type.ROCKET}));
+        }
     }
     serialize(){
         return{
@@ -56,7 +62,7 @@ class PlayerController extends Controller {
         if(keyboard.isDown(key.moveRight()))move++;
 
         if(keyboard.onDown(key.jump())) this.pawn.jump();
-        if(keyboard.onDown(key.reload()) && this.pawn.weapon) this.pawn.weapon.reload();
+        if(keyboard.onDown(key.reload()) && this.pawn.weapon()) this.pawn.weapon().reload();
 
         this.wantsToMove=move;
         this.wantsToCrouch=keyboard.isDown(key.crouch());
@@ -72,7 +78,7 @@ class PlayerController extends Controller {
     }
     weapon(w){
         if(!w||w.constructor.name!="Weapon")return;
-        this.pawn.weapon=w;
+        this.pawn.pickupWeapon(w);
         PlayerController.data.weapon=w;
     }
 }

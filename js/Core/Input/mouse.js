@@ -9,6 +9,7 @@ const mouse={
     right_prev:false,
     setup:function(element,game){
         element.addEventListener("mousemove",(e)=>{
+            if(game.console.isActive())return; // ignore mouse if the console is open
             this.x=e.offsetX;
             this.y=e.offsetY;
         });
@@ -16,6 +17,13 @@ const mouse={
             if(e.button==0)this.left=true;
             if(e.button==2)this.right=true;
         });
+        element.addEventListener("mousewheel",(e)=>{
+            let scrollUp = (e.wheelDeltaY>0);
+            if(player&&player.pawn){
+                if(scrollUp)player.pawn.nextWeapon();
+                if(!scrollUp)player.pawn.prevWeapon();
+            }
+        })
         element.oncontextmenu = (e)=>{ return false; };
         document.addEventListener("mouseup",(e)=>{
             if(e.button==0)this.left=false;

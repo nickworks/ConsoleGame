@@ -28,7 +28,8 @@ class Pawn {
 
         this.mind = null; // AIController or PlayerController
         
-        this.weapon=Weapon.random();
+        this.weapons=[];
+        this.pickupWeapon(Weapon.random());
         this.aimAngle=0;
 
         this.canDoubleJump=canDoubleJump;
@@ -101,7 +102,7 @@ class Pawn {
         if(this.mind) this.mind.update();
         if(!this.state) this.state =new PawnStates.idle(this);
         if(this.state && this.state.update) this.state.update();
-        if(this.weapon) this.weapon.update();
+        if(this.weapon()) this.weapon().update();
 
         if(this.hp<=0){
             this.die();
@@ -256,12 +257,13 @@ class Pawn {
         this.aimAlpha=1;
     }
     shoot(){
-        if(this.weapon){
+        const currentWeapon = this.weapon();
+        if(currentWeapon){
             let p=this.rect.mid();
             let jitter=Maths.clamp(1-this.mind.weaponAccuracy,0,1)*2;
             jitter=+Maths.rand(-jitter/2,jitter/2);
             jitter+=Maths.rand(-jitter/2,jitter/2);
-            this.weapon.shoot(p, this.aimAngle+jitter, this.mind&&this.mind.friend);
+            currentWeapon.shoot(p, this.aimAngle+jitter, this.mind&&this.mind.friend);
         }
     }
     canSee(o,h=20){
@@ -287,5 +289,31 @@ class Pawn {
             scene.spawnLoot(3,raw);
         }
         this.dead=true;
+    }
+
+    weapon(){
+        if(!this.weapons)this.weapons=[];
+        if(this.weapons.length==0) return null;
+
+        if(typeof this.weaponIndex != "number") this.weaponIndex=0;
+
+        if(this.weaponIndex<0) this.weaponIndex=this.weapons.length-1;
+        if(this.weaponIndex>=this.weapons.length) this.weaponIndex%=this.weapons.length;
+
+        return this.weapons[this.weaponIndex];
+    }
+
+    nextWeapon(){
+        this.weaponIndex++;
+    }
+    prevWeapon(){
+        this.weaponIndex--;
+    }
+    pickupWeapon(weapon){
+        if(!this.weapons)this.weapons=[];
+        this.weapons.push(weapon);
+    }
+    dropWeapon(){
+
     }
 }

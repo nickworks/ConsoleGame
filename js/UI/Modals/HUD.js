@@ -24,8 +24,13 @@ class HUD extends Modal {
         const y=game.height()-35;
 
         // calculate size of ammo txt box:
-        let txt="";
-        if(this.pawn)txt=this.pawn.weapon.ammo.toString(); // text string
+
+        if(!this.pawn) return;
+        const w = this.pawn.weapon();
+        if(!w) return;
+
+
+        let txt=this.pawn.weapon().ammo.toString(); // text string
         let width = this.font.measure(txt).width + 20;
         if(width < 35) width = 35;
         const height=26;
@@ -44,7 +49,8 @@ class HUD extends Modal {
     drawBullets(x, y, height){
 
         if(!this.pawn) return;
-        const w=this.pawn.weapon;//weapon
+        const w=this.pawn.weapon();//weapon
+        if(!w) return;
         const bw=7;//bullet width
         const bm=4;//bullet margin
         const sm=4;//side margins

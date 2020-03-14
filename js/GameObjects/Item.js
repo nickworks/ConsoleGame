@@ -70,7 +70,10 @@ class Item {
 
         switch(this.type){
             case Item.Type.HEAL:o.heal(25);break;
-            case Item.Type.AMMO:o.weapon.addAmmo(25);break;
+            case Item.Type.AMMO:
+                const w = o.weapon();
+                if(w)w.addAmmo(25);
+                break;
             case Item.Type.COIN:PlayerController.data.coins++;break; //PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
             case Item.Type.GUN:
                 if(o != scene.player.pawn) break;

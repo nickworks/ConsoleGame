@@ -86,8 +86,11 @@
     };
 
     loadThen(files,()=>{
-        console.log("------ ALL FILES LOADED ------");
-        console.log("launching game...");
+
+        Game.DEVMODE=true;
+
+        if(Game.DEVMODE) console.log("------ ALL FILES LOADED ------");
+        if(Game.DEVMODE) console.log("launching game...");
         
         window.scene=null;
         window.player=null;
@@ -96,7 +99,6 @@
         window.game=new Game();
         window.game.start("myCanvas");
 
-        Game.DEVMODE=false;
     });
 
 })(false);
