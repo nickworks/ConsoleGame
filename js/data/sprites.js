@@ -21,7 +21,18 @@ const sprites={
         this.item2=this.load("imgs/item_ammo.gif");
         this.item3=this.load("imgs/item_coin.gif");
         this.bullet=this.load("imgs/bullet.gif");
-        this.gun=this.load("imgs/gun.gif");
+        this.gun1=this.load("imgs/gun1.gif");
+        this.gun2=this.load("imgs/gun2.gif");
+        this.gun3=this.load("imgs/gun3.gif");
+        this.gun4=this.load("imgs/gun4.gif");
+        this.gun5=this.load("imgs/gun5.gif");
+
+        this.hudGun1=this.load("imgs/hud-gun1.gif");
+        this.hudGun2=this.load("imgs/hud-gun2.gif");
+        this.hudGun3=this.load("imgs/hud-gun3.gif");
+        this.hudGun4=this.load("imgs/hud-gun4.gif");
+        this.hudGun5=this.load("imgs/hud-gun5.gif");
+
         this.projectile=this.load("imgs/projectile.gif");
         this.input=this.load("imgs/input.png");
         this.door1=this.load("imgs/door.gif");

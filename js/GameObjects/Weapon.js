@@ -10,7 +10,7 @@ class Weapon {
     }
 
     static random(){
-        const t=((Math.random()*Weapon.Type.length+1)|0)+2;
+        const t=parseInt(Math.random()*5+1);
         return new Weapon({t:t});
     }
 
@@ -87,9 +87,7 @@ class Weapon {
                 break;
         }
         this.type=t;
-    }
-    
-    
+    }    
     update(){
         
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;

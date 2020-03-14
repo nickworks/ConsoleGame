@@ -37,7 +37,7 @@ class Item {
         this.weapon=null;
         this.hint=null;
         this.showHint=false;
-
+        this.weapon=Weapon.random();
 
     }
     serialize(){
@@ -55,6 +55,9 @@ class Item {
         return this.oid;  
     }
     update(){
+
+        if(this.type==Item.Type.GUN && !this.weapon) this.weapon=Weapon.random();
+
         this.phys.update();
         this.rect.speed();
     }
@@ -77,10 +80,7 @@ class Item {
             case Item.Type.COIN:PlayerController.data.coins++;break; //PlayerController.data.coins=(PlayerController.data.coins|0)+1;break;
             case Item.Type.GUN:
                 if(o != scene.player.pawn) break;
-                if(!this.weapon){
-                    this.weapon=Weapon.random();
-                    this.hint=new BubbleHint(this.weapon.title);
-                }
+                if(!this.hint) this.hint=new BubbleHint(this.weapon.title);
                 this.showHint=true;
                 if(keyboard.onDown(key.activate())){
                     scene.player.weapon(this.weapon);
@@ -96,7 +96,15 @@ class Item {
         if(this.type==Item.Type.HEAL)img=sprites.item1;
         if(this.type==Item.Type.AMMO)img=sprites.item2;
         if(this.type==Item.Type.COIN)img=sprites.item3;
-        if(this.type==Item.Type.GUN )img=sprites.gun;
+        if(this.type==Item.Type.GUN ){
+            switch(this.weapon.type){
+                case 1: img=sprites.gun1; break;
+                case 2: img=sprites.gun2; break;
+                case 3: img=sprites.gun3; break;
+                case 4: img=sprites.gun4; break;
+                case 5: img=sprites.gun5; break;
+            }
+        }
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw();

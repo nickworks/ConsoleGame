@@ -136,6 +136,12 @@ class Rect {
     mid(){
         return {x:this.x+this.w/2,y:this.y+this.h/2};
     }
+    min(){
+        return {x:this.x, y:this.y};
+    }
+    max(){
+        return {x:this.x+this.w,y:this.y+this.height};
+    }
     mouseOver(){
         return(scene.cam && this.hits(scene.cam.worldMouse()));
     }
