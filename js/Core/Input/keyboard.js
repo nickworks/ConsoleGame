@@ -87,7 +87,7 @@ const keyboard = {
     updateKey: function(e, value){
         if(this.debug)console.log(e.keyCode+(value?" down":" up"));
         
-        const gameInFocus=(document.activeElement==document.body);
+        const gameInFocus=(!game.console.isActive());
         
         if(gameInFocus){
             this.keys[e.keyCode] = value;
@@ -97,12 +97,12 @@ const keyboard = {
                 case key.right:
                 case key.down:
                 case key.up:
+                case key.tab:
                     e.preventDefault(); // prevent page-scrolling
             }
         } else {
             if(value&&(e.keyCode==key.tab||e.keyCode==key.escape)){
-                //if(scene.unpause)scene.unpause();
-                game.console.input.blur();
+                game.console.blur();
                 e.preventDefault();
             }
         }

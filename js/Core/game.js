@@ -133,10 +133,10 @@ class Game {
     // returns view.gfx
     gfx(){return this.view.gfx;}
 
-    
     update(){
-        document.scrollingElement.style.overflowY=this.consoleHasFocus()?"scroll":"hidden";
-        if(!this.consoleHasFocus())document.scrollingElement.scrollTop=0;
+
+        this.console.update(); // keeps CSS up to date
+
         this.view.resizeCanvas(); // if the canvas needs resizing, do it
         
         // if the console button is pressed, switch focus to console mode:
@@ -151,7 +151,6 @@ class Game {
         } else {
             this.scene=new SceneTitle(); // if no scene, default to sceneTitle
         }
-        
 
         this.lateUpdate();
     }
@@ -167,16 +166,13 @@ class Game {
         window.game=this;
         window.gfx=this.view.gfx;
     }
-    consoleHasFocus(){
-        return (document.activeElement!=document.body);
-    }
     draw(){
         this.scene.draw();
         if(Game.DEVMODE) this.drawDev();
         
 
         // if focused on console (input is not going to game)
-        if(this.consoleHasFocus()) this.view.fill("rgba(0,0,0,.5)");
+        if(this.console.isActive()) this.view.fill("rgba(0,0,0,.5)");
         
     }
     drawDev(){

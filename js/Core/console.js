@@ -24,8 +24,30 @@ class Console {
         });
         
         const bttn=document.getElementById("bttn-clear");
-        bttn.addEventListener("focus",()=>bttn.blur());
+        //bttn.addEventListener("focus",()=>bttn.blur());
         bttn.addEventListener("click",()=>this.clear());
+    }
+    isActive(){
+        return document.body.className=="console";
+    }
+    focus(){
+        document.body.className="console";
+    }
+    blur(){
+        document.body.className="game";
+        this.input.blur();
+    }
+    update(){
+        // something other than the page is in focus, switch modes:
+        if(document.activeElement!=document.body)this.focus();
+        if(mouse.onDown()||mouse.onDownRight())this.blur();
+
+        // hide scroll bar when the game is in focus
+        document.scrollingElement.style.overflowY=(this.isActive())?"scroll":"hidden";
+
+        if(!this.isActive()){
+            document.scrollingElement.scrollTop-=(document.scrollingElement.scrollTop/3);
+        }
     }
     handleHistory(offset){
         const h = this.history;
@@ -100,12 +122,6 @@ class Console {
             if(this.output.firstChild === this.inputP) break;
             this.output.removeChild(this.output.firstChild);
         }
-    }
-    show(){
-        this.consoleDiv.classList.add("viz");
-    }
-    hide(){
-        this.consoleDiv.classList.remove("viz");
     }
     stringify(obj){
         const isArr = (Array.isArray(obj));
