@@ -278,8 +278,11 @@ class Pawn {
         return Rect.from({x:x,y:y,w:w,h:h}).overlaps(o);
     }
     hurt(amt=10){
+        amt=parseInt(amt);
         if(this.mind)this.mind.notify();
         this.hp-=amt;
+        const p=this.rect.mid();
+        scene.particles.push(new Particle(p.x,p.y,Particle.Type.DMG_TXT,""+amt));
     }
     heal(amt=10){
         this.hp+=amt;

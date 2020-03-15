@@ -46,7 +46,7 @@ class Weapon {
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=20;
                 this.clip=this.clipMax=5;
-                this.dmg=25;
+                this.dmg=55;
                 this.shootAmt=1;
                 this.speed=2400;
                 this.speedRand=0;
@@ -60,7 +60,7 @@ class Weapon {
                 this.reloadCooldown=.75;
                 this.ammo=this.ammoMax=10;
                 this.clip=this.clipMax=4;
-                this.dmg=25;
+                this.dmg=10;
                 this.shootAmt=5;
                 this.angleRand=.5;
                 this.speed=1000;
