@@ -87,7 +87,7 @@
 
     loadThen(files,()=>{
 
-        Game.DEVMODE=true;
+        Game.DEVMODE=false;
 
         if(Game.DEVMODE) console.log("------ ALL FILES LOADED ------");
         if(Game.DEVMODE) console.log("launching game...");

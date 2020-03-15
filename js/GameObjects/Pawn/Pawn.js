@@ -1,6 +1,6 @@
 // The Pawn is a body that can be driven by a AIController or PlayerController
 class Pawn {
-    constructor(raw,canDoubleJump=()=>{return false;}){
+    constructor(raw){
         this.rect=new Rect(raw.x||0,raw.y||0,25,45);
         this.a=1200;
         this.vx=0;
@@ -31,8 +31,6 @@ class Pawn {
         this.weapons=[];
         this.pickupWeapon(Weapon.random());
         this.aimAngle=0;
-
-        this.canDoubleJump=canDoubleJump;
     }
     draw(){
 

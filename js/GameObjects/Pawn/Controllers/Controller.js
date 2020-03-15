@@ -7,6 +7,8 @@ class Controller {
 		this.wantsToMove=0; // which direction this controller wants to move
 
 		this.weaponAccuracy=.5;
+		this.canDoubleJump=true;
+		this.canWallJump=()=>{return true;};
 	}
 	notify(){
 		// notifies the controller to another controller's presence

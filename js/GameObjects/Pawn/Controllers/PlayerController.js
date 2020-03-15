@@ -24,7 +24,7 @@ class PlayerController extends Controller {
         super();
         raw.maxv=300;
         this.oid=raw.i||0;
-        this.canDoubleJump=Game.DEVMODE||false;
+        
         this.pawn=new Pawn(raw,()=>{return this.canDoubleJump;});
         this.pawn.mind=this;
         this.pawn.jumpCooldownAmt=0;
@@ -32,8 +32,9 @@ class PlayerController extends Controller {
         this.isPlayer=true;
 
         this.weaponAccuracy=.8;
+        this.canDoubleJump=false;
+        this.canWallJump=()=>{return false;};
 
-        this.canWallJump=Game.DEVMODE ? ()=>{return true;} : ()=>{return false;};
         this.weapon((PlayerController.data.weapon)?PlayerController.data.weapon:this.pawn.weapon);
         if(Game.DEVMODE){
             this.weapon(new Weapon({t:Weapon.Type.WEAK}));

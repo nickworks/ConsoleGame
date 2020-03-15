@@ -85,7 +85,10 @@ const PawnStates={
             }
         };
         this.jump=()=>{
-            pawn.launch({y:-375});
+            if(!pawn.mind) return;
+            let canJump = pawn.mind.canDoubleJump;
+            if(pawn.mind.isPlayer&&Game.DEVMODE) canJump=true;
+            if(canJump)pawn.launch({y:-375});
         };
     },
     onWall:function(pawn,onRight){
@@ -107,7 +110,13 @@ const PawnStates={
             pawn.moveV(.45);
         };
         const wallJumpSpeed = 400;
-        this.jump=()=>{ pawn.launch({x:wallJumpSpeed*(onRight?-1:1),y:-400},.4); };
+        this.jump=()=>{
+            if(!pawn.mind) return;
+            if(typeof pawn.mind.canWallJump != "function") return;
+            let canJump = pawn.mind.canWallJump();
+            if(pawn.mind.isPlayer&&Game.DEVMODE) canJump=true;
+            if(canJump) pawn.launch({x:wallJumpSpeed*(onRight?-1:1),y:-400},.4);
+        };
     },
     launched:function(pawn,delayIgnoreInput=0){
         if(!PawnStates.isPawn(pawn)) return;
