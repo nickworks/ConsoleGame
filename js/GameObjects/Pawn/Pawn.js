@@ -89,8 +89,14 @@ class Pawn {
                 y:Math.sin(this.aimAngle),
             };
             gfx.beginPath();
+
+            let len = 100;
+            const w = this.weapon();
+            if(w&&w.type==Weapon.Type.RIFLE) len+=50;
+            if(this.state.isStealth) len+=30;
+
             gfx.moveTo(p.x+dir.x*50,p.y+dir.y*50);
-            gfx.lineTo(p.x+dir.x*100,p.y+dir.y*100);
+            gfx.lineTo(p.x+dir.x*len,p.y+dir.y*len);
             gfx.lineWidth=2;
             gfx.strokeStyle="rgba(0,0,0,"+(this.aimAlpha/2)+")";
             gfx.stroke();
@@ -261,9 +267,8 @@ class Pawn {
         if(currentWeapon){
             let p=this.rect.mid();
             let jitter=Maths.clamp(1-this.mind.weaponAccuracy,0,1)*2;
-            jitter=+Maths.rand(-jitter/2,jitter/2);
-            jitter+=Maths.rand(-jitter/2,jitter/2);
-            currentWeapon.shoot(p, this.aimAngle+jitter, this.mind&&this.mind.friend);
+            jitter=+Maths.randBell(-jitter,jitter,4);
+            currentWeapon.shoot(p, this.aimAngle+jitter, this.mind);
         }
     }
     canSee(o,h=20){

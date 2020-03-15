@@ -38,6 +38,7 @@ class Weapon {
                 this.speed=1000;
                 this.speedRand=0;
                 this.explode=false;
+                this.knockbackForce=10;
                 break;
             case Weapon.Type.RIFLE:
                 this.title="RIFLE";
@@ -51,6 +52,7 @@ class Weapon {
                 this.speedRand=0;
                 this.angleRand=.01;
                 this.explode=false;
+                this.knockbackForce=300;
                 break;
             case Weapon.Type.SHOTGUN:
                 this.title="SHOTGUN";
@@ -64,6 +66,7 @@ class Weapon {
                 this.speed=1000;
                 this.speedRand=200;
                 this.explode=false;
+                this.knockbackForce=500;
                 break;
             case Weapon.Type.SMG:
                 this.title="SMG";
@@ -77,6 +80,7 @@ class Weapon {
                 this.speed=1200;
                 this.speedRand=0;
                 this.explode=false;
+                this.knockbackForce=200;
                 break;
             case Weapon.Type.ROCKET:
                 this.title="ROCKET LAUNCHER";
@@ -90,6 +94,7 @@ class Weapon {
                 this.speed=700;
                 this.speedRand=50;
                 this.explode=true;
+                this.knockbackForce=50;
                 break;
         }
         this.type=t;
@@ -105,7 +110,7 @@ class Weapon {
         }
         else if(this.shootDelay>0)this.shootDelay-=game.time.dt;       
     }
-    shoot(pos,dir,isFriend){
+    shoot(pos,dir,shooter){
         if(this.reloadDelay>0)return;
         if(this.shootDelay>0)return;
         if(!scene.objs)return;
@@ -123,13 +128,20 @@ class Weapon {
                 const dir={};
                 dir.x=Math.cos(finalAngle)*finalSpeed;
                 dir.y=Math.sin(finalAngle)*finalSpeed;
-                const b=new Bullet(pos,dir,isFriend,this.dmg);
+                const b=new Bullet(pos,dir,shooter&&shooter.friend,this.dmg);
                 b.explode=this.explode;
                 scene.objs.add(b);
             }
             this.shootDelay=this.shootCooldown;
             this.ammo--;
             this.clip--;
+            if(shooter&&shooter.pawn){
+
+                shooter.pawn.launch({
+                    x:-Math.cos(dir) * this.knockbackForce,
+                    y:-Math.sin(dir) * this.knockbackForce,
+                },false);
+            }
         } else {
             this.reload();
         }
