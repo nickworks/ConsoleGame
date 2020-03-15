@@ -47,6 +47,7 @@ body.console #console {
 #console p {    
     padding:5px;
     margin:0;
+    font-size:80%;
 }
 #console err {
     color:#FF4;
@@ -69,7 +70,7 @@ body.console #console {
 }
 #console p.in {
     color:#000;
-    font-size:80%;
+    font-size:70%;
 }
 #console-input {
     padding:0 5px;

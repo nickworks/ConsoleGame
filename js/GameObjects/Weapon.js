@@ -144,4 +144,10 @@ class Weapon {
         this.ammo+=amt;
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
     }
+    isEmpty(){
+        return this.clip<=0;
+    }
+    isReloading(){
+        return this.getReloadProgress() < 1;
+    }
 }

@@ -21,7 +21,7 @@ class HUD extends Modal {
     }
     draw(){
 
-        this.canvas=new Rect(0,0,game.width(),game.height());
+        this.rect=new Rect(0,0,game.width(),game.height());
 
         this.drawWeapon();
         this.drawHealth();
@@ -33,23 +33,39 @@ class HUD extends Modal {
         const w = this.pawn.weapon();
         if(!w) return;
 
-        // position near bottom of screen:
-        let y=16;
-
         // calculate size of ammo txt box:
         let txt=w.ammo.toString(); // text string
         let txtWidth = this.fontWeaponAmmo.measure(txt).width + 20;
         if(txtWidth < 35) txtWidth = 35;
         const txtHeight=26;
         
+        const rightEdge = this.rect.max().x; // the right edge of the screen
+
+        let y=0;
+        let x=rightEdge-171;
+
         // draw the bullets:
-        this.drawBullets(this.canvas.max().x-txtWidth, y, txtHeight);
+        this.drawBullets(x-txtWidth, 13, txtHeight);
 
         // draw the ammo txt box:
         gfx.fillStyle="#000";
-        gfx.fillRect(this.canvas.max().x-txtWidth,y-txtHeight/2,txtWidth,txtHeight);
+        gfx.fillRect(x-txtWidth,0,txtWidth,txtHeight);
         this.fontWeaponAmmo.apply();
-        gfx.fillText(txt,this.canvas.max().x-10,1+y);
+        gfx.fillText(txt,x-10,14);
+
+
+        if(w.isReloading()){
+            //this.fontWeaponAmmo.apply();
+            gfx.fillStyle="rgba(0,0,0,.5)";
+            gfx.fillRect(x,y+26,-100,26);
+            gfx.fillStyle="#FFF";
+            gfx.fillText("reloading",x-10, y+39);
+        } else if(w.isEmpty()){
+            gfx.fillStyle="rgba(255,10,10,.9)";
+            gfx.fillRect(x,y+26,-80,26);
+            gfx.fillStyle="#FFF";
+            gfx.fillText("EMPTY",x-10, y+39);
+        }
 
         let img = null;
         switch(w.type){
@@ -60,11 +76,11 @@ class HUD extends Modal {
             case 5: img=sprites.hudGun5; break;
         }
         if(img){
-            y+=16;
-            gfx.drawImage(img, this.canvas.max().x-img.width, y);
-            y+=12;
+            // draw weapon image:
+            gfx.drawImage(img, rightEdge-img.width, y);
+            // draw weapon title:
             this.fontWeaponTitle.apply();
-            gfx.fillText(w.title, this.canvas.max().x-img.width/2,y)
+            gfx.fillText(w.title, rightEdge-img.width/2,y+12);
         }
     }
     drawBullets(x, y, height){
@@ -72,6 +88,9 @@ class HUD extends Modal {
         if(!this.pawn) return;
         const w=this.pawn.weapon();//weapon
         if(!w) return;
+
+        // if this is less than 1, the weapon is reloading
+
         const bw=7;//bullet width
         const bm=4;//bullet margin
         const sm=4;//side margins
@@ -81,24 +100,17 @@ class HUD extends Modal {
         const c=w.clipMax;//clip size
         const bulletsMissing = (c-b); // how many bullets are missing from magazine
         
+        const isEmpty = (w.clip<=0);
+
         const bgw=bs*c+sm*2-4; // width of rectangle holding bullets
         let bgx = bulletsMissing * bs; // x-offset of rectangle
         if(bgx < 0) bgx += 2-sm;
 
-        // draw transparent bg:
         gfx.fillStyle="rgba(10,10,20,.25)";
         gfx.fillRect(x,y-height/2,-bgw,height);
-        
-        const reloadPercent = w.getReloadProgress();
-        if(reloadPercent>=1){
-            //slide out:
-            this.ammoPercent = Maths.lerp(this.ammoPercent,1,Maths.slide(.01,game.time.dt)); // calculate background position
-        } else {
-            // slide away:
-            this.fontWeaponAmmo.apply();
-            gfx.fillText("reloading",x-10, y);
-            this.ammoPercent = Maths.lerp(this.ammoPercent,0,Maths.slide(.01,game.time.dt));
-        }
+
+        let targetPercent = (w.isReloading()||w.isEmpty())?0:1;
+        this.ammoPercent = Maths.lerp(this.ammoPercent,targetPercent,Maths.slide(.001,game.time.dt)); // calculate background position
 
         x=x-bgw*this.ammoPercent+bgx;
         
