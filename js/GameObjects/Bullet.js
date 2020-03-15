@@ -1,7 +1,7 @@
 class Bullet {
     constructor(p,v,f,d,g=false){
         this.radius=5;
-        this.rect=new Rect(p.x,p.y,this.radius*2,this.radius*2);
+        this.rect=new Rect(p.x-this.radius,p.y-this.radius,this.radius*2,this.radius*2);
         this.vx=v.x;
         this.vy=v.y;
         this.g=g?400:0;

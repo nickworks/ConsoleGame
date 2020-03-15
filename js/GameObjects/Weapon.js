@@ -18,7 +18,6 @@ class Weapon {
         this.type;
         this.shootDelay=0;
         this.reloadDelay=0;
-        this.speed=600;
         this.changeType(raw.t||Weapon.Type.WEAK);
         this.clip=this.clipMax;
     }
@@ -28,53 +27,59 @@ class Weapon {
         switch(t){
             case Weapon.Type.WEAK:
             default:
-                this.shootCooldown=.5;
-                this.reloadCooldown=1;
+                this.title="PISTOL";
+                this.shootCooldown=.4;
+                this.reloadCooldown=.5;
                 this.ammo=this.ammoMax=100;
-                this.clip=this.clipMax=10;
+                this.clip=this.clipMax=8;
                 this.dmg=10;
                 this.shootAmt=1;
-                this.angleRand=0;
-                this.title="PEA-SHOOTER";
+                this.angleRand=.3;
+                this.speed=1000;
+                this.speedRand=0;
                 this.explode=false;
                 break;
             case Weapon.Type.RIFLE:
+                this.title="RIFLE";
                 this.shootCooldown=1;
                 this.reloadCooldown=1;
                 this.ammo=this.ammoMax=20;
                 this.clip=this.clipMax=5;
-                this.speed=2400;
                 this.dmg=25;
                 this.shootAmt=1;
+                this.speed=2400;
+                this.speedRand=0;
                 this.angleRand=.01;
-                this.title="RIFLE";
                 this.explode=false;
                 break;
             case Weapon.Type.SHOTGUN:
+                this.title="SHOTGUN";
                 this.shootCooldown=.5;
-                this.reloadCooldown=2;
+                this.reloadCooldown=.75;
                 this.ammo=this.ammoMax=10;
-                this.clip=this.clipMax=2;
+                this.clip=this.clipMax=4;
                 this.dmg=25;
                 this.shootAmt=5;
                 this.angleRand=.5;
-                this.title="SHOTGUN";
-                this.speed=800;
+                this.speed=1000;
+                this.speedRand=200;
                 this.explode=false;
                 break;
             case Weapon.Type.SMG:
+                this.title="SMG";
                 this.shootCooldown=.1;
                 this.reloadCooldown=2;
                 this.ammo=this.ammoMax=90;
                 this.clip=this.clipMax=30;
                 this.dmg=10;
                 this.shootAmt=1;
-                this.angleRand=.1;
-                this.title="SMG";
-                this.explode=false;
+                this.angleRand=.2;
                 this.speed=1200;
+                this.speedRand=0;
+                this.explode=false;
                 break;
             case Weapon.Type.ROCKET:
+                this.title="ROCKET LAUNCHER";
                 this.shootCooldown=1;
                 this.reloadCooldown=3;
                 this.ammo=this.ammoMax=12;
@@ -82,7 +87,8 @@ class Weapon {
                 this.dmg=50;
                 this.shootAmt=1;
                 this.angleRand=0;
-                this.title="ROCKET LAUNCHER";
+                this.speed=700;
+                this.speedRand=50;
                 this.explode=true;
                 break;
         }
@@ -108,13 +114,15 @@ class Weapon {
             
             let angle=dir;
             
+            const spread = this.angleRand/2;
+
             for(var i=0;i<this.shootAmt;i++){
                 
-                var finalAngle=angle+Math.random()*this.angleRand-this.angleRand/2;
-                
+                var finalAngle=angle+Maths.randBell(-spread,spread);
+                var finalSpeed=this.speed+Maths.randBell(-this.speedRand,this.speedRand);
                 const dir={};
-                dir.x=Math.cos(finalAngle)*this.speed
-                dir.y=Math.sin(finalAngle)*this.speed
+                dir.x=Math.cos(finalAngle)*finalSpeed;
+                dir.y=Math.sin(finalAngle)*finalSpeed;
                 const b=new Bullet(pos,dir,isFriend,this.dmg);
                 b.explode=this.explode;
                 scene.objs.add(b);

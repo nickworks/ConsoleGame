@@ -19,6 +19,14 @@ const Maths={
     rand(min,max){
         return Math.random()*(max-min)+min;
     },
+    randBell(min,max,n=2){
+    	const range = max-min;
+    	let sum = 0;
+    	for(let i = 0; i <n; i++){
+	    	sum+=Math.random()*range/n;
+	    }
+	    return sum+min;
+    },
 	lerp(a, b, p){
 		return (b-a)*p+a;
 	},
