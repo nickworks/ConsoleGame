@@ -29,7 +29,6 @@ class Pawn {
         this.mind = null; // AIController or PlayerController
         
         this.weapons=[];
-        this.pickupWeapon(Weapon.random());
         this.aimAngle=0;
     }
     draw(){

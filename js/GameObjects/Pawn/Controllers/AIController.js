@@ -21,6 +21,8 @@ class AIController extends Controller {
             onDeath:Callback.from(raw.onDeath),
             onData:Callback.from(raw.onData),
         };
+
+        this.pawn.pickupWeapon(Weapon.random());
     }
     serialize(){
         var data={
