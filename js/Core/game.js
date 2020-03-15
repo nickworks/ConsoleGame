@@ -27,6 +27,7 @@ class Game {
             _dt:0,
             tick:(t)=>{
                 if(t === undefined) t = 0;
+                if(this.time.scale<0)this.time.scale=0;
                 this.time.now = t;
                 this.time._dt = (t - this.time.prev) / 1000;
                 this.time.dt = this.time._dt * this.time.scale;

@@ -25,6 +25,7 @@ class Rect {
         this.fix();
     }
     fix(){
+        // if w or h are negative, adjust the values
         if(this.w<0){
             this.w*=-1;
             this.x-=this.w;
@@ -34,7 +35,6 @@ class Rect {
             this.y-=this.h;
         }   
     }
-    
     setRaw(raw){
         this.x=raw.x;
         this.y=raw.y;
@@ -98,23 +98,38 @@ class Rect {
     }
     findFix(o){
         
-        // how far to move o to get it out
+        // find how far to move other to get it out of this
+
         const r=this;
         let moveL=r.x-(o.x+o.w);
         let moveR=(r.x+r.w)-o.x;
         let moveU=r.y-(o.y+o.h);
         let moveD=(r.y+r.h)-o.y;
         
+        // get previous position of other's center:
+        const prevOther=o.mid();
+        prevOther.y-=o.vy;
+        prevOther.x-=o.vx;
+
+        // get previous position of this center:
+        const prevThis=r.mid();
+        prevThis.x-=r.vx;
+        prevThis.y-=r.vy;
+
+        const otherWasLeft = (prevOther.x < prevThis.x);
+        const otherWasAbove = (prevOther.y < prevThis.y);
+
         const res={x:0,y:0};
-        res.x=(Math.abs(moveL)<Math.abs(moveR))?moveL:moveR;
-        res.y=(Math.abs(moveU)<Math.abs(moveD))?moveU:moveD;
-        
-        if(o.vx>0&&res.x>0)res.x=0;
-        else if(o.vx<0&&res.x<0)res.x=0;
-        else if(o.vy>0&&res.y>0)res.y=0;
-        else if(o.vy<0&&res.y<0)res.y=0;
-        else if(Math.abs(res.x)<Math.abs(res.y))res.y=0;
-        else res.x=0;
+        res.x=(Math.abs(moveL)<Math.abs(moveR) || otherWasLeft)?moveL:moveR;
+        res.y=(Math.abs(moveU)<Math.abs(moveD) || otherWasAbove)?moveU:moveD;
+
+        if(o.vx>0&&res.x>0)res.x=0;         // if moving right, nullify fix right
+        else if(o.vx<0&&res.x<0)res.x=0;    // if moving left, nullify fix left
+        else if(o.vy>0&&res.y>0)res.y=0;    // if moving down, nullify fix down
+        else if(o.vy<0&&res.y<0)res.y=0;    // if moving up, nullify fix up
+        else if(Math.abs(res.x)<Math.abs(res.y))res.y=0; // if horizontal fix is smaller than vertical, nullify vertical
+        else res.x=0; // else nullify horizontal
+
         return res;
     }
     toString(){
