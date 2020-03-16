@@ -87,7 +87,7 @@
 
     loadThen(files,()=>{
 
-        Game.DEVMODE=false;
+        Game.DEVMODE=true;
 
         if(Game.DEVMODE) console.log("------ ALL FILES LOADED ------");
         if(Game.DEVMODE) console.log("launching game...");
@@ -98,6 +98,8 @@
         window.obj=()=>{};
         window.game=new Game();
         window.game.start("myCanvas");
+
+        if(Game.DEVMODE) window.game.scene=new ScenePlay().fromLevel(3);
 
     });
 

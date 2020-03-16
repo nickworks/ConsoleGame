@@ -20,6 +20,7 @@ class ScenePlay extends Scene {
         const data=LevelData.level(n);
         this.reloadScene = ()=>game.switchScene(SceneLoad.Level(n, pos));
         this.fromData(data,pos);
+        return this;
     }
 
     // n - what level to load

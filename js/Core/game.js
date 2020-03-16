@@ -17,7 +17,7 @@ class Game {
     }
 
 
-    constructor(){
+    constructor(scene=null){
 
         this.time={
             now:0,
@@ -114,7 +114,7 @@ class Game {
         // reference to the console
         this.console=new Console();
         // reference to the current scene
-        this.scene=null;
+        this.scene=scene;
         // reference to the next scene (so we can fade between the two scenes)
         this.nextScene=null;
 

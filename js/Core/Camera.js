@@ -41,7 +41,7 @@ class Camera {
 
         this.pa1s=.01;
         // for modals:
-        if(scene.guis){
+        if(scene&&scene.guis){
             if(scene.guis.death){
                 const m = scene.guis.death;
                 this.goals.scale=m.scale;

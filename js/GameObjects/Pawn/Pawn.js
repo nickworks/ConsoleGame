@@ -317,6 +317,7 @@ class Pawn {
     pickupWeapon(weapon){
         if(!this.weapons)this.weapons=[];
         this.weapons.push(weapon);
+        this.weaponIndex=this.weapons.length-1;
     }
     dropWeapon(){
 
