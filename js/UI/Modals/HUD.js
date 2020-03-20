@@ -34,7 +34,8 @@ class HUD extends Modal {
         if(!w) return;
 
         // calculate size of ammo txt box:
-        let txt=w.ammo.toString(); // text string
+
+        let txt=w.clip+"  /  "+(w.ammo-w.clip); // text string
         let txtWidth = this.fontWeaponAmmo.measure(txt).width + 20;
         if(txtWidth < 35) txtWidth = 35;
         const txtHeight=26;

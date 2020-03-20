@@ -38,7 +38,7 @@ const Maths={
 	// a framerate-independent PERCENT value (P)
 	// that can then be used like: lerp(current, target, P)
 	slide(pa1s, dt){
-		if(!!dt)dt=game.time.dt;
+		if(!dt)dt=game.time.dt;
 		return 1 - Math.pow(pa1s, dt);
 	},
 	clamp(c,min,max){

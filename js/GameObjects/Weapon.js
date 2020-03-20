@@ -28,41 +28,45 @@ class Weapon {
             case Weapon.Type.WEAK:
             default:
                 this.title="PISTOL";
-                this.shootCooldown=.4;
-                this.reloadCooldown=.5;
+
+                this.timeBetweenShots=.4;
+                this.timeToReload=.5;
                 this.ammo=this.ammoMax=100;
                 this.clip=this.clipMax=8;
-                this.dmg=10;
                 this.shootAmt=1;
-                this.angleRand=.3;
+                this.spread=.3;
+
+                this.dmg=10;
                 this.speed=1000;
                 this.speedRand=0;
                 this.explode=false;
                 this.knockbackForce=10;
+
+
                 break;
             case Weapon.Type.RIFLE:
                 this.title="RIFLE";
-                this.shootCooldown=1;
-                this.reloadCooldown=1;
+                this.timeBetweenShots=1;
+                this.timeToReload=1;
                 this.ammo=this.ammoMax=20;
                 this.clip=this.clipMax=5;
                 this.dmg=55;
                 this.shootAmt=1;
                 this.speed=2400;
                 this.speedRand=0;
-                this.angleRand=.01;
+                this.spread=.01;
                 this.explode=false;
                 this.knockbackForce=300;
                 break;
             case Weapon.Type.SHOTGUN:
                 this.title="SHOTGUN";
-                this.shootCooldown=.5;
-                this.reloadCooldown=.75;
+                this.timeBetweenShots=.5;
+                this.timeToReload=.75;
                 this.ammo=this.ammoMax=10;
                 this.clip=this.clipMax=4;
                 this.dmg=10;
                 this.shootAmt=5;
-                this.angleRand=.5;
+                this.spread=.5;
                 this.speed=1000;
                 this.speedRand=200;
                 this.explode=false;
@@ -70,13 +74,13 @@ class Weapon {
                 break;
             case Weapon.Type.SMG:
                 this.title="SMG";
-                this.shootCooldown=.1;
-                this.reloadCooldown=2;
+                this.timeBetweenShots=.1;
+                this.timeToReload=2;
                 this.ammo=this.ammoMax=90;
                 this.clip=this.clipMax=30;
                 this.dmg=10;
                 this.shootAmt=1;
-                this.angleRand=.2;
+                this.spread=.2;
                 this.speed=1200;
                 this.speedRand=0;
                 this.explode=false;
@@ -84,13 +88,13 @@ class Weapon {
                 break;
             case Weapon.Type.ROCKET:
                 this.title="ROCKET LAUNCHER";
-                this.shootCooldown=1;
-                this.reloadCooldown=3;
+                this.timeBetweenShots=1;
+                this.timeToReload=3;
                 this.ammo=this.ammoMax=12;
                 this.clip=this.clipMax=6;
                 this.dmg=50;
                 this.shootAmt=1;
-                this.angleRand=0;
+                this.spread=.1;
                 this.speed=700;
                 this.speedRand=50;
                 this.explode=true;
@@ -98,7 +102,47 @@ class Weapon {
                 break;
         }
         this.type=t;
-    }    
+    }
+    drawAimLine(pawn){
+        if(!this.aimCache)this.aimCache={
+            angle:0,
+            alpha:0,
+            len:100,
+            spread:0,
+        };
+        if(this.aimCache.alpha<.25) this.aimCache.alpha+=game.time.dt;
+        if(this.aimCache.alpha>0){
+            let targetLen = 100;
+            if(this.type==Weapon.Type.RIFLE) targetLen+=50;
+            if(pawn.mind&&pawn.mind.wantsToAim) targetLen+=30;
+            
+            const dis1 = 50;
+            const dis2 = this.aimCache.len = Maths.lerp(this.aimCache.len,targetLen,Maths.slide(.001));
+
+            let targetSpread = pawn.jitterSpread();
+            const spread = this.aimCache.spread=Maths.lerp(this.aimCache.spread,targetSpread,Maths.slide(.001));
+
+            const dir1={
+                x:Math.cos(this.aimCache.angle-spread),
+                y:Math.sin(this.aimCache.angle-spread),
+            };
+            const dir2={
+                x:Math.cos(this.aimCache.angle+spread),
+                y:Math.sin(this.aimCache.angle+spread),
+            };
+
+
+            const p = pawn.rect.mid();
+            gfx.beginPath();
+            gfx.moveTo(p.x+dir1.x*dis1,p.y+dir1.y*dis1);
+            gfx.lineTo(p.x+dir1.x*dis2,p.y+dir1.y*dis2);
+            gfx.moveTo(p.x+dir2.x*dis1,p.y+dir2.y*dis1);
+            gfx.lineTo(p.x+dir2.x*dis2,p.y+dir2.y*dis2);
+            gfx.lineWidth=3;
+            gfx.strokeStyle="rgba(0,0,0,"+this.aimCache.alpha+")";
+            gfx.stroke();
+        }
+    }
     update(){
         
         if(this.ammo>this.ammoMax)this.ammo=this.ammoMax;
@@ -110,38 +154,42 @@ class Weapon {
         }
         else if(this.shootDelay>0)this.shootDelay-=game.time.dt;       
     }
-    shoot(pos,dir,shooter){
+    shoot(pos,shooter){
         if(this.reloadDelay>0)return;
         if(this.shootDelay>0)return;
         if(!scene.objs)return;
         
         if(this.clip>0){
             
-            let angle=dir;
-            
-            const spread = this.angleRand/2;
-
+            let angle=this.aimCache.angle;
+            let spread = this.spread;
+            let parentv = {x:0,y:0};
+            if(shooter&&shooter.pawn){
+                spread = shooter.pawn.jitterSpread();
+                shooter.pawn.launch({
+                    x:-Math.cos(angle) * this.knockbackForce,
+                    y:-Math.sin(angle) * this.knockbackForce,
+                },false);
+                parentv.x = shooter.pawn.rect.vx;
+                parentv.y = shooter.pawn.rect.vy;
+            }
             for(var i=0;i<this.shootAmt;i++){
                 
-                var finalAngle=angle+Maths.randBell(-spread,spread);
+                var finalAngle=angle+Maths.rand(-spread,spread);
                 var finalSpeed=this.speed+Maths.randBell(-this.speedRand,this.speedRand);
-                const dir={};
-                dir.x=Math.cos(finalAngle)*finalSpeed;
-                dir.y=Math.sin(finalAngle)*finalSpeed;
-                const b=new Bullet(pos,dir,shooter&&shooter.friend,this.dmg);
+                const v={};
+                v.x=Math.cos(finalAngle)*finalSpeed;
+                v.y=Math.sin(finalAngle)*finalSpeed;
+                v.x+=parentv.x;
+                v.y+=parentv.y;
+                const b=new Bullet(pos,v,shooter&&shooter.friend,this.dmg);
+                
                 b.explode=this.explode;
                 scene.objs.add(b);
             }
-            this.shootDelay=this.shootCooldown;
+            this.shootDelay=this.timeBetweenShots;
             this.ammo--;
             this.clip--;
-            if(shooter&&shooter.pawn){
-
-                shooter.pawn.launch({
-                    x:-Math.cos(dir) * this.knockbackForce,
-                    y:-Math.sin(dir) * this.knockbackForce,
-                },false);
-            }
         } else {
             this.reload();
         }
@@ -151,14 +199,14 @@ class Weapon {
         if(this.shootDelay>0)return;
         if(this.clip>=this.clipMax)return;
         if(this.ammo<=0)return;
-        this.reloadDelay=this.reloadCooldown;
+        this.reloadDelay=this.timeToReload;
     }
     doReload(){
         this.clip=Math.min(this.ammo,this.clipMax);
     }
     getReloadProgress(){
         if(this.reloadDelay<=0)return 1;
-        return this.reloadDelay/this.reloadCooldown;
+        return this.reloadDelay/this.timeToReload;
     }
     addAmmo(amt=10){
         this.ammo+=amt;

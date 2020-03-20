@@ -59,7 +59,8 @@ class Pawn {
         this.drawTrail();
         gfx.drawImage(img,pos.x,pos.y);
 
-        this.drawAimLine();
+        const w = this.weapon();
+        if(w)w.drawAimLine(this);
 
         // draw collider:
         //this.rect.drawStroke();
@@ -77,28 +78,6 @@ class Pawn {
             gfx.drawImage(p.img,p.x,p.y);
         });
         gfx.globalAlpha=1;
-    }
-    drawAimLine(){
-        if(this.aimAlpha>0){
-            const p = this.rect.mid();
-            const dir={
-                x:Math.cos(this.aimAngle),
-                y:Math.sin(this.aimAngle),
-            };
-            gfx.beginPath();
-
-            let len = 100;
-            const w = this.weapon();
-            if(w&&w.type==Weapon.Type.RIFLE) len+=50;
-            if(this.state.isStealth) len+=30;
-
-            gfx.moveTo(p.x+dir.x*50,p.y+dir.y*50);
-            gfx.lineTo(p.x+dir.x*len,p.y+dir.y*len);
-            gfx.lineWidth=2;
-            gfx.strokeStyle="rgba(0,0,0,"+(this.aimAlpha/2)+")";
-            gfx.stroke();
-            this.aimAlpha-=game.time.dt;
-        }
     }
     update(){
 
@@ -255,17 +234,35 @@ class Pawn {
             x:+p.x-+o.x,
             y:+p.y-+o.y,
         };
+        const w = this.weapon();
+        if(w && w.aimCache){
+            w.aimCache.angle=Math.atan2(d.y,d.x);
+        }
+    }
+    jitterSpread(){
+        let res = 0;
+        const w = this.weapon();
 
-        this.aimAngle=Math.atan2(d.y,d.x);
-        this.aimAlpha=1;
+        if(this.mind) {
+
+            let p=Maths.clamp(this.mind.weaponAccuracy,0,1);
+            let amt=Maths.lerp(.5,.01,p);
+            if(this.mind.wantsToAim) amt/=2;
+            res+=amt;
+        }
+        if(w) {
+            let amt=w.spread;
+            if(this.mind.wantsToAim) amt/=2;
+            res+=amt;
+        }
+
+        return res;
     }
     shoot(){
         const currentWeapon = this.weapon();
         if(currentWeapon){
             let p=this.rect.mid();
-            let jitter=Maths.clamp(1-this.mind.weaponAccuracy,0,1)*2;
-            jitter=+Maths.randBell(-jitter,jitter,4);
-            currentWeapon.shoot(p, this.aimAngle+jitter, this.mind);
+            currentWeapon.shoot(p, this.mind);
         }
     }
     canSee(o,h=20){

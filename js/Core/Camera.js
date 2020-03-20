@@ -81,6 +81,7 @@ class Camera {
                     this.goals.scale=1;
                     if(this.target.mind.wantsToDash) this.goals.scale=.9;
                     if(this.target.mind.wantsToCrouch) this.goals.scale=1.3;
+                    if(this.target.mind.wantsToAim) this.goals.scale=1.1;
 
                     const dy = this.goals.y-m.y;
                     if(this.target.isGrounded || dy > 300 || dy < -10)this.goals.y=m.y|0;
