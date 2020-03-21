@@ -59,18 +59,17 @@ class Particle {
                 break;
             case Particle.Type.DMG_TXT:
                 this.rect.y-=20;
-                this.v={x:Maths.rand(-100,100),y:Maths.rand(-250,-200)};
+                this.v={x:Maths.rand(-100,100),y:Maths.randBell(-350,-200)};
                 this.scalev=-.1; //speed at which scale should change
                 this.rect.w=this.rect.h=1;
                 this.lifespan=Maths.rand(.5,1.5);
                 this.gravityScale=0;
-                this.anglev=this.v.x/100;
+                this.anglev=this.v.x/150;
                 this.scale=Maths.lerp(2, 3, parseInt(this.text)/50);
                 this.a.y=400;
                 this.fadeOut=false;
                 break;
             case Particle.Type.DUST:
-                console.log("dust");
                 this.v=Maths.randDir(Maths.rand(0,800));
                 this.drag=.1;
                 this.lifespan=Maths.rand(.5,1);

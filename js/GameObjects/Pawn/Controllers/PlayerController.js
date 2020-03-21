@@ -73,7 +73,8 @@ class PlayerController extends Controller {
         this.wantsToDash=keyboard.isDown(key.dash());
         this.wantsToShoot=(mouse.onDown()||keyboard.isDown(key.attack())||(this.wantsToShoot && mouse.isDown()));
         if(this.wantsToShoot)this.pawn.shoot();
-
+        else this.pawn.noShoot();
+        
         this.wantsToAim = mouse.isDownRight();
         game.time.scale = this.wantsToAim?.5:1;
 

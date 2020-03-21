@@ -75,13 +75,15 @@ class AIController extends Controller {
             this.wantsToJump=false;
             this.pawn.aimAt(player.pawn);
             if(me.y-50>p.y){//enemy is below player
-
                 this.wantsToJump=true;
                 this.pawn.jump();
+                this.pawn.noShoot();
             } else if(me.y+50<p.y){
                 this.pawn.drop();
+                this.pawn.noShoot();
             } else {
                 this.pawn.shoot();
+                this.pawn.noShoot();
             }
         } else {
             

@@ -265,6 +265,10 @@ class Pawn {
             currentWeapon.shoot(p, this.mind);
         }
     }
+    noShoot(){
+        const currentWeapon = this.weapon();
+        if(currentWeapon)currentWeapon.noShoot();
+    }
     canSee(o,h=20){
         const w=this.sightRange;
         const x=this.rect.x-((this.dir<0)?w:0);

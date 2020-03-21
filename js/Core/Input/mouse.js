@@ -29,6 +29,11 @@ const mouse={
             if(e.button==0)this.left=false;
             if(e.button==2)this.right=false;
         });
+        document.addEventListener("contextmenu",(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
     },
     update:function(){
         this.left_prev=this.left;

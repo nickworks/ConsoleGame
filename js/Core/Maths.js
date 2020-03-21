@@ -53,5 +53,13 @@ const Maths={
 	},
 	mag(a,b){
 		return Math.sqrt(this.magSq(a,b));
+	},
+	vecFromAngle(radians,mag=1){
+		radians=+radians; // convert to number
+		mag=+mag;//convert to number
+		return {
+            x:Math.cos(radians)*mag,
+            y:Math.sin(radians)*mag,
+        };
 	}
 };

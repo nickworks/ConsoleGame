@@ -106,8 +106,8 @@ const PawnStates={
 
             if(pawn.isGrounded)pawn.state=new PawnStates.idle(pawn);
 
-            pawn.moveH(1,.1);
-            pawn.moveV(.45);
+            pawn.moveH(.1,.1);
+            pawn.moveV(.25);
         };
         const wallJumpSpeed = 400;
         this.jump=()=>{
