@@ -8,12 +8,14 @@ class Weapon {
         SMG: 4,
         ROCKET: 5,
     }
+    static types=[];    
 
     static random(){
-        const t=parseInt(Math.random()*5+1);
-        return new Weapon({t:t});
+        if(!Array.isArray(Weapon.types)||Weapon.types.length==0)return;
+        const t=parseInt(Math.random()*Weapon.types.length);
+        const type=Weapon.types[t];
+        if(typeof type == "function")return new type();
     }
-
     constructor(raw={}){
         this.type;
         this.shootDelay=0;
@@ -24,91 +26,7 @@ class Weapon {
 
     // TODO: maybe move this into the /data/ folder?
     changeType(t){
-        switch(t){
-            case Weapon.Type.WEAK:
-            default:
-                this.title="PISTOL";
 
-                this.timeBetweenShots=.02;
-                this.timeToReload=.5;
-                this.ammo=this.ammoMax=100;
-                this.clip=this.clipMax=8;
-                this.shootAmt=1;
-                this.spread=.1;
-                this.auto=false;
-                this.dmg=20;
-                this.speed=1000;
-                this.speedRand=0;
-                this.explode=false;
-                this.knockbackForce=10;
-                this.aimDistance=200;
-
-                break;
-            case Weapon.Type.RIFLE:
-                this.title="RIFLE";
-                this.timeBetweenShots=1;
-                this.timeToReload=1;
-                this.ammo=this.ammoMax=20;
-                this.clip=this.clipMax=5;
-                this.dmg=55;
-                this.auto=false;
-                this.shootAmt=1;
-                this.speed=2400;
-                this.speedRand=0;
-                this.spread=.01;
-                this.explode=false;
-                this.knockbackForce=300;
-                this.aimDistance=200;
-                break;
-            case Weapon.Type.SHOTGUN:
-                this.title="SHOTGUN";
-                this.timeBetweenShots=.5;
-                this.timeToReload=.75;
-                this.ammo=this.ammoMax=10;
-                this.clip=this.clipMax=4;
-                this.auto=false;
-                this.dmg=10;
-                this.shootAmt=12;
-                this.spread=.5;
-                this.speed=1000;
-                this.speedRand=200;
-                this.explode=false;
-                this.knockbackForce=500;
-                this.aimDistance=75;
-                break;
-            case Weapon.Type.SMG:
-                this.title="SMG";
-                this.timeBetweenShots=.1;
-                this.timeToReload=2;
-                this.ammo=this.ammoMax=90;
-                this.clip=this.clipMax=30;
-                this.auto=true;
-                this.dmg=10;
-                this.shootAmt=1;
-                this.spread=.2;
-                this.speed=1200;
-                this.speedRand=0;
-                this.explode=false;
-                this.knockbackForce=200;
-                this.aimDistance=100;
-                break;
-            case Weapon.Type.ROCKET:
-                this.title="ROCKET LAUNCHER";
-                this.timeBetweenShots=1;
-                this.timeToReload=3;
-                this.ammo=this.ammoMax=12;
-                this.clip=this.clipMax=6;
-                this.auto=false;
-                this.dmg=50;
-                this.shootAmt=1;
-                this.spread=.1;
-                this.speed=700;
-                this.speedRand=50;
-                this.explode=true;
-                this.knockbackForce=50;
-                this.aimDistance=75;
-                break;
-        }
         this.type=t;
     }
     drawAimLine(pawn){
@@ -210,6 +128,7 @@ class Weapon {
             this.shootDelay=this.timeBetweenShots;
             this.ammo--;
             this.clip--;
+            if(this.sound)sfx.play(this.sound);
         } else {
             this.reload();
         }
@@ -239,3 +158,108 @@ class Weapon {
         return this.getReloadProgress() < 1;
     }
 }
+Weapon.Pistol=class Pistol extends Weapon {
+    constructor(){
+        super();
+        this.title="PISTOL";
+
+        this.timeBetweenShots=.02;
+        this.timeToReload=.5;
+        this.ammo=this.ammoMax=100;
+        this.clip=this.clipMax=8;
+        this.shootAmt=1;
+        this.spread=.1;
+        this.auto=false;
+        this.knockbackForce=10;
+        this.aimDistance=200;
+
+        this.dmg=20;
+        this.speed=1000;
+        this.speedRand=0;
+        this.explode=false;
+    }
+};
+Weapon.SMG = class SMG extends Weapon {
+    constructor(){
+        super();
+        this.title="SMG";
+        this.timeBetweenShots=.1;
+        this.timeToReload=2;
+        this.ammo=this.ammoMax=90;
+        this.clip=this.clipMax=30;
+        this.auto=true;
+        this.dmg=10;
+        this.shootAmt=1;
+        this.spread=.2;
+        this.speed=1200;
+        this.speedRand=0;
+        this.explode=false;
+        this.knockbackForce=200;
+        this.aimDistance=100;
+    }
+};
+Weapon.Rifle = class Rifle extends Weapon {
+    constructor(){
+        super();
+        this.title="RIFLE";
+        this.timeBetweenShots=1;
+        this.timeToReload=1;
+        this.ammo=this.ammoMax=20;
+        this.clip=this.clipMax=5;
+        this.dmg=55;
+        this.auto=false;
+        this.shootAmt=1;
+        this.speed=2400;
+        this.speedRand=0;
+        this.spread=.01;
+        this.explode=false;
+        this.knockbackForce=300;
+        this.aimDistance=200;
+    }
+};
+Weapon.Shotgun = class Shotgun extends Weapon {
+    constructor(){
+        super();
+        this.title="SHOTGUN";
+        this.timeBetweenShots=.5;
+        this.timeToReload=.75;
+        this.ammo=this.ammoMax=10;
+        this.clip=this.clipMax=4;
+        this.auto=false;
+        this.dmg=10;
+        this.shootAmt=12;
+        this.spread=.5;
+        this.speed=1000;
+        this.speedRand=200;
+        this.explode=false;
+        this.knockbackForce=500;
+        this.aimDistance=75;
+        this.sound="shotgun1";
+    }
+};
+Weapon.RocketLauncher = class RocketLauncher extends Weapon {
+    constructor(){
+        super();
+        this.title="ROCKET LAUNCHER";
+        this.timeBetweenShots=1;
+        this.timeToReload=3;
+        this.ammo=this.ammoMax=12;
+        this.clip=this.clipMax=6;
+        this.auto=false;
+        this.dmg=50;
+        this.shootAmt=1;
+        this.spread=.1;
+        this.speed=700;
+        this.speedRand=50;
+        this.explode=true;
+        this.knockbackForce=50;
+        this.aimDistance=75;
+    }
+};
+Weapon.types=[
+    Weapon.Pistol,
+    Weapon.SMG,
+    Weapon.Rifle,
+    Weapon.Shotgun,
+    Weapon.RocketLauncher,
+];

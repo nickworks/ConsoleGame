@@ -57,6 +57,7 @@
         'js/Core/game.js',
 
         'js/data/sprites.js',
+        'js/data/sfx.js',
         'js/data/LevelData.js',
     ];
 

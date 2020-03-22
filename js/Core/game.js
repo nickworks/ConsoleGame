@@ -204,6 +204,7 @@ class Game {
             this.nextScene = null;
         }
 
+        sfx.update();
         keyboard.update();
         mouse.update();
 
@@ -226,10 +227,14 @@ class Game {
         window.addEventListener("error", (e)=>{
             this.console.log("<err> ERROR </err> <dim>Run-time error detected. There's a good chance the game is broken. If you can't get it to work, you might need to <a href=\"index.html\">refresh</a> the page.</dim>");
         });
+        document.body.addEventListener("click",()=>{
+            sfx.audio.resume().then(()=>sfx.loadSounds());
+        })
         keyboard.setup();
         mouse.setup(this.view.canvas, this);
         
         sprites.init(this.view.gfx);
+        sfx.loadSounds();
         this.update(0); // begin game loop
     }
 }

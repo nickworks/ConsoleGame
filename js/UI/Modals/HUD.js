@@ -69,12 +69,12 @@ class HUD extends Modal {
         }
 
         let img = null;
-        switch(w.type){
-            case 1: img=sprites.hudGun1; break;
-            case 2: img=sprites.hudGun2; break;
-            case 3: img=sprites.hudGun3; break;
-            case 4: img=sprites.hudGun4; break;
-            case 5: img=sprites.hudGun5; break;
+        switch(w.constructor.name){
+            case "Pistol": img=sprites.hudGun1; break;
+            case "Rifle": img=sprites.hudGun2; break;
+            case "Shotgun": img=sprites.hudGun3; break;
+            case "SMG": img=sprites.hudGun4; break;
+            case "RocketLauncher": img=sprites.hudGun5; break;
         }
         if(img){
             // draw weapon image:

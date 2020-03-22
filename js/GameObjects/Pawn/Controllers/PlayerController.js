@@ -37,11 +37,7 @@ class PlayerController extends Controller {
 
         
         if(Game.DEVMODE){
-            this.weapon(new Weapon({t:Weapon.Type.WEAK}));
-            this.weapon(new Weapon({t:Weapon.Type.RIFLE}));
-            this.weapon(new Weapon({t:Weapon.Type.SHOTGUN}));
-            this.weapon(new Weapon({t:Weapon.Type.SMG}));
-            this.weapon(new Weapon({t:Weapon.Type.ROCKET}));
+            Weapon.types.forEach( w=>this.weapon(new w()) );
         } else {
             this.weapon(new Weapon({t:Weapon.Type.WEAK}));
         }
@@ -84,8 +80,9 @@ class PlayerController extends Controller {
         // draw the mind
     }
     weapon(w){
-        if(!w||w.constructor.name!="Weapon")return;
-        this.pawn.pickupWeapon(w);
-        PlayerController.data.weapon=w;
+        if(w&&w instanceof Weapon){
+            this.pawn.pickupWeapon(w);
+            PlayerController.data.weapon=w;
+        }
     }
 }
