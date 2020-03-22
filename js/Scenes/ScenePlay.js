@@ -84,6 +84,7 @@ class ScenePlay extends Scene {
         });
 
         this.pulse(x,y,r,dmg*10);
+        sfx.play("explosion");
     }
     pulse(x,y,radius,force=0){
 

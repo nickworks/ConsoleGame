@@ -2,7 +2,25 @@ const sfx={
 	soundbank:{
 		"shotgun1":{
 			url:"audio/shotgun1.ogg"
-		}
+		},
+		"smg":{
+			url:["audio/smg1.ogg","audio/smg2.ogg","audio/smg3.ogg"]
+		},
+		"pistol":{
+			url:"audio/pistol1.ogg"
+		},
+		"rifle":{
+			url:"audio/rifle1.ogg"
+		},
+		"rocket":{
+			url:"audio/rocketlauncher.ogg"
+		},
+		"outofammo":{
+			url:"audio/outofammo.ogg"
+		},
+		"explosion":{
+			url:"audio/explosion.ogg"
+		},
 	},
 	soundsLoaded:false,
 	audio:new AudioContext(),
@@ -10,8 +28,32 @@ const sfx={
 	play(str){
 		const sound=this.soundbank[str];
 		if(!sound)return;
-		if(sound.play){
-			this.audio.resume().then(()=>sound.play());
+		if(sound.buffers){
+			this.audio.resume().then(()=>{
+				
+				const i = parseInt(Math.random() * sound.buffers.length);
+				const buff=sound.buffers[i];
+
+				const source = this.audio.createBufferSource();
+				source.buffer = buff;
+				source.playbackRate.value = game.time.scale;
+				source.detune.value = Maths.rand(-600,600);
+				source.connect(this.masterGain);
+				source.start(0);
+				// this callback will be called when the game's speed changes:
+				const rateCallback=(e)=>{
+					source.playbackRate.value=game.time.scale;
+				};
+				// when the sound is done playing, do some cleanup:
+				source.onended=function(){
+					document.removeEventListener("rateChange",rateCallback);
+					source.onended=false;
+				};
+				// add listener:
+				document.addEventListener("rateChange",rateCallback);
+
+
+			});
 		}
 	},
 	update(){
@@ -36,32 +78,20 @@ const sfx={
 		for(var key in this.soundbank){
 			const sound = this.soundbank[key];
 
-			const req = new XMLHttpRequest();
-			req.open('GET', sound.url, true);
-			req.responseType = 'arraybuffer';
-			
-			req.onload = function() {
-				audio.decodeAudioData(req.response, (buff)=> {
-					sound.play=()=>{
-						const source = audio.createBufferSource();
-						source.buffer = buff;
-						source.playbackRate.value = game.time.scale;
-						source.detune.value = Maths.rand(-600,600);
-						source.connect(sfx.masterGain);
-						source.start(0);
-						const rateCallback=(e)=>{
-							source.playbackRate.value=game.time.scale;
-						};
-						source.onended=function(){
-							document.removeEventListener("rateChange",rateCallback);
-							source.onended=false;
-						};
-						document.addEventListener("rateChange",rateCallback);
-					};
-				});
-			}
+			if(!Array.isArray(sound.url)) sound.url=[sound.url];
 
-			req.send();
+			sound.url.forEach(url=>{
+				const req = new XMLHttpRequest();
+				req.open('GET', url, true);
+				req.responseType = 'arraybuffer';
+				req.onload = function() {
+					audio.decodeAudioData(req.response, (buff)=> {
+						if(!Array.isArray(sound.buffers))sound.buffers=[];
+						sound.buffers.push(buff);
+					});
+				};
+				req.send();
+			});
 		}
 	},
 };

@@ -130,6 +130,7 @@ class Weapon {
             this.clip--;
             if(this.sound)sfx.play(this.sound);
         } else {
+            sfx.play("outofammo");
             this.reload();
         }
     }
@@ -177,6 +178,7 @@ Weapon.Pistol=class Pistol extends Weapon {
         this.speed=1000;
         this.speedRand=0;
         this.explode=false;
+        this.sound="pistol";
     }
 };
 Weapon.SMG = class SMG extends Weapon {
@@ -196,6 +198,7 @@ Weapon.SMG = class SMG extends Weapon {
         this.explode=false;
         this.knockbackForce=200;
         this.aimDistance=100;
+        this.sound="smg";
     }
 };
 Weapon.Rifle = class Rifle extends Weapon {
@@ -215,6 +218,7 @@ Weapon.Rifle = class Rifle extends Weapon {
         this.explode=false;
         this.knockbackForce=300;
         this.aimDistance=200;
+        this.sound="rifle";
     }
 };
 Weapon.Shotgun = class Shotgun extends Weapon {
@@ -254,6 +258,7 @@ Weapon.RocketLauncher = class RocketLauncher extends Weapon {
         this.explode=true;
         this.knockbackForce=50;
         this.aimDistance=75;
+        this.sound="rocket";
     }
 };
 Weapon.types=[
