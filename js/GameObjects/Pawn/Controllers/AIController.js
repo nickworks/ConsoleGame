@@ -82,8 +82,13 @@ class AIController extends Controller {
                 this.pawn.drop();
                 this.pawn.noShoot();
             } else {
-                this.pawn.shoot();
-                this.pawn.noShoot();
+                if(this.releaseTriggerIn>0){
+                    this.pawn.noShoot();
+                    this.releaseTriggerIn-=game.time.dt;
+                } else {
+                    this.pawn.shoot();
+                    this.releaseTriggerIn=Maths.rand(.01,.2);
+                }
             }
         } else {
             

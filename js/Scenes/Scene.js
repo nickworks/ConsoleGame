@@ -102,7 +102,7 @@ class Scene {
         this.guis.pause = null;
     }
 	draw(){
-        game.view.fill("#888");
+        game.view.fill("#666676");
 
         this.cam.drawStart();
         this.objs.all.forEach(o => o.draw());

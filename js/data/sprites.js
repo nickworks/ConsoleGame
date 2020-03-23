@@ -35,6 +35,7 @@ const sprites={
 
         this.projectile=this.load("imgs/projectile.gif");
         this.input=this.load("imgs/input.png");
+        this.door0=this.load("imgs/door-dark.gif");
         this.door1=this.load("imgs/door.gif");
         this.door2=this.load("imgs/door-locked.gif");
         this.playerR=this.load("imgs/player.gif");

@@ -68,14 +68,7 @@ class HUD extends Modal {
             gfx.fillText("EMPTY",x-10, y+39);
         }
 
-        let img = null;
-        switch(w.constructor.name){
-            case "Pistol": img=sprites.hudGun1; break;
-            case "Rifle": img=sprites.hudGun2; break;
-            case "Shotgun": img=sprites.hudGun3; break;
-            case "SMG": img=sprites.hudGun4; break;
-            case "RocketLauncher": img=sprites.hudGun5; break;
-        }
+        let img = w.getSpriteGUI();
         if(img){
             // draw weapon image:
             gfx.drawImage(img, rightEdge-img.width, y);

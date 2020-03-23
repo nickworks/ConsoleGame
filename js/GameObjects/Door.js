@@ -39,7 +39,7 @@ class Door {
     }
     update(){
         if(this.animating){
-            this.timer+=game.time.dt;
+            this.timer+=game.time.dt*4;
             var p = this.timer/this.timespan;
             if(p>1){
                 p=1;
@@ -69,7 +69,10 @@ class Door {
     draw(){
         this.rect.draw();
         
-        gfx.drawImage(this.lockCode?sprites.door2:sprites.door1,this.rect.x,this.rect.y-(100-this.rect.h));
+        let img = sprites.door0;
+        if(this.canActivate)img = this.lockCode?sprites.door2:sprites.door1;
+
+        gfx.drawImage(img,this.rect.x,this.rect.y-(100-this.rect.h));
         
         if(this.canActivate&&!scene.modal&&!this.animating){
             this.hint.x=this.rect.mid().x;

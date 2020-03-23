@@ -96,15 +96,7 @@ class Item {
         if(this.type==Item.Type.HEAL)img=sprites.item1;
         if(this.type==Item.Type.AMMO)img=sprites.item2;
         if(this.type==Item.Type.COIN)img=sprites.item3;
-        if(this.type==Item.Type.GUN ){
-            switch(this.weapon.type){
-                case 1: img=sprites.gun1; break;
-                case 2: img=sprites.gun2; break;
-                case 3: img=sprites.gun3; break;
-                case 4: img=sprites.gun4; break;
-                case 5: img=sprites.gun5; break;
-            }
-        }
+        if(this.type==Item.Type.GUN )img=this.weapon.getSprite();
         
         if(img)gfx.drawImage(img, this.rect.x, this.rect.y);
         else this.rect.draw();

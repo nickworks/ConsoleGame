@@ -1,13 +1,6 @@
 
 class Weapon {
 
-    static Type = {
-        WEAK: 1,
-        RIFLE: 2,
-        SHOTGUN: 3,
-        SMG: 4,
-        ROCKET: 5,
-    }
     static types=[];    
 
     static random(){
@@ -20,14 +13,7 @@ class Weapon {
         this.type;
         this.shootDelay=0;
         this.timeUntilReloaded=0;
-        this.changeType(raw.t||Weapon.Type.WEAK);
         this.clip=this.clipMax;
-    }
-
-    // TODO: maybe move this into the /data/ folder?
-    changeType(t){
-
-        this.type=t;
     }
     drawAimLine(pawn){
         if(!pawn||!pawn.mind)return;
@@ -98,6 +84,7 @@ class Weapon {
         this.isTriggerHeld=true;
         if(this.timeUntilReloaded>0)return;
         if(this.shootDelay>0)return;
+        if(!this.aimCache)return;
         if(!scene.objs)return;
         
         if(this.clip>0){
@@ -158,6 +145,24 @@ class Weapon {
     isReloading(){
         return this.getReloadProgress() < 1;
     }
+    getSprite(){
+        switch(this.constructor.name){
+            case "Pistol": return sprites.gun1;
+            case "Rifle": return sprites.gun2;
+            case "Shotgun": return sprites.gun3;
+            case "SMG":  return sprites.gun4;
+            case "RocketLauncher": return sprites.gun5;
+        }
+    }
+    getSpriteGUI(){
+        switch(this.constructor.name){
+            case "Pistol": return sprites.hudGun1;
+            case "Rifle": return sprites.hudGun2;
+            case "Shotgun": return sprites.hudGun3;
+            case "SMG":  return sprites.hudGun4;
+            case "RocketLauncher": return sprites.hudGun5;
+        }
+    }
 }
 Weapon.Pistol=class Pistol extends Weapon {
     constructor(){
@@ -178,6 +183,7 @@ Weapon.Pistol=class Pistol extends Weapon {
         this.speed=1000;
         this.speedRand=0;
         this.explode=false;
+
         this.sound="pistol";
     }
 };

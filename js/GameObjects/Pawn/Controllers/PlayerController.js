@@ -39,7 +39,7 @@ class PlayerController extends Controller {
         if(Game.DEVMODE){
             Weapon.types.forEach( w=>this.weapon(new w()) );
         } else {
-            this.weapon(new Weapon({t:Weapon.Type.WEAK}));
+            this.weapon(new Weapon.Pistol());
         }
     }
     serialize(){

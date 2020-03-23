@@ -22,7 +22,7 @@ class Portal {
         };
     }
     draw(){
-        gfx.fillStyle="#39F";
+        gfx.fillStyle=(this.active)?"#39F":"#123";
         this.rect.draw();
     }
     use(){
