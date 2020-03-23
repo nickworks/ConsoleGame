@@ -5,7 +5,26 @@ class SceneTitle {
             {caption:"Play",callback:()=>{game.switchScene(SceneLoad.Level(0, {x:-1250, y:230}));}},
             {caption:"Tutorial",callback:()=>{game.console.log("// Tutorial coming soon!")}},
             {caption:"About",callback:()=>{
-                game.console.log("/*\n * Open Source v0.4\n * A game by Nick Pattison\n * Write code to change the game!\n * Contribute to it here: <a href='https://github.com/nickworks/ConsoleGame' target='_blank'>https://github.com/nickworks/ConsoleGame</a>\n */");
+
+                const data = [
+                    "Open Source v0.5",
+                    "A game by Nick Pattison",
+                    "",
+                    "Write code to change the game!",
+                    "Contribute to it here: <a href='https://github.com/nickworks/ConsoleGame' target='_blank'>https://github.com/nickworks/ConsoleGame</a>",
+                    "",
+                    "Featuring art by:",
+                    "   Nick Pattison",
+                    "   Jaylen Jennings",
+                    "   Collin Pattison",
+                    "",
+                    "Featuring audio by:",
+                    "   <a href='https://opengameart.org/content/q009s-weapon-sounds' target='_blank'>Q009</a>",
+                ];
+                var output="";
+                const pre="\n *  ";
+                data.forEach(s=>output+=pre+s);
+                game.console.log("/*"+output+"\n *\n */");
             }}
         ]);
         PlayerController.data.reset();
